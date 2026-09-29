@@ -36,15 +36,15 @@ export const TAB_ORDER: TabId[] = [
 ];
 
 export const TAB_LABELS: Record<TabId, string> = {
-  identitas: "Identitas",
-  "quiz-1": "Quiz 1",
-  "quiz-2": "Quiz 2",
-  "quiz-3": "Quiz 3",
-  "quiz-4": "Quiz 4",
-  "quiz-5": "Quiz 5",
-  "quiz-6": "Quiz 6",
-  "quiz-7": "Quiz 7",
-  leaderboard: "Leaderboard",
+  identitas: "Data Diri",
+  "quiz-1": "Statistik Deskriptif",
+  "quiz-2": "Distribusi",
+  "quiz-3": "Probabilitas & Bayes",
+  "quiz-4": "Uji Hipotesis",
+  "quiz-5": "Tes Diagnostik",
+  "quiz-6": "Desain Studi",
+  "quiz-7": "Ujian Akhir NUMi",
+  leaderboard: "Papan Skor",
 };
 
 // ---------------------------------------------------------------------------

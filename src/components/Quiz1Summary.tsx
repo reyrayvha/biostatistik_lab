@@ -103,13 +103,13 @@ export default function Quiz1Summary() {
   };
 
   return (
-    <div className="flex flex-col gap-8 text-slate-300 leading-relaxed font-sans">
+    <div className="flex flex-col gap-8 text-[#c9d1d9] leading-relaxed font-sans">
       
       {/* 1. Skenario / Cerita */}
-      <div className="border-l-4 border-slate-600 bg-slate-800/30 p-5 rounded-r-xl">
-        <h4 className="text-lg font-semibold text-slate-200 mb-3">UGD yang Tidak Bisa Mengukur Waktu Tunggunya Sendiri</h4>
+      <div className="border-l-4 border-[#30363d] bg-[#161b22]/80 p-5 rounded-r-xl">
+        <h4 className="text-lg font-semibold text-[#e6edf3] mb-3">UGD yang Tidak Bisa Mengukur Waktu Tunggunya Sendiri</h4>
         <p className="mb-2">
-          Minggu pertama rotasi klinik. Direktur rumah sakit masuk ke rapat pagi dan dengan bangga mengumumkan: "Rata-rata waktu tunggu UGD kita 28 menit." Dokter senior memutar matanya. "Angka itu menyesatkan," bisiknya. "Coba lihat datanya."
+          Minggu pertama rotasi klinik. Direktur rumah sakit masuk ke rapat pagi dan dengan bangga mengumumkan: &quot;Rata-rata waktu tunggu UGD kita 28 menit.&quot; Dokter senior memutar matanya. &quot;Angka itu menyesatkan,&quot; bisiknya. &quot;Coba lihat datanya.&quot;
         </p>
         <p className="mb-2">
           Dia membuka data waktu tunggu kemarin: 8, 10, 12, 12, 14, 15, 15, 18, 20, 150 menit. Satu pasien menunggu dua setengah jam karena kesalahan administrasi rekam medis. Satu pencilan itu menarik mean dari sekitar 14 menit menjadi 27,4. Direktur secara teknis benar — tapi sangat menyesatkan.
@@ -121,27 +121,27 @@ export default function Quiz1Summary() {
 
       {/* 2. Definisi */}
       <div>
-        <h4 className="text-xl font-semibold text-slate-100 mb-2">Tiga Cara Menemukan "Nilai Tengah"</h4>
-        <p className="mb-5 text-slate-400">
-          Bayangkan begini: 10 pasien datang ke klinikmu hari ini. Kamu ingin tahu seperti apa pasien "tipikal".
+        <h4 className="text-xl font-semibold text-[#f0f6fc] mb-2">Tiga Cara Menemukan &quot;Nilai Tengah&quot;</h4>
+        <p className="mb-5 text-[#8b949e]">
+          Bayangkan begini: 10 pasien datang ke klinikmu hari ini. Kamu ingin tahu seperti apa pasien &quot;tipikal&quot;.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-1">
-            <span className="block text-indigo-400 font-bold text-lg mb-3">Mean (x̄)</span>
-            <p className="text-slate-300 leading-relaxed text-sm">
-              Jumlahkan semua usia, bagi dengan 10. Sederhana — tapi kalau satu pasien berusia 98 tahun, tiba-tiba "rata-rata" jadi 45 padahal semua yang lain berusia 30-an. Mean mudah dipengaruhi pencilan.
+          <div className="bg-[#161b22] backdrop-blur-md border border-[#30363d] rounded-2xl p-6 shadow-xl hover:bg-[#1c2129] transition-all duration-300 hover:-translate-y-1">
+            <span className="block text-[#58a6ff] font-bold text-lg mb-3">Mean (x̄)</span>
+            <p className="text-[#c9d1d9] leading-relaxed text-sm">
+              Jumlahkan semua usia, bagi dengan 10. Sederhana — tapi kalau satu pasien berusia 98 tahun, tiba-tiba &quot;rata-rata&quot; jadi 45 padahal semua yang lain berusia 30-an. Mean mudah dipengaruhi pencilan.
             </p>
           </div>
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-1">
-            <span className="block text-indigo-400 font-bold text-lg mb-3">Median</span>
-            <p className="text-slate-300 leading-relaxed text-sm">
+          <div className="bg-[#161b22] backdrop-blur-md border border-[#30363d] rounded-2xl p-6 shadow-xl hover:bg-[#1c2129] transition-all duration-300 hover:-translate-y-1">
+            <span className="block text-[#58a6ff] font-bold text-lg mb-3">Median</span>
+            <p className="text-[#c9d1d9] leading-relaxed text-sm">
               Urutkan semua orang berdasarkan usia, pilih orang yang berdiri di tengah. Si 98 tahun tidak menggeser angka ini. Untuk data miring — biaya RS, pendapatan, lama rawat — median adalah jawaban yang jujur.
             </p>
           </div>
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-1">
-            <span className="block text-indigo-400 font-bold text-lg mb-3">Modus</span>
-            <p className="text-slate-300 leading-relaxed text-sm">
+          <div className="bg-[#161b22] backdrop-blur-md border border-[#30363d] rounded-2xl p-6 shadow-xl hover:bg-[#1c2129] transition-all duration-300 hover:-translate-y-1">
+            <span className="block text-[#58a6ff] font-bold text-lg mb-3">Modus</span>
+            <p className="text-[#c9d1d9] leading-relaxed text-sm">
               Usia mana yang paling sering muncul? Kurang glamor, tapi penting untuk data kategorikal — seperti keluhan utama paling umum di malam Jumat.
             </p>
           </div>
@@ -149,10 +149,10 @@ export default function Quiz1Summary() {
       </div>
 
       {/* 3. Cerita Obat */}
-      <div className="border-l-4 border-slate-600 bg-slate-800/30 p-5 rounded-r-xl">
-        <h4 className="text-lg font-semibold text-slate-200 mb-3">Mengapa "Sebaran" Bisa Menyelamatkan Nyawa</h4>
+      <div className="border-l-4 border-[#30363d] bg-[#161b22]/80 p-5 rounded-r-xl">
+        <h4 className="text-lg font-semibold text-[#e6edf3] mb-3">Mengapa &quot;Sebaran&quot; Bisa Menyelamatkan Nyawa</h4>
         <p className="mb-2">
-          Ini skenario yang akan kamu hadapi saat residensi: dua obat tekanan darah sama-sama menurunkan sistolik 10 mmHg rata-rata. Mean identik. Dokter seniormu bertanya: "Mana yang akan kamu resepkan?"
+          Ini skenario yang akan kamu hadapi saat residensi: dua obat tekanan darah sama-sama menurunkan sistolik 10 mmHg rata-rata. Mean identik. Dokter seniormu bertanya: &quot;Mana yang akan kamu resepkan?&quot;
         </p>
         <p className="mb-2">
           Obat A: kebanyakan pasien turun antara 8 dan 12 mmHg. Konsisten.<br />
@@ -165,15 +165,15 @@ export default function Quiz1Summary() {
 
       {/* 4. Grid Sebaran */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-1">
-          <span className="block text-indigo-400 font-bold text-lg mb-3">Standar Deviasi (σ)</span>
-          <p className="text-slate-300 leading-relaxed text-sm">
-            Seberapa rapat data berkumpul di sekitar mean. σ kecil = konsisten, bisa diprediksi. σ besar = tidak stabil. Anggap saja sebagai "skor keandalan" datamu.
+        <div className="bg-[#161b22] backdrop-blur-md border border-[#30363d] rounded-2xl p-6 shadow-xl hover:bg-[#1c2129] transition-all duration-300 hover:-translate-y-1">
+          <span className="block text-[#58a6ff] font-bold text-lg mb-3">Standar Deviasi (σ)</span>
+          <p className="text-[#c9d1d9] leading-relaxed text-sm">
+            Seberapa rapat data berkumpul di sekitar mean. σ kecil = konsisten, bisa diprediksi. σ besar = tidak stabil. Anggap saja sebagai &quot;skor keandalan&quot; datamu.
           </p>
         </div>
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-1">
-          <span className="block text-indigo-400 font-bold text-lg mb-3">IQR (Rentang Interkuartil)</span>
-          <p className="text-slate-300 leading-relaxed text-sm">
+        <div className="bg-[#161b22] backdrop-blur-md border border-[#30363d] rounded-2xl p-6 shadow-xl hover:bg-[#1c2129] transition-all duration-300 hover:-translate-y-1">
+          <span className="block text-[#58a6ff] font-bold text-lg mb-3">IQR (Rentang Interkuartil)</span>
+          <p className="text-[#c9d1d9] leading-relaxed text-sm">
             Rentang 50% data di tengah. Mengabaikan nilai ekstrem — pasangan setia dari median. Untuk data miring, laporkan median + IQR, bukan mean + SD.
           </p>
         </div>
@@ -181,30 +181,30 @@ export default function Quiz1Summary() {
 
       {/* 5. Membaca Bentuk Penyakit */}
       <div>
-        <h4 className="text-xl font-semibold text-slate-100 mb-3">Membaca Bentuk Penyakit</h4>
-        <p className="mb-2 text-slate-300">
-          Dokter seniormu membuka dua histogram. "Beritahu aku yang mana miring kanan."
+        <h4 className="text-xl font-semibold text-[#f0f6fc] mb-3">Membaca Bentuk Penyakit</h4>
+        <p className="mb-2 text-[#c9d1d9]">
+          Dokter seniormu membuka dua histogram. &quot;Beritahu aku yang mana miring kanan.&quot;
         </p>
-        <p className="mb-4 text-slate-400">
+        <p className="mb-4 text-[#8b949e]">
           Bayangkan kamu mengurutkan tagihan RS dari 100 pasien. Kebanyakan berutang Rp5–20 juta. Tapi beberapa rawat ICU menghabiskan Rp1,5 miliar+. Tagihan ekstrem itu membuat ekor panjang ke kanan. Mean tertarik ke ekor itu, tapi median tetap di tempat kebanyakan pasien berada.
         </p>
         <ul className="list-disc pl-6 space-y-2 mb-4">
-          <li><strong className="text-slate-200 font-medium">Miring kanan (Mean &gt; Median):</strong> Biaya kesehatan, lama rawat, pendapatan.</li>
-          <li><strong className="text-slate-200 font-medium">Miring kiri (Mean &lt; Median):</strong> Usia kematian di negara maju — kebanyakan hidup tua, sebagian meninggal muda.</li>
-          <li><strong className="text-slate-200 font-medium">Simetris (Mean ≈ Median):</strong> Tekanan darah, tinggi badan, kebanyakan nilai lab pada populasi sehat.</li>
+          <li><strong className="text-[#e6edf3] font-medium">Miring kanan (Mean &gt; Median):</strong> Biaya kesehatan, lama rawat, pendapatan.</li>
+          <li><strong className="text-[#e6edf3] font-medium">Miring kiri (Mean &lt; Median):</strong> Usia kematian di negara maju — kebanyakan hidup tua, sebagian meninggal muda.</li>
+          <li><strong className="text-[#e6edf3] font-medium">Simetris (Mean ≈ Median):</strong> Tekanan darah, tinggi badan, kebanyakan nilai lab pada populasi sehat.</li>
         </ul>
-        <p className="italic text-slate-400">
+        <p className="italic text-[#8b949e]">
           Aturan klinisnya: jika seseorang menyebut mean untuk data miring, curigai. Tanyakan mediannya.
         </p>
       </div>
 
       {/* 6. Highlight Box */}
-      <div className="bg-slate-800/40 border border-slate-700/50 p-5 rounded-xl">
-        <div className="flex items-center gap-2 text-slate-300 mb-3">
-          <Bookmark size={20} className="text-indigo-400" />
+      <div className="bg-[#161b22]/80 border border-[#30363d] p-5 rounded-xl">
+        <div className="flex items-center gap-2 text-[#c9d1d9] mb-3">
+          <Bookmark size={20} className="text-[#58a6ff]" />
           <h4 className="text-lg font-semibold">Rangkuman untuk Ujian</h4>
         </div>
-        <ul className="list-disc pl-6 space-y-1 text-sm text-slate-400">
+        <ul className="list-disc pl-6 space-y-1 text-sm text-[#8b949e]">
           <li>Menambahkan 10 ke setiap nilai? Mean bergeser 10, SD tetap sama. (Semua dapat bonus — sebarannya tidak berubah.)</li>
           <li>Mengalikan dengan 2? Mean DAN SD dua-duanya berlipat ganda.</li>
           <li>Mean selalu tertarik ke arah ekor.</li>
@@ -216,16 +216,16 @@ export default function Quiz1Summary() {
       {/* =========================================
           7. EKSPLORASI INTERAKTIF
       ========================================= */}
-      <div className="mt-8 bg-[#0f172a]/60 backdrop-blur-md border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-        <div className="bg-slate-800/50 border-b border-slate-700/50 p-4 flex items-center gap-3">
-          <div className="p-2 bg-indigo-500/20 text-indigo-300 rounded-lg">
+      <div className="mt-8 bg-[#0d1117]/80 backdrop-blur-md border border-[#21262d] rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-[#161b22]/80 border-b border-[#21262d] p-4 flex items-center gap-3">
+          <div className="p-2 bg-[#388bfd]/15 text-[#58a6ff] rounded-lg">
             <BarChart3 size={20} />
           </div>
-          <h3 className="text-lg font-semibold text-slate-100">Eksplorasi Interaktif</h3>
+          <h3 className="text-lg font-semibold text-[#f0f6fc]">Eksplorasi Interaktif</h3>
         </div>
         
         <div className="p-6">
-          <p className="text-sm text-slate-400 mb-4">
+          <p className="text-sm text-[#8b949e] mb-4">
             Coba ubah kumpulan data di bawah ini untuk melihat bagaimana Mean, Median, Modus, dan Standar Deviasi bereaksi.
           </p>
           
@@ -236,8 +236,8 @@ export default function Quiz1Summary() {
                 onClick={() => handlePresetClick('simetris')}
                 className={`px-4 py-1.5 text-sm rounded-full transition-colors border ${
                   activePreset === 'simetris'
-                    ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30 shadow-[0_0_10px_rgba(99,102,241,0.1)]'
-                    : 'bg-slate-800/40 text-slate-400 border-slate-700 hover:bg-slate-700 hover:text-slate-300'
+                    ? 'bg-[#388bfd]/15 text-[#58a6ff] border-[#388bfd]/30 shadow-[0_0_10px_rgba(56,139,253,0.1)]'
+                    : 'bg-[#21262d]/60 text-[#8b949e] border-[#30363d] hover:bg-[#30363d] hover:text-[#c9d1d9]'
                 }`}
               >
                 Simetris
@@ -246,8 +246,8 @@ export default function Quiz1Summary() {
                 onClick={() => handlePresetClick('kanan')}
                 className={`px-4 py-1.5 text-sm rounded-full transition-colors border ${
                   activePreset === 'kanan'
-                    ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30 shadow-[0_0_10px_rgba(99,102,241,0.1)]'
-                    : 'bg-slate-800/40 text-slate-400 border-slate-700 hover:bg-slate-700 hover:text-slate-300'
+                    ? 'bg-[#388bfd]/15 text-[#58a6ff] border-[#388bfd]/30 shadow-[0_0_10px_rgba(56,139,253,0.1)]'
+                    : 'bg-[#21262d]/60 text-[#8b949e] border-[#30363d] hover:bg-[#30363d] hover:text-[#c9d1d9]'
                 }`}
               >
                 Miring Kanan
@@ -256,8 +256,8 @@ export default function Quiz1Summary() {
                 onClick={() => handlePresetClick('kiri')}
                 className={`px-4 py-1.5 text-sm rounded-full transition-colors border ${
                   activePreset === 'kiri'
-                    ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30 shadow-[0_0_10px_rgba(99,102,241,0.1)]'
-                    : 'bg-slate-800/40 text-slate-400 border-slate-700 hover:bg-slate-700 hover:text-slate-300'
+                    ? 'bg-[#388bfd]/15 text-[#58a6ff] border-[#388bfd]/30 shadow-[0_0_10px_rgba(56,139,253,0.1)]'
+                    : 'bg-[#21262d]/60 text-[#8b949e] border-[#30363d] hover:bg-[#30363d] hover:text-[#c9d1d9]'
                 }`}
               >
                 Miring Kiri
@@ -266,8 +266,8 @@ export default function Quiz1Summary() {
                 onClick={() => handlePresetClick('bimodal')}
                 className={`px-4 py-1.5 text-sm rounded-full transition-colors border ${
                   activePreset === 'bimodal'
-                    ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30 shadow-[0_0_10px_rgba(99,102,241,0.1)]'
-                    : 'bg-slate-800/40 text-slate-400 border-slate-700 hover:bg-slate-700 hover:text-slate-300'
+                    ? 'bg-[#388bfd]/15 text-[#58a6ff] border-[#388bfd]/30 shadow-[0_0_10px_rgba(56,139,253,0.1)]'
+                    : 'bg-[#21262d]/60 text-[#8b949e] border-[#30363d] hover:bg-[#30363d] hover:text-[#c9d1d9]'
                 }`}
               >
                 Bimodal
@@ -276,69 +276,69 @@ export default function Quiz1Summary() {
             
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Settings2 size={16} className="text-slate-500" />
+                <Settings2 size={16} className="text-[#484f58]" />
               </div>
               <input 
                 type="text" 
                 value={inputText}
                 onChange={handleInputChange}
-                className="w-full bg-slate-900 border border-slate-700/50 text-slate-300 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all font-mono text-sm"
+                className="w-full bg-[#0d1117] border border-[#30363d] text-[#c9d1d9] rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-[#388bfd]/50 focus:ring-1 focus:ring-[#388bfd]/50 transition-all font-mono text-sm"
                 placeholder="Masukkan angka dipisahkan koma..."
               />
             </div>
           </div>
 
           {/* Bar Chart (Histogram) */}
-          <div className="h-56 mt-8 mb-6 flex items-end justify-center gap-1 border-b border-white/20 pb-2">
+          <div className="h-56 mt-8 mb-6 flex items-end justify-center gap-1 border-b border-[#30363d] pb-2">
             {binData.bins.map((bin, idx) => {
               const isZero = bin.freq === 0;
               return (
                 <div key={idx} className="h-full flex flex-col justify-end items-center group w-8 sm:w-10 md:w-12">
                   <div className="flex-1 w-full flex items-end justify-center relative">
                     <div 
-                      className={`w-full mx-0.5 sm:mx-1 rounded-t-sm transition-all duration-500 ${isZero ? 'bg-transparent border-none' : 'bg-gradient-to-t from-slate-800 to-indigo-500 border-t-2 border-indigo-400'}`}
+                      className={`w-full mx-0.5 sm:mx-1 rounded-t-sm transition-all duration-500 ${isZero ? 'bg-transparent border-none' : 'bg-gradient-to-t from-[#21262d] to-[#388bfd] border-t-2 border-[#58a6ff]'}`}
                       style={{ height: isZero ? '0%' : `${Math.max((bin.freq / binData.maxBinFreq) * 100, 5)}%` }}
                     >
                       {!isZero && (
-                        <div className="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-800 text-xs px-2 py-1 rounded transition-opacity pointer-events-none z-10 whitespace-nowrap text-indigo-200">
+                        <div className="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-[#21262d] text-xs px-2 py-1 rounded transition-opacity pointer-events-none z-10 whitespace-nowrap text-[#79b8ff]">
                           Freq: {bin.freq}
                         </div>
                       )}
                     </div>
                   </div>
-                  <span className="text-[10px] sm:text-xs text-slate-400 mt-2 font-mono h-4 shrink-0 flex items-center">{bin.label}</span>
+                  <span className="text-[10px] sm:text-xs text-[#8b949e] mt-2 font-mono h-4 shrink-0 flex items-center">{bin.label}</span>
                 </div>
               );
             })}
             {binData.bins.length === 0 && (
-              <div className="text-slate-500 text-sm pb-10">Grafik Kosong - Masukkan angka valid</div>
+              <div className="text-[#6e7681] text-sm pb-10">Grafik Kosong - Masukkan angka valid</div>
             )}
           </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-            <div className="bg-slate-900/50 border border-slate-700/50 p-4 rounded-xl flex flex-col items-center justify-center transition-all">
-              <span className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">MEAN</span>
-              <span className="text-2xl font-mono text-white font-bold">{stats.mean.toFixed(2)}</span>
+            <div className="bg-[#0d1117]/70 border border-[#21262d] p-4 rounded-xl flex flex-col items-center justify-center transition-all">
+              <span className="text-[#8b949e] text-xs font-medium uppercase tracking-wider mb-1">MEAN</span>
+              <span className="text-2xl font-mono text-[#f0f6fc] font-bold">{stats.mean.toFixed(2)}</span>
             </div>
-            <div className="bg-slate-900/50 border border-slate-700/50 p-4 rounded-xl flex flex-col items-center justify-center transition-all">
-              <span className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">MEDIAN</span>
-              <span className="text-2xl font-mono text-white font-bold">{stats.median.toFixed(2)}</span>
+            <div className="bg-[#0d1117]/70 border border-[#21262d] p-4 rounded-xl flex flex-col items-center justify-center transition-all">
+              <span className="text-[#8b949e] text-xs font-medium uppercase tracking-wider mb-1">MEDIAN</span>
+              <span className="text-2xl font-mono text-[#f0f6fc] font-bold">{stats.median.toFixed(2)}</span>
             </div>
-            <div className="bg-slate-900/50 border border-slate-700/50 p-4 rounded-xl flex flex-col items-center justify-center text-center transition-all">
-              <span className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">MODUS</span>
-              <span className="text-2xl font-mono text-white font-bold line-clamp-1 truncate w-full" title={stats.mode}>{stats.mode}</span>
+            <div className="bg-[#0d1117]/70 border border-[#21262d] p-4 rounded-xl flex flex-col items-center justify-center text-center transition-all">
+              <span className="text-[#8b949e] text-xs font-medium uppercase tracking-wider mb-1">MODUS</span>
+              <span className="text-2xl font-mono text-[#f0f6fc] font-bold line-clamp-1 truncate w-full" title={stats.mode}>{stats.mode}</span>
             </div>
-            <div className="bg-slate-900/50 border border-slate-700/50 p-4 rounded-xl flex flex-col items-center justify-center transition-all">
-              <span className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">SD (σ)</span>
-              <span className="text-2xl font-mono text-white font-bold">{stats.sd.toFixed(2)}</span>
+            <div className="bg-[#0d1117]/70 border border-[#21262d] p-4 rounded-xl flex flex-col items-center justify-center transition-all">
+              <span className="text-[#8b949e] text-xs font-medium uppercase tracking-wider mb-1">SD (σ)</span>
+              <span className="text-2xl font-mono text-[#f0f6fc] font-bold">{stats.sd.toFixed(2)}</span>
             </div>
           </div>
 
           {/* Insight Auto Conclusion */}
           {insight && (
-            <div className="mt-5 bg-indigo-900/20 border border-indigo-500/20 rounded-xl p-4 text-center animate-in fade-in zoom-in duration-500">
-              <p className="text-indigo-200 font-medium text-sm">{insight}</p>
+            <div className="mt-5 bg-[#388bfd]/10 border border-[#388bfd]/20 rounded-xl p-4 text-center animate-in fade-in zoom-in duration-500">
+              <p className="text-[#79b8ff] font-medium text-sm">{insight}</p>
             </div>
           )}
           

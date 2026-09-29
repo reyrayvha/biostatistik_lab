@@ -6,47 +6,7 @@ import {
   TAB_LABELS,
   type TabId,
 } from "@/src/store/useAppStore";
-import {
-  User,
-  BookOpen,
-  BarChart3,
-  FlaskConical,
-  TestTube2,
-  Stethoscope,
-  FileSearch,
-  GraduationCap,
-  Trophy,
-  Lock,
-  Check,
-} from "lucide-react";
-
-// ---------------------------------------------------------------------------
-// Icon mapping for each tab
-// ---------------------------------------------------------------------------
-
-const TAB_ICONS: Record<TabId, React.ReactNode> = {
-  identitas: <User size={18} />,
-  "quiz-1": <BarChart3 size={18} />,
-  "quiz-2": <BookOpen size={18} />,
-  "quiz-3": <FlaskConical size={18} />,
-  "quiz-4": <TestTube2 size={18} />,
-  "quiz-5": <Stethoscope size={18} />,
-  "quiz-6": <FileSearch size={18} />,
-  "quiz-7": <GraduationCap size={18} />,
-  leaderboard: <Trophy size={18} />,
-};
-
-const TAB_SUBTITLES: Record<TabId, string> = {
-  identitas: "Data Diri",
-  "quiz-1": "Statistik Deskriptif",
-  "quiz-2": "Distribusi",
-  "quiz-3": "Probabilitas & Bayes",
-  "quiz-4": "Uji Hipotesis",
-  "quiz-5": "Tes Diagnostik",
-  "quiz-6": "Desain Studi",
-  "quiz-7": "NUMi (Ujian Akhir)",
-  leaderboard: "Papan Skor",
-};
+import { Circle, CircleCheck, Lock } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Component
@@ -82,26 +42,14 @@ export default function TabNavigation() {
               className={`tab-item ${stateClass}`}
               onClick={() => unlocked && setActiveTab(tabId)}
             >
-              {/* Progress connector line (skip first) */}
-              {idx > 0 && (
-                <span
-                  className={`tab-connector ${
-                    isCompleted || isActive
-                      ? "tab-connector--active"
-                      : "tab-connector--inactive"
-                  }`}
-                  aria-hidden="true"
-                />
-              )}
-
               {/* Icon badge */}
               <span className="tab-icon-badge">
                 {!unlocked ? (
-                  <Lock size={14} />
+                  <Lock size={15} />
                 ) : isCompleted ? (
-                  <Check size={14} strokeWidth={3} />
+                  <CircleCheck size={16} />
                 ) : (
-                  TAB_ICONS[tabId]
+                  <Circle size={16} />
                 )}
               </span>
 
@@ -110,7 +58,9 @@ export default function TabNavigation() {
                 <span className="tab-label-primary">
                   {TAB_LABELS[tabId]}
                 </span>
-                <span className="tab-label-sub">{TAB_SUBTITLES[tabId]}</span>
+                <span className="tab-label-sub">
+                  {tabId.replace("-", " ")}
+                </span>
               </span>
             </button>
           );

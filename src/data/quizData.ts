@@ -25,33 +25,33 @@ export const quizData: Quiz[] = [
         questions: [
             {
                 id: 1,
-                text: "[DUMMY] Contoh soal Biostatistik nomor 1?",
-                options: ["Opsi A", "Opsi B", "Opsi C", "Opsi D"],
-                correctAnswer: "Opsi A"
+                text: "Dataset usia pasien memiliki mean 65 dan median 58. Apa yang ditunjukkan ini?",
+                options: ["Miring kiri", "Miring kanan", "Simetris", "Bimodal"],
+                correctAnswer: "Miring kanan"
             },
             {
                 id: 2,
-                text: "[DUMMY] Contoh soal Biostatistik nomor 2?",
-                options: ["Opsi A", "Opsi B", "Opsi C", "Opsi D"],
-                correctAnswer: "Opsi B"
+                text: "Dalam distribusi miring kanan dari biaya RS, mana yang paling mewakili tagihan 'tipikal'?",
+                options: ["Mean", "Median", "Modus", "Standar Deviasi"],
+                correctAnswer: "Median"
             },
             {
                 id: 3,
-                text: "[DUMMY] Contoh soal Biostatistik nomor 3?",
-                options: ["Opsi A", "Opsi B", "Opsi C", "Opsi D"],
-                correctAnswer: "Opsi C"
+                text: "Jika setiap sistolik pasien naik 10 mmHg, apa yang terjadi pada standar deviasi?",
+                options: ["Naik 10", "Berlipat ganda", "Tetap sama", "Turun 10"],
+                correctAnswer: "Tetap sama"
             },
             {
                 id: 4,
-                text: "[DUMMY] Contoh soal Biostatistik nomor 4?",
-                options: ["Opsi A", "Opsi B", "Opsi C", "Opsi D"],
-                correctAnswer: "Opsi D"
+                text: "Nilai: 10, 12, 12, 14, 50. Mana yang paling terpengaruh pencilan?",
+                options: ["Median", "Modus", "Mean", "IQR"],
+                correctAnswer: "Mean"
             },
             {
                 id: 5,
-                text: "[DUMMY] Contoh soal Biostatistik nomor 5?",
-                options: ["Opsi A", "Opsi B", "Opsi C", "Opsi D"],
-                correctAnswer: "Opsi A"
+                text: "Obat A: mean penurunan LDL, SD=5. Obat B: mean sama, SD=20. Mana lebih bisa diprediksi?",
+                options: ["Obat A", "Obat B", "Sama", "Tidak bisa ditentukan"],
+                correctAnswer: "Obat A"
             }
         ]
     },

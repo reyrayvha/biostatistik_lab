@@ -87,13 +87,15 @@ export default function AppShell() {
         </div>
       </header>
 
-      {/* Navigation */}
-      <TabNavigation />
+      <div className="app-body">
+        {/* Navigation Sidebar */}
+        <TabNavigation />
 
-      {/* Main content */}
-      <main className="app-main">
-        <div className="app-content">{renderContent()}</div>
-      </main>
+        {/* Main content */}
+        <main className="app-main">
+          <div className="app-content">{renderContent()}</div>
+        </main>
+      </div>
 
       {/* Footer */}
       <footer className="app-footer">
