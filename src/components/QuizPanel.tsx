@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useAppStore, DEFAULT_QUIZ_STATE } from "@/src/store/useAppStore";
 import { quizData, type Question } from "@/src/data/quizData";
 import Quiz1Summary from "@/src/components/Quiz1Summary";
+import MateriDistribusi from "@/src/components/MateriDistribusi";
 import {
   BookOpen,
   Play,
@@ -48,7 +49,7 @@ function QuizSummaryScreen({
   onStart: () => void;
 }) {
   const hasAttemptsLeft = attemptsUsed < MAX_ATTEMPTS;
-  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(true);
 
   return (
     <div className="quiz-summary-screen">
@@ -93,6 +94,8 @@ function QuizSummaryScreen({
           <div className="quiz-summary-accordion-content">
             {quizId === 1 ? (
               <Quiz1Summary />
+            ) : quizId === 2 ? (
+              <MateriDistribusi />
             ) : (
               <p className="quiz-summary-text">{summary}</p>
             )}
@@ -366,6 +369,12 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
   // Local pagination state
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showResults, setShowResults] = useState(false);
+
+  // Reset local state when navigating to a different quiz
+  useEffect(() => {
+    setCurrentIndex(0);
+    setShowResults(false);
+  }, [quizId]);
 
   // Reset pagination when quiz restarts
   const { started } = quizState;

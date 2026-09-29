@@ -1425,6 +1425,55 @@ body {
 }
 
 /* =========================================================================
+   INTERACTIVE SLIDER
+   ========================================================================= */
+
+.interactive-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--slate-700);
+  outline: none;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-smooth);
+}
+
+.interactive-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--brand-400);
+  border: 3px solid var(--bg-body);
+  box-shadow: 0 0 8px rgb(56 139 253 / 0.4), 0 0 0 2px rgb(56 139 253 / 0.15);
+  cursor: pointer;
+  transition: box-shadow var(--duration-fast) var(--ease-smooth), transform var(--duration-fast) var(--ease-spring);
+}
+
+.interactive-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 14px rgb(56 139 253 / 0.5), 0 0 0 3px rgb(56 139 253 / 0.2);
+}
+
+.interactive-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--brand-400);
+  border: 3px solid var(--bg-body);
+  box-shadow: 0 0 8px rgb(56 139 253 / 0.4);
+  cursor: pointer;
+}
+
+.interactive-slider::-moz-range-track {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--slate-700);
+}
+
+/* =========================================================================
    RESPONSIVE
    ========================================================================= */
 

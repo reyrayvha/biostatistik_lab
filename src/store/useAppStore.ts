@@ -133,6 +133,27 @@ export const useAppStore = create<AppState>((set, get) => ({
   activeTab: "identitas",
   setActiveTab: (tab) => {
     if (get().isTabUnlocked(tab)) {
+      // When navigating to a quiz tab, reset transient quiz state so the
+      // user always lands on the summary/material screen first.
+      const quizMatch = tab.match(/^quiz-(\d+)$/);
+      if (quizMatch) {
+        const quizId = parseInt(quizMatch[1], 10);
+        const prev = get().quizStates[quizId];
+        if (prev) {
+          set({
+            activeTab: tab,
+            quizStates: {
+              ...get().quizStates,
+              [quizId]: {
+                ...prev,
+                started: false,
+                lastResult: null,
+              },
+            },
+          });
+          return;
+        }
+      }
       set({ activeTab: tab });
     }
   },
@@ -227,12 +248,34 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   advanceToNextQuiz: () => {
-    const { unlockedIndex } = get();
+    const { unlockedIndex, quizStates } = get();
     const nextIndex = unlockedIndex + 1;
     if (nextIndex < TAB_ORDER.length) {
+      const nextTab = TAB_ORDER[nextIndex];
+      // Reset the target quiz's transient state so the summary screen shows
+      const quizMatch = nextTab.match(/^quiz-(\d+)$/);
+      if (quizMatch) {
+        const quizId = parseInt(quizMatch[1], 10);
+        const prev = quizStates[quizId];
+        if (prev) {
+          set({
+            unlockedIndex: nextIndex,
+            activeTab: nextTab,
+            quizStates: {
+              ...quizStates,
+              [quizId]: {
+                ...prev,
+                started: false,
+                lastResult: null,
+              },
+            },
+          });
+          return;
+        }
+      }
       set({
         unlockedIndex: nextIndex,
-        activeTab: TAB_ORDER[nextIndex],
+        activeTab: nextTab,
       });
     }
   },
