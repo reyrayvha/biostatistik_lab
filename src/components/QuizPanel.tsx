@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAppStore, DEFAULT_QUIZ_STATE } from "@/src/store/useAppStore";
 import { quizData, type Question } from "@/src/data/quizData";
+import Quiz1Summary from "@/src/components/Quiz1Summary";
 import {
   BookOpen,
   Play,
@@ -16,6 +17,8 @@ import {
   Hash,
   Eye,
   Quote,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -45,6 +48,7 @@ function QuizSummaryScreen({
   onStart: () => void;
 }) {
   const hasAttemptsLeft = attemptsUsed < MAX_ATTEMPTS;
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
   return (
     <div className="quiz-summary-screen">
@@ -74,11 +78,26 @@ function QuizSummaryScreen({
       )}
 
       <div className="quiz-summary-content">
-        <h3 className="quiz-summary-content-title">
-          <BookOpen size={16} />
-          Rangkuman Materi
-        </h3>
-        <p className="quiz-summary-text">{summary}</p>
+        <button
+          className="quiz-summary-accordion-toggle"
+          onClick={() => setIsSummaryOpen(!isSummaryOpen)}
+        >
+          <div className="quiz-summary-accordion-title">
+            <BookOpen size={18} />
+            <h3>Rangkuman Materi</h3>
+          </div>
+          {isSummaryOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        </button>
+        
+        {isSummaryOpen && (
+          <div className="quiz-summary-accordion-content">
+            {quizId === 1 ? (
+              <Quiz1Summary />
+            ) : (
+              <p className="quiz-summary-text">{summary}</p>
+            )}
+          </div>
+        )}
       </div>
 
       {hasAttemptsLeft ? (

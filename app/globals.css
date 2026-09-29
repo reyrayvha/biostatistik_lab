@@ -40,30 +40,41 @@
   --slate-950: #020617;
 
   /* Semantic (Elegant & Natural) */
-  --color-success: #34d399; /* Vibrant but soft emerald */
+  --color-success: #34d399;
+  /* Vibrant but soft emerald */
   --color-success-dim: rgba(52, 211, 153, 0.12);
-  --color-error: #fb7185; /* Soft readable rose */
+  --color-error: #fb7185;
+  /* Soft readable rose */
   --color-error-dim: rgba(251, 113, 133, 0.12);
   --color-warning: #fbbf24;
 
   /* ── Ultra Premium Neutral Dark Surfaces ── */
-  --bg-body: #09090b; /* Zinc 950 - True professional dark */
-  --bg-card: #18181b; /* Zinc 900 - Matte elevated card */
-  --bg-card-elevated: #27272a; /* Zinc 800 */
+  --bg-body: #09090b;
+  /* Zinc 950 - True professional dark */
+  --bg-card: #18181b;
+  /* Zinc 900 - Matte elevated card */
+  --bg-card-elevated: #27272a;
+  /* Zinc 800 */
   --bg-card-hover: #27272a;
   --bg-input: rgba(255, 255, 255, 0.04);
   --bg-input-focus: rgba(255, 255, 255, 0.08);
 
   /* ── Extremely Readable Text ── */
-  --text-primary: #f4f4f5; /* Zinc 100 - Perfect for reading */
-  --text-secondary: #a1a1aa; /* Zinc 400 - Natural contrast */
-  --text-muted: #71717a; /* Zinc 500 */
+  --text-primary: #f4f4f5;
+  /* Zinc 100 - Perfect for reading */
+  --text-secondary: #a1a1aa;
+  /* Zinc 400 - Natural contrast */
+  --text-muted: #71717a;
+  /* Zinc 500 */
   --text-on-brand: #ffffff;
 
   /* ── Subtle Borders ── */
-  --border-light: #27272a; /* Zinc 800 */
-  --border-medium: #3f3f46; /* Zinc 700 */
-  --border-strong: #52525b; /* Zinc 600 */
+  --border-light: #27272a;
+  /* Zinc 800 */
+  --border-medium: #3f3f46;
+  /* Zinc 700 */
+  --border-strong: #52525b;
+  /* Zinc 600 */
 
   /* Shadows — darker / glow-based for dark mode */
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3);
@@ -155,10 +166,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1280px; /* Reverted to original */
+  max-width: 1280px;
+  /* Reverted to original */
   margin: 0 auto;
   padding: 12px 24px;
-  min-height: 68px; /* Memaksa tinggi header selalu tetap/konsisten */
+  min-height: 68px;
+  /* Memaksa tinggi header selalu tetap/konsisten */
 }
 
 .app-brand {
@@ -319,7 +332,8 @@ body {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 16px;
-  gap: 8px; /* Increased gap for breathing room */
+  gap: 8px;
+  /* Increased gap for breathing room */
 }
 
 /* --- Tab item --- */
@@ -332,13 +346,15 @@ body {
   padding: 12px 14px;
   border: none;
   background: transparent;
-  border-radius: var(--radius-md); /* Pill-like hover */
+  border-radius: var(--radius-md);
+  /* Pill-like hover */
   cursor: pointer;
   font-family: var(--font-sans);
   white-space: nowrap;
   transition: all var(--duration-fast) var(--ease-smooth);
   min-width: 0;
-  margin-bottom: 4px; /* Space for a subtle bottom indicator if needed */
+  margin-bottom: 4px;
+  /* Space for a subtle bottom indicator if needed */
 }
 
 .tab-item:focus-visible {
@@ -353,12 +369,15 @@ body {
 
 /* Active */
 .tab-item--active {
-  background: rgba(255, 255, 255, 0.05); /* Soft highlight for active tab */
-  box-shadow: inset 0 -2px 0 var(--brand-500); /* Clean bottom line indicator */
+  background: rgba(255, 255, 255, 0.05);
+  /* Soft highlight for active tab */
+  box-shadow: inset 0 -2px 0 var(--brand-500);
+  /* Clean bottom line indicator */
 }
 
 .tab-item--active .tab-icon-badge {
-  background: rgba(56, 189, 248, 0.15); /* Soft blue */
+  background: rgba(56, 189, 248, 0.15);
+  /* Soft blue */
   color: #38bdf8;
   border: 1px solid rgba(56, 189, 248, 0.3);
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
@@ -411,7 +430,8 @@ body {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-md); /* Soft rounded corners */
+  border-radius: var(--radius-md);
+  /* Soft rounded corners */
   flex-shrink: 0;
   transition: all var(--duration-fast) var(--ease-spring);
 }
@@ -773,14 +793,42 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-.quiz-summary-content-title {
+/* Accordion Styles */
+.quiz-summary-accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--text-primary);
+  font-family: inherit;
+  transition: opacity var(--duration-fast) var(--ease-smooth);
+}
+
+.quiz-summary-accordion-toggle:hover {
+  opacity: 0.8;
+}
+
+.quiz-summary-accordion-title {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.quiz-summary-accordion-title h3 {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 12px;
+  margin: 0;
+}
+
+.quiz-summary-accordion-content {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+  animation: fadeSlideUp var(--duration-fast) var(--ease-spring);
 }
 
 .quiz-summary-text {
@@ -789,6 +837,7 @@ body {
   line-height: 1.75;
   margin: 0;
 }
+
 
 .quiz-start-btn {
   display: flex;
