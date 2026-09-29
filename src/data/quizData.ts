@@ -63,11 +63,34 @@ export const quizData: Quiz[] = [
         questions: [
             {
                 id: 1,
-                text: "[DUMMY] Soal distribusi nomor 1?",
-                options: ["Opsi A", "Opsi B", "Opsi C", "Opsi D"],
-                correctAnswer: "Opsi A"
+                text: "Berapa persen nilai yang berada dalam ±2σ pada distribusi normal?",
+                options: ["68%", "90%", "95%", "99.7%"],
+                correctAnswer: "95%"
+            },
+            {
+                id: 2,
+                text: "Referensi hemoglobin: mean=14, SD=1. Pasien punya 11 g/dL. Berapa SD di bawah?",
+                options: ["1", "2", "3", "4"],
+                correctAnswer: "3"
+            },
+            {
+                id: 3,
+                text: "Mana yang BUKAN sifat distribusi normal?",
+                options: ["Mean = Median = Modus", "Didefinisikan oleh nilai μ dan σ", "Selalu miring kanan", "Luas di bawah kurva = 1"],
+                correctAnswer: "Selalu miring kanan"
+            },
+            {
+                id: 4,
+                text: "Saat ukuran sampel meningkat, distribusi sampling mean menjadi lebih normal. Ini disebut:",
+                options: ["Hukum Bilangan Besar", "Teorema Limit Pusat", "Teorema Bayes", "Regresi ke Mean"],
+                correctAnswer: "Teorema Limit Pusat"
+            },
+            {
+                id: 5,
+                text: "Menaikkan σ dengan μ tetap membuat kurva:",
+                options: ["Lebih tinggi dan sempit", "Lebih pendek dan lebar", "Bergeser ke kanan", "Lebih miring"],
+                correctAnswer: "Lebih pendek dan lebar"
             }
-            // Nanti tinggal copy-paste block soal di atas sampai ada 5 soal
         ]
     },
     {
