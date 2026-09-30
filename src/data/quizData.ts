@@ -59,7 +59,7 @@ export const quizData: Quiz[] = [
         quizId: 2,
         title: "Distribusi",
         summary: "[DUMMY] Area rangkuman materi Distribusi...",
-        quote: "Ketepatan dalam memahami distribusi data adalah kunci diagnosis yang tepat.",
+        quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
         questions: [
             {
                 id: 1,
@@ -97,7 +97,7 @@ export const quizData: Quiz[] = [
         quizId: 3,
         title: "Probabilitas dan Bayes",
         summary: "[DUMMY] Area rangkuman materi Probabilitas...",
-        quote: "Di balik setiap probabilitas medis, ada ikhtiar dan doa untuk kesembuhan pasien.",
+        quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
         questions: [
             {
                 id: 1,
@@ -135,8 +135,39 @@ export const quizData: Quiz[] = [
         quizId: 4,
         title: "Uji Hipotesis",
         summary: "[DUMMY] Area rangkuman materi Uji Hipotesis...",
-        quote: "Kebenaran ilmiah dibangun atas dasar pengujian yang teliti dan integritas tinggi.",
-        questions: []
+        quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
+        questions: [
+            {
+                id: 1,
+                text: "Sebuah studi melaporkan p = 0,03. Ini berarti:",
+                options: ["3% Kemungkinan Ho benar", "3% Kemungkinan hasil ini jika Ho benar", "Obat bekerja dengan 97% kepastian", "Ukuran efek besar"],
+                correctAnswer: "3% Kemungkinan hasil ini jika Ho benar"
+            },
+            {
+                id: 2,
+                text: "Gagal menolak H₀ padahal obat benar-benar bekerja adalah:",
+                options: ["Kesalahan Tipe I", "Kesalahan Tipe II", "Keputusan benar", "Kesalahan power"],
+                correctAnswer: "Kesalahan Tipe II"
+            },
+            {
+                id: 3,
+                text: "Mana yang MENINGKATKAN power statistik?",
+                options: ["Mengurangi n", "Menggunakan α = 0.01 bukan 0.05", "Menambah n", "Mengurangi ukuran efek"],
+                correctAnswer: "Menambah n"
+            },
+            {
+                id: 4,
+                text: "Perbedaan TD 0,5 mmHg, p = 0,001, n = 50.000. Ini adalah:",
+                options: ["Signifikan secara klinis", "Signifikan secara statistik tapi tidak signifikan secara klinis", "Kesalahan Tipe I", "Kesalahan Tipe II"],
+                correctAnswer: "Signifikan secara statistik tapi tidak signifikan secara klinis"
+            },
+            {
+                id: 5,
+                text: "α = 0,05, 20 tes independen. Jumlah positif palsu yang diharapkan?",
+                options: ["0", "1", "5", "20"],
+                correctAnswer: "1"
+            }
+        ]
     },
     {
         quizId: 5,
