@@ -253,11 +253,124 @@ export const quizData: Quiz[] = [
         questions: [
             {
                 id: 1,
-                text: "[DUMMY] Soal Ujian Akhir nomor 1?",
-                options: ["Opsi A", "Opsi B", "Opsi C", "Opsi D"],
-                correctAnswer: "Opsi A"
+                text: "p = 0,04, 95% CI: −2 sampai +8 mmHg. Interpretasi:",
+                options: ["Obat berhasil", "CI bertentangan dengan p-value", "Tidak ada efek bermakna klinis yang terkonfirmasi", "Obat tidak berhasil"],
+                correctAnswer: "Tidak ada efek bermakna klinis yang terkonfirmasi"
+            },
+            {
+                id: 2,
+                text: "Statin baru: LDL ↓5 mg/dL, p=0,0001, n=50.000:",
+                options: ["Sangat efektif", "Signifikan statistik tapi tidak klinis", "Kesalahan Tipe I", "Harus menggantikan standar perawatan"],
+                correctAnswer: "Signifikan statistik tapi tidak klinis"
+            },
+            {
+                id: 3,
+                text: "Hasil pemeriksaan indeks massa tubuh (IMT) seorang pasien menunjukkan Z-score 1,5. Interpretasi yang tepat adalah:",
+                options: ["1.5 SD diatas mean", "1.5 SD dibawah mean", "Di persentil ke-15", "Di bawah 95% nilai"],
+                correctAnswer: "1.5 SD diatas mean"
+            },
+            {
+                id: 4,
+                text: "Sebuah penelitian obat antihipertensi memiliki statistical power sebesar 60%. Pernyataan ini berarti:",
+                options: ["60% peluang menemukan efek nyata", "40% kesalahan Tipe I", "60% tingkat kepercayaan", "60% sampel memadai", "Ada 60% kemungkinan penelitian gagal menemukan efek nyata"],
+                correctAnswer: "60% peluang menemukan efek nyata"
+            },
+            {
+                id: 5,
+                text: "Prevalensi adalah:",
+                options: ["Kasus baru/tahun", "Kasus yang ada/populasi pada satu titik waktu", "Laju perkembangan", "Insidensi kumulatif"],
+                correctAnswer: "Kasus yang ada/populasi pada satu titik waktu"
+            },
+            {
+                id: 6,
+                text: "Sensitivitas 95%, spesifisitas 80%. Mana yang benar?",
+                options: ["5% pasien sakit terlewat", "20% orang sehat tes positif", "A dan B keduanya", "Tidak keduanya benar"],
+                correctAnswer: "A dan B keduanya"
+            },
+            {
+                id: 7,
+                text: "Waktu tunggu UGD: 5, 10, 15, 15, 20, 120 menit. Ringkasan terbaik:",
+                options: ["Mean = 30.8", "Median = 15", "Modus = 15", "SD"],
+                correctAnswer: "Median = 15"
+            },
+            {
+                id: 8,
+                text: "Dalam suatu penelitian klinis, 5 endpoint diuji secara bersamaan dengan alpha=0,05. Peluang terjadinya minimal satu false positive adalah:",
+                options: ["5%", "10%", "23%", "50%"],
+                correctAnswer: "23%"
+            },
+            {
+                id: 9,
+                text: "95% CI = [2,3; 8,7] untuk perbedaan mean. Interpretasi yang benar:",
+                options: ["95% pasien dalam rentang ini", "95% yakin perbedaan sebenarnya dalam rentang", "95% probabilitas mean ada di sini", "p > 0.05"],
+                correctAnswer: "95% yakin perbedaan sebenarnya dalam rentang"
+            },
+            {
+                id: 10,
+                text: "NNH = 200 berarti:",
+                options: ["200 pasien dirugikan", "1 dari 200 yang diobati mengalami efek samping", "Terlalu berbahaya", "Risiko absolut 2%"],
+                correctAnswer: "1 dari 200 yang diobati mengalami efek samping"
+            },
+            {
+                id: 11,
+                text: "ARR = 2%, NNT = 50 berarti:",
+                options: ["Penurunan risiko relatif 2%", "Obati 50 agar 1 dapat manfaat", "50% mendapat manfaat", "Efikasi 2% / 50"],
+                correctAnswer: "Obati 50 agar 1 dapat manfaat"
+            },
+            {
+                id: 12,
+                text: "Spesifisitas dihitung sebagai:",
+                options: ["PB / (PB+NP)", "NB / (NB+PP)", "PB / (PB+PP)", "NB / (NB+NP)"],
+                correctAnswer: "NB / (NB+PP)"
+            },
+            {
+                id: 13,
+                text: "LR+ = 15, prob pre-test = 10%. Probabilitas post-test setelah positif:",
+                options: ["15%", "40%", "63%", "90%"],
+                correctAnswer: "63%"
+            },
+            {
+                id: 14,
+                text: "Skrining mendeteksi kanker 2 tahun lebih awal. Ketahanan 5 tahun membaik tapi usia kematian tidak berubah:",
+                options: ["Manfaat nyata", "Lead-time bias", "Length-time bias", "Selection bias"],
+                correctAnswer: "Lead-time bias"
+            },
+            {
+                id: 15,
+                text: "TD diukur sebelum dan sesudah pada pasien YANG SAMA. Gunakan:",
+                options: ["Uji-t independen", "Uji-t berpasangan", "Chi-square", "ANOVA"],
+                correctAnswer: "Uji-t berpasangan"
+            },
+            {
+                id: 16,
+                text: "IMT: μ=25, σ=4. Berapa % populasi dengan IMT di atas 33?",
+                options: ["2.5%", "5%", "16%", "0.15%"],
+                correctAnswer: "2.5%"
+            },
+            {
+                id: 17,
+                text: "Tes HIV (sens/spes 99,5%), prevalensi 0,1%. NPP ≈:",
+                options: ["95%", "67%", "17%", "50%"],
+                correctAnswer: "17%"
+            },
+            {
+                id: 18,
+                text: "Studi kasus-kontrol untuk cacat lahir langka tepat karena:",
+                options: ["Menegakkan kausalitas", "Menghitung insidensi", "Efisien mempelajari outcome langka", "Menghilangkan recall bias"],
+                correctAnswer: "Efisien mempelajari outcome langka"
+            },
+            {
+                id: 19,
+                text: "10K perokok, 10K bukan perokok. 200 vs 20 kena kanker paru. RR:",
+                options: ["10", "100", "0.1", "180"],
+                correctAnswer: "10"
+            },
+            {
+                id: 20,
+                text: "Lebar 95% confidence interval pada hasil penelitian dapat meningkat (melebar) apabila:",
+                options: ["↑ ukuran sampel", "↓ variasi", "↓ ukuran sampel", "↑ α ke 0.10"],
+                correctAnswer: "↓ ukuran sampel"
             }
-            // Nanti diisi sampai 20 soal
         ]
     }
 ];

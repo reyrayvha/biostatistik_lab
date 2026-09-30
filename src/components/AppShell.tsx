@@ -20,23 +20,12 @@ export default function AppShell() {
       return <IdentityForm />;
     }
 
-    // Quiz 1-6 → use QuizPanel
+    // Quiz 1-7 → use QuizPanel
     const quizMatch = activeTab.match(/^quiz-(\d+)$/);
     if (quizMatch) {
       const quizId = parseInt(quizMatch[1], 10);
 
-      // Quiz 7 (NUMi) — placeholder for now
-      if (quizId === 7) {
-        return (
-          <QuizPlaceholder
-            tabId={activeTab}
-            title="Quiz 7 — NUMi (Ujian Akhir)"
-            subtitle="Ujian komprehensif mencakup seluruh materi dari Quiz 1 hingga 6."
-          />
-        );
-      }
-
-      // Quiz 1-6 → full quiz logic
+      // Quiz 1-7 → full quiz logic
       return <QuizPanel quizId={quizId} />;
     }
 

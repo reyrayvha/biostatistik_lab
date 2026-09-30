@@ -82,38 +82,40 @@ function QuizSummaryScreen({
         </div>
       )}
 
-      <div className="quiz-summary-content">
-        <button
-          className="quiz-summary-accordion-toggle"
-          onClick={() => setIsSummaryOpen(!isSummaryOpen)}
-        >
-          <div className="quiz-summary-accordion-title">
-            <BookOpen size={18} />
-            <h3>Rangkuman Materi</h3>
-          </div>
-          {isSummaryOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-        </button>
-        
-        {isSummaryOpen && (
-          <div className="quiz-summary-accordion-content">
-            {quizId === 1 ? (
-              <Quiz1Summary />
-            ) : quizId === 2 ? (
-              <MateriDistribusi />
-            ) : quizId === 3 ? (
-              <Quiz3Summary />
-            ) : quizId === 4 ? (
-              <Quiz4Summary />
-            ) : quizId === 5 ? (
-              <Quiz5Summary />
-            ) : quizId === 6 ? (
-              <Quiz6Summary />
-            ) : (
-              <p className="quiz-summary-text">{summary}</p>
-            )}
-          </div>
-        )}
-      </div>
+      {quizId !== 7 && (
+        <div className="quiz-summary-content">
+          <button
+            className="quiz-summary-accordion-toggle"
+            onClick={() => setIsSummaryOpen(!isSummaryOpen)}
+          >
+            <div className="quiz-summary-accordion-title">
+              <BookOpen size={18} />
+              <h3>Rangkuman Materi</h3>
+            </div>
+            {isSummaryOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </button>
+          
+          {isSummaryOpen && (
+            <div className="quiz-summary-accordion-content">
+              {quizId === 1 ? (
+                <Quiz1Summary />
+              ) : quizId === 2 ? (
+                <MateriDistribusi />
+              ) : quizId === 3 ? (
+                <Quiz3Summary />
+              ) : quizId === 4 ? (
+                <Quiz4Summary />
+              ) : quizId === 5 ? (
+                <Quiz5Summary />
+              ) : quizId === 6 ? (
+                <Quiz6Summary />
+              ) : (
+                <p className="quiz-summary-text">{summary}</p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {hasAttemptsLeft ? (
         <button className="quiz-start-btn" onClick={onStart}>
