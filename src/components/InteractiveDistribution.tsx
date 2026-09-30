@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useMemo } from 'react';
 
@@ -137,9 +137,9 @@ export default function InteractiveDistribution() {
           <span className="shrink-0 px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase font-mono bg-[#388bfd]/15 text-[#58a6ff] border border-[#388bfd]/30 rounded-md">
             Coba Sendiri
           </span>
-          <p className="text-sm text-[#8b949e]">
-            Atur <strong className="text-[#c9d1d9]">μ</strong> (mean) dan{" "}
-            <strong className="text-[#c9d1d9]">σ</strong> (SD) untuk mengubah bentuk kurva.
+          <p className="text-sm text-[#e6edf3]">
+            Atur <strong className="text-[#e6edf3]">μ</strong> (mean) dan{" "}
+            <strong className="text-[#e6edf3]">σ</strong> (SD) untuk mengubah bentuk kurva.
             Pilih rentang ±1/2/3σ untuk melihat persentase populasi.
           </p>
         </div>
@@ -149,7 +149,7 @@ export default function InteractiveDistribution() {
           {/* μ slider */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-[#c9d1d9]">μ (Mean)</span>
+              <span className="text-sm font-medium text-[#e6edf3]">μ (Mean)</span>
               <span className="text-sm font-mono font-bold text-[#58a6ff]">{mu}</span>
             </div>
             <input
@@ -168,7 +168,7 @@ export default function InteractiveDistribution() {
           {/* σ slider */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-[#c9d1d9]">σ (Standar Deviasi)</span>
+              <span className="text-sm font-medium text-[#e6edf3]">σ (Standar Deviasi)</span>
               <span className="text-sm font-mono font-bold text-[#58a6ff]">{sigma}</span>
             </div>
             <input
@@ -293,7 +293,7 @@ export default function InteractiveDistribution() {
                 className={`px-5 py-2 text-sm font-mono font-semibold rounded-full transition-all duration-200 border ${
                   isActive
                     ? 'bg-[#388bfd]/20 text-[#58a6ff] border-[#388bfd]/40 shadow-[0_0_14px_rgba(56,139,253,0.25)]'
-                    : 'bg-[#21262d] text-[#8b949e] border-[#30363d] hover:bg-[#30363d] hover:text-[#c9d1d9]'
+                    : 'bg-[#21262d] text-[#e6edf3] border-[#30363d] hover:bg-[#30363d] hover:text-[#e6edf3]'
                 }`}
               >
                 {SIGMA_CONFIG[key].label}
@@ -304,8 +304,10 @@ export default function InteractiveDistribution() {
 
         {/* Insight box */}
         <div className="bg-[#388bfd]/8 border border-[#388bfd]/20 rounded-xl p-4 flex items-start gap-3">
-          <span className="text-lg shrink-0 mt-0.5">💡</span>
-          <p className="text-sm text-[#c9d1d9] leading-relaxed">
+          <span className="shrink-0 mt-0.5 text-[#58a6ff]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </span>
+          <p className="text-sm text-[#e6edf3] leading-relaxed">
             <strong className="text-[#58a6ff]">{pct}</strong> nilai berada di antara{" "}
             <strong className="font-mono">{lowerBound}</strong> dan{" "}
             <strong className="font-mono">{upperBound}</strong>.
@@ -321,3 +323,4 @@ export default function InteractiveDistribution() {
     </div>
   );
 }
+

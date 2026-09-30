@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAppStore, DEFAULT_QUIZ_STATE } from "@/src/store/useAppStore";
 import { quizData, type Question } from "@/src/data/quizData";
 import Quiz1Summary from "@/src/components/Quiz1Summary";
 import MateriDistribusi from "@/src/components/MateriDistribusi";
+import Quiz3Summary from "@/src/components/Quiz3Summary";
 import {
   BookOpen,
   Play,
@@ -96,6 +97,8 @@ function QuizSummaryScreen({
               <Quiz1Summary />
             ) : quizId === 2 ? (
               <MateriDistribusi />
+            ) : quizId === 3 ? (
+              <Quiz3Summary />
             ) : (
               <p className="quiz-summary-text">{summary}</p>
             )}
@@ -290,12 +293,12 @@ function QuizScorePanel({
         </div>
         <h3 className="quiz-score-title">
           {percentage === 100
-            ? "Sempurna! 🎉"
+            ? "Sempurna"
             : percentage >= 80
-              ? "Hebat! 👏"
+              ? "Hasil Sangat Baik"
               : percentage >= 60
-                ? "Cukup Baik 👍"
-                : "Terus Belajar 💪"}
+                ? "Cukup Baik"
+                : "Terus Berlatih"}
         </h3>
         <p className="quiz-score-detail">
           Anda menjawab{" "}
@@ -528,3 +531,4 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
     </div>
   );
 }
+

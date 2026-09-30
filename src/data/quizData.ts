@@ -98,7 +98,38 @@ export const quizData: Quiz[] = [
         title: "Probabilitas dan Bayes",
         summary: "[DUMMY] Area rangkuman materi Probabilitas...",
         quote: "Di balik setiap probabilitas medis, ada ikhtiar dan doa untuk kesembuhan pasien.",
-        questions: []
+        questions: [
+            {
+                id: 1,
+                text: "Tes: sensitivitas 99%, spesifisitas 99%. Prevalensi: 1%. Perkiraan NPP?",
+                options: ["99%", "90%", "50%", "33%"],
+                correctAnswer: "50%"
+            },
+            {
+                id: 2,
+                text: "Teorema Bayes menghubungkan probabilitas pre-test ke post-test menggunakan:",
+                options: ["Sensitivitas dan spesifisitas", "Rasio kemungkinan", "A dan B keduanya bisa", "Standar deviasi dan kuartil"],
+                correctAnswer: "A dan B keduanya bisa"
+            },
+            {
+                id: 3,
+                text: "Prevalensi 5%, LR+ = 10. Probabilitas post-test setelah tes positif?",
+                options: ["15%", "34%", "50%", "90%"],
+                correctAnswer: "34%"
+            },
+            {
+                id: 4,
+                text: "Skenario mana yang memberikan NPP TERTINGGI?",
+                options: ["Prevalensi tinggi + spesifisitas tinggi", "Prevalensi rendah + spesifisitas tinggi", "Prevalensi rendah + spesifisitas tinggi", "Prevalensi tinggi + spesifisitas rendah"],
+                correctAnswer: "Prevalensi tinggi + spesifisitas tinggi"
+            },
+            {
+                id: 5,
+                text: "Dua kejadian independen, masing-masing P = 0,1. P(keduanya terjadi)?",
+                options: ["0.2", "0.1", "0.01", "0.02"],
+                correctAnswer: "0.01"
+            }
+        ]
     },
     {
         quizId: 4,
