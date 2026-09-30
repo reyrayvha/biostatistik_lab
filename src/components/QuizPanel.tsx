@@ -8,6 +8,7 @@ import MateriDistribusi from "@/src/components/MateriDistribusi";
 import Quiz3Summary from "@/src/components/Quiz3Summary";
 import Quiz4Summary from "@/src/components/Quiz4Summary";
 import Quiz5Summary from "@/src/components/Quiz5Summary";
+import Quiz6Summary from "@/src/components/Quiz6Summary";
 import {
   BookOpen,
   Play,
@@ -105,6 +106,8 @@ function QuizSummaryScreen({
               <Quiz4Summary />
             ) : quizId === 5 ? (
               <Quiz5Summary />
+            ) : quizId === 6 ? (
+              <Quiz6Summary />
             ) : (
               <p className="quiz-summary-text">{summary}</p>
             )}
