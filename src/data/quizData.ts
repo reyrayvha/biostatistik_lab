@@ -173,8 +173,39 @@ export const quizData: Quiz[] = [
         quizId: 5,
         title: "Tes Diagnostik",
         summary: "[DUMMY] Area rangkuman materi Tes Diagnostik...",
-        quote: "Sensitivitas dan spesifisitas bukan sekadar angka, melainkan kepastian langkah klinis.",
-        questions: []
+        quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
+        questions: [
+            {
+                id: 1,
+                text: "Sensitivitas 100% + hasil negatif berarti:",
+                options: ["Pasien punya penyakit", "Pasien tidak punya penyakit", "Tes tidak andal", "Perlu info lebih"],
+                correctAnswer: "Pasien tidak punya penyakit"
+            },
+            {
+                id: 2,
+                text: "Mana yang paling berguna untuk menegakkan diagnosis?",
+                options: ["Sensitivitas tinggi", "Spesifisitas tinggi", "NPN tinggi", "NPP tinggi"],
+                correctAnswer: "Spesifisitas tinggi"
+            },
+            {
+                id: 3,
+                text: "LR = 1,0 berarti:",
+                options: ["Tes sempurna", "Tidak ada informasi diagnostik", "Pasien punya penyakit", "Sensitivitas 100% dan spesifisitas 100%"],
+                correctAnswer: "Tidak ada informasi diagnostik"
+            },
+            {
+                id: 4,
+                text: "Menaikkan prevalensi akan:",
+                options: ["↑ NPP, ↓ NPN", "↓ keduanya", "↑ Keduanya", "Tidak berpengaruh"],
+                correctAnswer: "↑ NPP, ↓ NPN"
+            },
+            {
+                id: 5,
+                text: "Kurva ROC memplot:",
+                options: ["NPP vs NPN", "Sensitivitas vs (1-Spesifisitas)", "Power vs α", "Insidensi vs prevalensi"],
+                correctAnswer: "Sensitivitas vs (1-Spesifisitas)"
+            }
+        ]
     },
     {
         quizId: 6,
