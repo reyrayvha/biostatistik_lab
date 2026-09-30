@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useMemo } from 'react';
 
@@ -158,7 +158,7 @@ export default function InteractiveDistribution() {
               max={200}
               value={mu}
               onChange={e => setMu(Number(e.target.value))}
-              className="interactive-slider w-full"
+              className="w-full accent-[#58a6ff]"
             />
             <div className="flex justify-between text-[10px] font-mono text-[#484f58] mt-1">
               <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span>
@@ -177,7 +177,7 @@ export default function InteractiveDistribution() {
               max={50}
               value={sigma}
               onChange={e => setSigma(Number(e.target.value))}
-              className="interactive-slider w-full"
+              className="w-full accent-[#58a6ff]"
             />
             <div className="flex justify-between text-[10px] font-mono text-[#484f58] mt-1">
               <span>1</span><span>13</span><span>25</span><span>38</span><span>50</span>

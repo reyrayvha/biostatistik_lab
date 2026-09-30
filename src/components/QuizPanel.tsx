@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAppStore, DEFAULT_QUIZ_STATE } from "@/src/store/useAppStore";
@@ -6,6 +6,7 @@ import { quizData, type Question } from "@/src/data/quizData";
 import Quiz1Summary from "@/src/components/Quiz1Summary";
 import MateriDistribusi from "@/src/components/MateriDistribusi";
 import Quiz3Summary from "@/src/components/Quiz3Summary";
+import Quiz4Summary from "@/src/components/Quiz4Summary";
 import {
   BookOpen,
   Play,
@@ -99,6 +100,8 @@ function QuizSummaryScreen({
               <MateriDistribusi />
             ) : quizId === 3 ? (
               <Quiz3Summary />
+            ) : quizId === 4 ? (
+              <Quiz4Summary />
             ) : (
               <p className="quiz-summary-text">{summary}</p>
             )}
