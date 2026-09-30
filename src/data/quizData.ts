@@ -211,8 +211,39 @@ export const quizData: Quiz[] = [
         quizId: 6,
         title: "Desain Studi",
         summary: "[DUMMY] Area rangkuman materi Desain Studi...",
-        quote: "Metodologi yang kokoh melahirkan bukti medis yang bermanfaat bagi kemanusiaan.",
-        questions: []
+        quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
+        questions: [
+            {
+                id: 1,
+                text: "Bukti TERKUAT untuk kausalitas?",
+                options: ["Kasus-kontrol", "Kohort", "RCT", "Potong lintang"],
+                correctAnswer: "RCT"
+            },
+            {
+                id: 2,
+                text: "Ukuran asosiasi pada studi kasus-kontrol:",
+                options: ["Risiko relatif", "Odds Ratio", "Risiko Atribut", "Laju Insidensi"],
+                correctAnswer: "Odds Ratio"
+            },
+            {
+                id: 3,
+                text: "Kanker terdeteksi 3 tahun lebih awal, pasien meninggal di usia sama:",
+                options: ["Selection bias", "Recall bias", "Lead-time bias", "Length-time bias"],
+                correctAnswer: "Lead-time bias"
+            },
+            {
+                id: 4,
+                text: "Ibu dari anak yang terkena dampak mengingat lebih banyak penggunaan obat:",
+                options: ["Lead-time bias", "Selection bias", "Recall bias", "Efek Hawthorne"],
+                correctAnswer: "Recall bias"
+            },
+            {
+                id: 5,
+                text: "Kopi → kanker paru, tapi peminum kopi lebih banyak merokok. Merokok adalah:",
+                options: ["Effect modifier", "Perancu", "Mediator", "Collider"],
+                correctAnswer: "Perancu"
+            }
+        ]
     },
     {
         quizId: 7,
