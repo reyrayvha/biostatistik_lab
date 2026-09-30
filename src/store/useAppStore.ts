@@ -43,7 +43,7 @@ export const TAB_LABELS: Record<TabId, string> = {
   "quiz-4": "Uji Hipotesis",
   "quiz-5": "Tes Diagnostik",
   "quiz-6": "Desain Studi",
-  "quiz-7": "Ujian Akhir NUMi",
+  "quiz-7": "Ujian Akhir",
   leaderboard: "Papan Skor",
 };
 
@@ -248,10 +248,15 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   advanceToNextQuiz: () => {
-    const { unlockedIndex, quizStates } = get();
-    const nextIndex = unlockedIndex + 1;
+    const { activeTab, unlockedIndex, quizStates } = get();
+    const currentIndex = TAB_ORDER.indexOf(activeTab);
+    const nextIndex = currentIndex + 1;
+    
     if (nextIndex < TAB_ORDER.length) {
       const nextTab = TAB_ORDER[nextIndex];
+      // Only advance unlockedIndex if we actually unlocked something new
+      const newUnlockedIndex = Math.max(unlockedIndex, nextIndex);
+
       // Reset the target quiz's transient state so the summary screen shows
       const quizMatch = nextTab.match(/^quiz-(\d+)$/);
       if (quizMatch) {
@@ -259,7 +264,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         const prev = quizStates[quizId];
         if (prev) {
           set({
-            unlockedIndex: nextIndex,
+            unlockedIndex: newUnlockedIndex,
             activeTab: nextTab,
             quizStates: {
               ...quizStates,
@@ -274,7 +279,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
       }
       set({
-        unlockedIndex: nextIndex,
+        unlockedIndex: newUnlockedIndex,
         activeTab: nextTab,
       });
     }

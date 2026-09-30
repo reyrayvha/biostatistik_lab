@@ -120,7 +120,7 @@ export const quizData: Quiz[] = [
             {
                 id: 4,
                 text: "Skenario mana yang memberikan NPP TERTINGGI?",
-                options: ["Prevalensi tinggi + spesifisitas tinggi", "Prevalensi rendah + spesifisitas tinggi", "Prevalensi rendah + spesifisitas tinggi", "Prevalensi tinggi + spesifisitas rendah"],
+                options: ["Prevalensi tinggi + spesifisitas tinggi", "Prevalensi rendah + spesifisitas tinggi", "Prevalensi rendah + spesifisitas rendah", "Prevalensi tinggi + spesifisitas rendah"],
                 correctAnswer: "Prevalensi tinggi + spesifisitas tinggi"
             },
             {
@@ -272,7 +272,7 @@ export const quizData: Quiz[] = [
             {
                 id: 4,
                 text: "Sebuah penelitian obat antihipertensi memiliki statistical power sebesar 60%. Pernyataan ini berarti:",
-                options: ["60% peluang menemukan efek nyata", "40% kesalahan Tipe I", "60% tingkat kepercayaan", "60% sampel memadai", "Ada 60% kemungkinan penelitian gagal menemukan efek nyata"],
+                options: ["60% peluang menemukan efek nyata", "40% kesalahan Tipe I", "60% tingkat kepercayaan", "60% sampel memadai"],
                 correctAnswer: "60% peluang menemukan efek nyata"
             },
             {

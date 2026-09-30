@@ -5,6 +5,7 @@ import TabNavigation from "@/src/components/TabNavigation";
 import IdentityForm from "@/src/components/IdentityForm";
 import QuizPanel from "@/src/components/QuizPanel";
 import QuizPlaceholder from "@/src/components/QuizPlaceholder";
+import Leaderboard from "@/src/components/Leaderboard";
 import { Trophy } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -30,17 +31,7 @@ export default function AppShell() {
     }
 
     if (activeTab === "leaderboard") {
-      return (
-        <div className="quiz-placeholder">
-          <div className="quiz-placeholder-icon">
-            <Trophy size={48} strokeWidth={1.5} />
-          </div>
-          <h2 className="quiz-placeholder-title">Leaderboard</h2>
-          <p className="quiz-placeholder-subtitle">
-            Papan skor global — lihat peringkat seluruh mahasiswa.
-          </p>
-        </div>
-      );
+      return <Leaderboard />;
     }
 
     return null;
