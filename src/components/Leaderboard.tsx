@@ -105,8 +105,8 @@ export default function Leaderboard() {
         
         setData(formattedData);
       }
-    } catch (error) {
-      console.error("Error fetching leaderboard:", error);
+    } catch (error: any) {
+      console.error("Error fetching leaderboard:", error.message || error);
     } finally {
       setLoading(false);
     }
