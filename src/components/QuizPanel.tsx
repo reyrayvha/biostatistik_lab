@@ -130,12 +130,12 @@ function QuizSummaryScreen({
             onClick={onStart}
           >
             {attemptsUsed > 0
-              ? (quizId === 7 ? `Ulangi Ujian Akhir (${MAX_ATTEMPTS - attemptsUsed} sisa)` : `Ulangi Kuis (${MAX_ATTEMPTS - attemptsUsed} sisa)`)
-              : (quizId === 7 ? "Mulai Ujian Akhir" : "Mulai Kuis")}
+              ? (quizId === 7 ? `Ulangi Ujian Akhir (${MAX_ATTEMPTS - attemptsUsed} sisa)` : `Ulangi Quiz (${MAX_ATTEMPTS - attemptsUsed} sisa)`)
+              : (quizId === 7 ? "Mulai Ujian Akhir" : "Mulai Quiz")}
           </button>
         ) : (
           <div className="flex-1 flex items-center justify-center py-3.5 rounded-xl border border-slate-300 bg-slate-50 text-slate-500 font-medium text-sm tracking-wide">
-            Sisa percobaan kuis ini telah habis.
+            Sisa percobaan quiz ini telah habis.
           </div>
         )}
 
@@ -144,7 +144,7 @@ function QuizSummaryScreen({
             className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
             onClick={onAdvance}
           >
-            {quizId === 7 ? "Lihat Papan Skor" : "Lanjut Kuis Berikutnya"}
+            {quizId === 7 ? "Lihat Papan Skor" : "Lanjut Quiz Berikutnya"}
           </button>
         )}
       </div>
@@ -325,7 +325,7 @@ function QuizScorePanel({
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
         <h3 className="text-sm font-semibold tracking-wider uppercase text-slate-500 mb-3 flex items-center gap-2">
-          <Target size={18} /> Hasil Kuis
+          <Target size={18} /> Hasil Quiz
         </h3>
 
         <div className="text-[6rem] font-medium tracking-tight leading-none text-slate-900">
@@ -384,7 +384,7 @@ function QuizScorePanel({
           onClick={onAdvance}
           className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
         >
-          Lanjut ke Kuis Selanjutnya
+          Lanjut ke Quiz Selanjutnya
         </button>
       </div>
     </div>

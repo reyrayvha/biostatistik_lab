@@ -78,8 +78,8 @@ export default function TabNavigation() {
                 <span className="tab-label-primary">
                   {TAB_LABELS[tabId]}
                 </span>
-                <span className="tab-label-sub">
-                  {tabId.replace("-", " ")}
+                <span className="tab-label-sub capitalize">
+                  {tabId === "quiz-7" ? "Evaluasi" : tabId.replace("-", " ")}
                 </span>
               </span>
             </button>
