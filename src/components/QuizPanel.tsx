@@ -64,7 +64,7 @@ function QuizSummaryScreen({
         <div className="quiz-summary-icon">
           <BookOpen size={32} strokeWidth={1.5} />
         </div>
-        <h2 className="quiz-summary-title">{title}</h2>
+        <h2 className="text-lg md:text-2xl font-bold text-center text-slate-800">{title}</h2>
         {attemptsUsed > 0 && (
           <div className="quiz-attempt-badge">
             <Zap size={14} />
@@ -795,7 +795,7 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
     <div className="quiz-panel">
       {/* Header bar */}
       <div className="quiz-header-bar">
-        <h2 className="quiz-header-title">
+        <h2 className="text-lg md:text-2xl font-bold text-center text-slate-800">
           {quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
         </h2>
         <span className="quiz-header-meta">

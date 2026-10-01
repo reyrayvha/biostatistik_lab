@@ -63,7 +63,7 @@ export default function AppShell() {
       {/* Header */}
       <header className="app-header">
         <div className="app-header-inner">
-          <div className="app-brand">
+          <div className="app-brand pl-14 md:pl-4">
             <div className="app-brand-logo">
               <span className="brand-text-white">SMART-MATH</span>
               <span className="brand-text-blue">MEDICS</span>
