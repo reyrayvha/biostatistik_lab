@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAppStore, DEFAULT_QUIZ_STATE } from "@/src/store/useAppStore";
@@ -589,111 +589,109 @@ function NUMiScorePanel({
     // Handle "Next" button
     const handleNext = useCallback(async () => {
       if (isLastQuestion) {
-        if (quizId === 7) {
-          setIsSubmitting(true);
-          try {
-            const identity = useAppStore.getState().identity;
-            if (!identity) throw new Error("Identity not found");
+        setIsSubmitting(true);
+        
+        // 1. Finish the quiz locally FIRST so the Zustand store is perfectly up-to-date
+        finishQuiz(quizId, currentScore, totalQuestions);
 
-            const { supabase } = await import("@/src/lib/supabaseClient");
+        // 2. Sync to Supabase in the background
+        try {
+          const identity = useAppStore.getState().identity;
+          if (!identity) throw new Error("Identity not found");
 
-            const { data: student, error: studentError } = await supabase
-              .from("students")
-              .upsert(
-                { nim: identity.nim, name: identity.nama, cohort: identity.angkatan },
-                { onConflict: "nim" }
-              )
-              .select("id")
-              .single();
+          const { supabase } = await import("@/src/lib/supabaseClient");
 
-            if (studentError) throw studentError;
+          const { data: student, error: studentError } = await supabase
+            .from("students")
+            .upsert(
+              { nim: identity.nim, name: identity.nama, cohort: identity.angkatan },
+              { onConflict: "nim" }
+            )
+            .select("id")
+            .single();
 
-            const states = useAppStore.getState().quizStates;
-            const details = Object.entries(states).map(([qId, state]) => {
-              const qIdNum = parseInt(qId);
-              const quiz = quizData.find((q) => q.quizId === qIdNum);
-              if (!quiz) return null;
+          if (studentError) throw studentError;
 
-              const isCurrentQuiz = qIdNum === 7;
-
-              const answersDetail = quiz.questions.map((q) => {
-                // If this is the current quiz being finished, currentAnswers might still have the latest answer,
-                // but let's be safe and use currentAnswers from state.
-                const selectedOpt = isCurrentQuiz ? currentAnswers[q.id] : state.currentAnswers[q.id];
-                const selectedIdx = q.options.indexOf(selectedOpt || "");
-                const correctIdx = q.options.indexOf(q.correctAnswer);
-                
-                return {
-                  id: q.id.toString(),
-                  question: q.text,
-                  selectedOption: selectedIdx !== -1 ? String.fromCharCode(65 + selectedIdx) : "-",
-                  selectedText: selectedOpt || "-",
-                  isCorrect: selectedOpt === q.correctAnswer,
-                  correctOption: correctIdx !== -1 ? String.fromCharCode(65 + correctIdx) : "-",
-                  correctText: q.correctAnswer,
-                };
-              });
-
-              const correctCount = answersDetail.filter((a) => a.isCorrect).length;
-
-              return {
-                title: quiz.title,
-                correct: isCurrentQuiz ? currentScore : correctCount,
-                total: quiz.questions.length,
-                attempts: state.attemptsUsed + (isCurrentQuiz ? 1 : 0),
-                answers: answersDetail,
-              };
-            }).filter(Boolean);
-
-            const numiScore = totalQuestions > 0 ? Math.round((currentScore / totalQuestions) * 1000) : 0;
-
-            const { data: existingAttempt } = await supabase
-              .from("quiz_attempts")
-              .select("id")
-              .eq("student_id", student.id)
-              .maybeSingle();
-
-            if (existingAttempt) {
-              const { error: attemptError } = await supabase
-                .from("quiz_attempts")
-                .update({
-                  total_score: numiScore,
-                  completion_time: new Date().toISOString(),
-                  details: details,
-                })
-                .eq("id", existingAttempt.id);
-              
-              if (attemptError) throw attemptError;
-            } else {
-              const { error: attemptError } = await supabase
-                .from("quiz_attempts")
-                .insert({
-                  student_id: student.id,
-                  total_score: numiScore,
-                  details: details,
-                });
-                
-              if (attemptError) throw attemptError;
-            }
-          } catch (err) {
-            console.error("Error submitting quiz:", err);
-            alert("Terjadi kesalahan saat menyimpan kuis. Pastikan koneksi internet Anda stabil.");
-            setIsSubmitting(false);
-            return;
-          }
+          const states = useAppStore.getState().quizStates;
           
+          const details = quizData.map((quiz) => {
+            const state = states[quiz.quizId];
+            if (!state || state.attemptsUsed === 0) return null;
+            
+            const answersToUse = state.lastResult ? state.lastResult.answers : state.currentAnswers;
+
+            const answersDetail = quiz.questions.map((q) => {
+              const selectedOpt = answersToUse[q.id];
+              const selectedIdx = q.options.indexOf(selectedOpt || "");
+              const correctIdx = q.options.indexOf(q.correctAnswer);
+              
+              return {
+                id: q.id.toString(),
+                question: q.text,
+                selectedOption: selectedIdx !== -1 ? String.fromCharCode(65 + selectedIdx) : "-",
+                selectedText: selectedOpt || "-",
+                isCorrect: selectedOpt === q.correctAnswer,
+                correctOption: correctIdx !== -1 ? String.fromCharCode(65 + correctIdx) : "-",
+                correctText: q.correctAnswer,
+              };
+            });
+
+            const correctCount = answersDetail.filter((a) => a.isCorrect).length;
+
+            return {
+              title: quiz.title,
+              correct: correctCount,
+              total: quiz.questions.length,
+              attempts: state.attemptsUsed,
+              answers: answersDetail,
+            };
+          }).filter(Boolean);
+
+          const quiz7State = states[7];
+          let numiScore = 0;
+          if (quiz7State && quiz7State.lastResult) {
+            numiScore = Math.round((quiz7State.lastResult.score / quiz7State.lastResult.total) * 1000);
+          }
+
+          const { data: existingAttempt } = await supabase
+            .from("quiz_attempts")
+            .select("id")
+            .eq("student_id", student.id)
+            .maybeSingle();
+
+          if (existingAttempt) {
+            const { error: attemptError } = await supabase
+              .from("quiz_attempts")
+              .update({
+                total_score: numiScore,
+                completion_time: new Date().toISOString(),
+                details: details,
+              })
+              .eq("id", existingAttempt.id);
+            if (attemptError) throw attemptError;
+          } else {
+            const { error: attemptError } = await supabase
+              .from("quiz_attempts")
+              .insert({
+                student_id: student.id,
+                total_score: numiScore,
+                details: details,
+              });
+            if (attemptError) throw attemptError;
+          }
+        } catch (err) {
+          console.error("Error submitting quiz:", err);
+          if (quizId === 7) {
+            alert("Terjadi kesalahan saat menyimpan kuis ke Papan Skor. Pastikan koneksi internet Anda stabil.");
+          }
+        } finally {
           setIsSubmitting(false);
-          finishQuiz(quizId, currentScore, totalQuestions);
-          setShowResults(true);
-        } else {
-          // Finish the quiz and show results
-          finishQuiz(quizId, currentScore, totalQuestions);
           setShowResults(true);
         }
       } else {
         setCurrentIndex((prev) => prev + 1);
       }
-    }, [isLastQuestion, quizId, currentScore, totalQuestions, finishQuiz, currentAnswers]);
+    }, [isLastQuestion, quizId, currentScore, totalQuestions, finishQuiz]);
 
     // Handle retry from score panel (go back to summary first)
     const handleRetryFromScore = useCallback(() => {
