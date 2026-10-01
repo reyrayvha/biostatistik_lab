@@ -320,69 +320,70 @@ function QuizScorePanel({
   }
 
   return (
-    <div ref={panelRef} className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
+  return (
+    <div ref={panelRef} className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-32 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
 
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
-        <h3 className="text-sm font-semibold tracking-wider uppercase text-slate-500 mb-3 flex items-center gap-2">
+        <h3 className="text-xs md:text-sm font-semibold tracking-wider uppercase text-slate-500 mb-2 md:mb-3 flex items-center gap-2">
           <Target size={18} /> Hasil Quiz
         </h3>
 
-        <div className="text-[6rem] font-medium tracking-tight leading-none text-slate-900">
+        <div className="text-5xl md:text-7xl font-bold tracking-tight leading-none text-slate-900 mt-2 md:mt-0">
           {percentage}
-          <span className="text-2xl font-normal text-slate-500 ml-2">%</span>
+          <span className="text-3xl md:text-5xl font-normal text-slate-500 ml-1 md:ml-2">%</span>
         </div>
 
-        <div className="mt-5 flex flex-col items-center justify-center gap-3">
-          <span className="px-5 py-1.5 rounded-full border border-slate-300 bg-[#f8fafc] text-xs uppercase font-bold tracking-widest text-slate-700">
+        <div className="mt-4 md:mt-5 flex flex-col items-center justify-center gap-2 md:gap-3">
+          <span className="px-4 md:px-5 py-1 md:py-1.5 rounded-full border border-slate-300 bg-[#f8fafc] text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-700">
             {levelText}
           </span>
-          <p className="text-slate-500 text-base">Anda menjawab <strong className="text-slate-700">{score} dari {total}</strong> soal dengan benar</p>
+          <p className="text-sm md:text-base text-slate-500">Anda menjawab <strong className="text-slate-700">{score} dari {total}</strong> soal dengan benar</p>
         </div>
       </div>
 
-      <hr className="border-slate-300 my-2" />
+      <hr className="border-slate-300 my-1 md:my-2" />
 
       {/* Stats Row */}
-      <div className="flex gap-4">
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
-          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
-            <Target size={14} /> Benar
+      <div className="flex gap-2 md:gap-4 mt-1 md:mt-2">
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+          <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
+            <Target size={14} className="hidden md:block" /> Benar
           </div>
-          <div className="text-slate-700 text-3xl font-semibold">{score}<span className="text-slate-500 text-lg font-normal ml-1">/{total}</span></div>
+          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{score}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">/{total}</span></div>
         </div>
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
-          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
-            <Zap size={14} /> Akurasi
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+          <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
+            <Zap size={14} className="hidden md:block" /> Akurasi
           </div>
-          <div className="text-slate-700 text-3xl font-semibold">{percentage}<span className="text-slate-500 text-lg font-normal ml-1">%</span></div>
+          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{percentage}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">%</span></div>
         </div>
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
-          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
-            <RotateCcw size={14} /> Percobaan
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+          <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
+            <RotateCcw size={14} className="hidden md:block" /> Percobaan
           </div>
-          <div className="text-slate-700 text-3xl font-semibold">{attemptsUsed}<span className="text-slate-500 text-lg font-normal ml-1">/{MAX_ATTEMPTS}</span></div>
+          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{attemptsUsed}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">/{MAX_ATTEMPTS}</span></div>
         </div>
       </div>
 
       {/* Quote */}
-      <div className="mt-6 mb-2 flex items-center justify-center px-4">
-        <p className="text-slate-700 text-xl font-medium italic text-center leading-relaxed max-w-2xl mx-auto">
+      <div className="mt-3 md:mt-6 mb-1 md:mb-2 flex items-center justify-center px-2 md:px-4">
+        <p className="text-sm md:text-lg text-slate-700 font-medium italic text-center leading-relaxed max-w-2xl mx-auto">
           &ldquo;{displayQuote}&rdquo;
         </p>
       </div>
 
       {/* Actions */}
-      <div className="flex gap-5 mt-4">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-5 mt-2 md:mt-4 mb-24 md:mb-0">
         <button
           onClick={onRetry}
-          className="flex-1 py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
+          className="flex-1 py-3 md:py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-sm md:text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
         >
           Buka Kembali Materi {hasAttemptsLeft ? `(${MAX_ATTEMPTS - attemptsUsed} sisa)` : ""}
         </button>
         <button
           onClick={onAdvance}
-          className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+          className="flex-1 py-3 md:py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-sm md:text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
         >
           Lanjut ke Quiz Selanjutnya
         </button>
@@ -430,50 +431,54 @@ function NUMiScorePanel({
   ];
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 md:p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
+    <div className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-32 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
 
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
-        <h3 className="text-sm font-semibold tracking-wider uppercase text-slate-500 mb-3 flex items-center gap-2">
+        <h3 className="text-xs md:text-sm font-semibold tracking-wider uppercase text-slate-500 mb-2 md:mb-3 flex items-center gap-2">
           <BookOpen size={18} /> Indeks Pemahaman Numerik
         </h3>
 
-        <div className="text-5xl md:text-[6rem] font-medium tracking-tight leading-none text-slate-900 mt-2 md:mt-0">
+        <div className="text-5xl md:text-7xl font-bold tracking-tight leading-none text-slate-900 mt-2 md:mt-0">
           {numiScore}
-          <span className="text-lg md:text-2xl font-normal text-slate-500 ml-2 md:ml-3">/ 1000</span>
+          <span className="text-3xl md:text-5xl font-normal text-slate-500 ml-1 md:ml-2">/ 1000</span>
         </div>
       </div>
 
       {/* Stats Row */}
-      <div className="flex gap-2 md:gap-4 mt-2">
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-4 text-center">
-          <div className="text-slate-500 text-[10px] md:text-xs uppercase font-bold tracking-widest mb-1 md:mb-2">Benar</div>
-          <div className="text-slate-700 text-2xl md:text-3xl font-semibold">{score}<span className="text-slate-500 text-sm md:text-lg font-normal ml-1">/{total}</span></div>
+      <div className="flex gap-2 md:gap-4 mt-1 md:mt-2">
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+          <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
+            <Target size={14} className="hidden md:block" /> Benar
+          </div>
+          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{score}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">/{total}</span></div>
         </div>
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-4 text-center">
-          <div className="text-slate-500 text-[10px] md:text-xs uppercase font-bold tracking-widest mb-1 md:mb-2">Akurasi</div>
-          <div className="text-slate-700 text-2xl md:text-3xl font-semibold">{accuracy}<span className="text-slate-500 text-sm md:text-lg font-normal ml-1">%</span></div>
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+          <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
+            <Zap size={14} className="hidden md:block" /> Akurasi
+          </div>
+          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{accuracy}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">%</span></div>
         </div>
       </div>
 
-      <hr className="border-slate-300 my-2" />
+      <hr className="border-slate-300 my-1 md:my-2" />
 
       {/* Domain Breakdown */}
       <div>
-        <h4 className="text-slate-900 text-base font-semibold mb-4">Rincian per Domain</h4>
-        <div className="space-y-4">
+        <h4 className="text-sm md:text-base text-slate-900 font-semibold mb-3 md:mb-4">Rincian per Domain</h4>
+        <div className="space-y-3 md:space-y-4">
           {domains.map(d => {
             // Neutral colors: Green for very good, Yellow for okay, Blue for low (avoids aggressive red)
             const barColor = d.pct >= 80 ? '#3fb950' : d.pct >= 60 ? '#d29922' : '#2563eb';
             return (
-              <div key={d.name} className="flex flex-col gap-2">
-                <div className="flex justify-between items-center text-[15px]">
-                  <span className="text-slate-600">{d.name}</span>
-                  <span className="font-mono text-slate-500 font-medium">
-                    {d.correct}/{d.total} <span className="ml-1.5 text-slate-700">({d.pct}%)</span>
+              <div key={d.name} className="flex flex-col gap-1 md:gap-2">
+                <div className="flex justify-between items-center text-xs md:text-[15px]">
+                  <span className="text-slate-600 truncate mr-2">{d.name}</span>
+                  <span className="font-mono text-slate-500 font-medium shrink-0">
+                    {d.correct}/{d.total} <span className="ml-1 md:ml-1.5 text-slate-700">({d.pct}%)</span>
                   </span>
                 </div>
-                <div className="h-2 w-full bg-[#f8fafc] rounded-full overflow-hidden">
+                <div className="h-1.5 md:h-2 w-full bg-[#f8fafc] rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-700 ease-out"
                     style={{ width: `${d.pct}%`, backgroundColor: barColor }}
@@ -486,27 +491,27 @@ function NUMiScorePanel({
       </div>
 
       {/* Interpretasi (Padat) */}
-      <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-5 mt-2">
-        <h4 className="text-slate-900 text-base font-semibold mb-4">Interpretasi NUMi</h4>
-        <div className="flex flex-wrap gap-x-12 gap-y-3 text-sm font-mono text-slate-500">
-          <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">900-1000:</span> Ahli</div>
-          <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">750-899:</span> Mahir</div>
-          <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">600-749:</span> Berkembang</div>
-          <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">&lt; 600:</span> Dasar</div>
+      <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-4 md:p-5 mt-2">
+        <h4 className="text-sm md:text-base text-slate-900 font-semibold mb-3 md:mb-4">Interpretasi NUMi</h4>
+        <div className="flex flex-col md:flex-row md:flex-wrap gap-x-12 gap-y-2 md:gap-y-3 text-xs md:text-sm font-mono text-slate-500">
+          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 font-medium">900-1000:</span> Ahli</div>
+          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 font-medium">750-899:</span> Mahir</div>
+          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 font-medium">600-749:</span> Berkembang</div>
+          <div className="flex items-center justify-between md:justify-start gap-2.5"><span className="text-slate-700 font-medium">&lt; 600:</span> Dasar</div>
         </div>
       </div>
 
       {/* Actions */}
-      <div className="flex gap-5 mt-4">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-5 mt-4 md:mt-6 mb-24 md:mb-0">
         <button
           onClick={onRetry}
-          className="flex-1 py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
+          className="flex-1 py-3 md:py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-sm md:text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
         >
           Ulangi Ujian Akhir
         </button>
         <button
           onClick={onAdvance}
-          className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+          className="flex-1 py-3 md:py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-sm md:text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
         >
           Papan Skor
         </button>
