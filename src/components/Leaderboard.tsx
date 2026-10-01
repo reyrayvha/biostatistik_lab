@@ -103,7 +103,7 @@ export default function Leaderboard() {
           }).format(new Date(attempt.completion_time)),
           quizzes: attempt.details || [],
         }));
-        
+
         setData(formattedData);
       }
     } catch (error: any) {
@@ -144,14 +144,14 @@ export default function Leaderboard() {
     if (!confirm("Apakah Anda yakin ingin menghapus SEMUA data mahasiswa dan nilai kuis? Tindakan ini tidak dapat dibatalkan!")) {
       return;
     }
-    
+
     try {
       setLoading(true);
       const { error } = await supabase
         .from('students')
         .delete()
         .neq('id', '00000000-0000-0000-0000-000000000000');
-      
+
       if (error) throw error;
       alert("Semua data berhasil dihapus.");
       fetchLeaderboard();
@@ -224,9 +224,9 @@ export default function Leaderboard() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative">
           <h1 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
             <Trophy className="text-indigo-400" size={32} />
-            Papan Skor Global (NUMi)
+            Papan Skor
           </h1>
-          
+
           {isAdmin ? (
             <div className="flex gap-3">
               <button
@@ -234,29 +234,108 @@ export default function Leaderboard() {
                 className="flex items-center gap-2 px-4 py-2 bg-rose-600/20 border border-rose-500 rounded-lg text-rose-400 hover:bg-rose-600/30 transition-colors shadow-[0_0_15px_rgba(225,29,72,0.1)] backdrop-blur-sm font-medium"
               >
                 <Trash2 size={18} />
-                Hapus Semua Data
+                <span className="hidden sm:inline">Hapus Semua Data</span>
               </button>
               <button
                 onClick={handleExportExcel}
                 className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 border border-emerald-500 rounded-lg text-emerald-400 hover:bg-emerald-600/30 transition-colors shadow-[0_0_15px_rgba(16,185,129,0.1)] backdrop-blur-sm font-medium"
               >
                 <Download size={18} />
-                Export to Excel
+                <span className="hidden sm:inline">Export to Excel</span>
               </button>
             </div>
           ) : (
-            <button 
+            <button
               onClick={() => setShowAdminModal(true)}
-              className="absolute top-0 right-0 p-2 text-slate-800 hover:text-slate-500 transition-colors"
-              title="Mode Dosen"
+              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-all font-medium text-sm shadow-sm"
+              title="Akses Mode Dosen"
             >
-              <Lock size={16} />
+              <Lock size={16} className="text-indigo-400" />
+              <span>Mode Dosen</span>
             </button>
           )}
         </div>
 
-        {/* Table Panel */}
-        <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl">
+        {/* Mobile View (Cards) */}
+        <div className="md:hidden space-y-4 pb-12">
+          {loading ? (
+            <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-slate-400">
+              <Loader2 className="animate-spin text-indigo-500" size={32} />
+              <p className="font-medium">Memuat data papan skor...</p>
+            </div>
+          ) : data.length === 0 ? (
+            <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-8 text-center text-slate-400 font-medium">
+              Belum ada data nilai kuis mahasiswa.
+            </div>
+          ) : (
+            data.map((student, idx) => (
+              <div key={student.id} className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden shadow-xl">
+                {/* Rank Badge */}
+                <div className="absolute top-0 right-0 bg-indigo-500/20 text-indigo-300 px-3 py-1.5 rounded-bl-xl font-bold text-sm border-b border-l border-indigo-500/30">
+                  Rank #{idx + 1}
+                </div>
+
+                {/* Student Info */}
+                <div className="flex flex-col pr-20">
+                  <span className="font-bold text-white text-lg leading-tight">{student.name}</span>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-sm text-slate-400">{student.nim}</span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-slate-300">
+                      {student.angkatan}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Score Info */}
+                <div className="bg-slate-900/50 rounded-xl p-4 flex justify-between items-center border border-slate-700/50">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Skor NUMi</span>
+                    <span className="text-3xl font-black text-indigo-400">{student.numiScore}</span>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="text-xs text-slate-400 text-right">{formatIndonesianDate(student.finishTimestamp)}</span>
+                    <span className="text-xs text-slate-400 text-right">{student.finishTime}</span>
+                  </div>
+                </div>
+
+                {/* Quizzes Summary (Horizontal Scroll) */}
+                <div className="overflow-x-auto pb-2 -mx-4 px-4 snap-x">
+                  <div className="flex gap-2 w-max">
+                    {student.quizzes.map((quiz, qIdx) => {
+                      const quizNames = ["Statistik", "Distribusi", "Probabilitas", "Uji Hipotesis", "Diagnostik", "Desain Studi", "Ujian Akhir"];
+                      const qName = quizNames[qIdx] || `Q${qIdx + 1}`;
+                      return (
+                        <div key={qIdx} className="bg-slate-800 border border-slate-700 rounded-lg p-2 min-w-[100px] flex flex-col items-center justify-center snap-center">
+                          <span className="text-[10px] text-slate-400 truncate w-full text-center">{qName}</span>
+                          <span className="text-sm font-bold text-white mt-1">{quiz.correct}/{quiz.total}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Action */}
+                <div className="pt-2 border-t border-slate-700/50">
+                  {isAdmin || student.nim === identity?.nim ? (
+                    <button
+                      onClick={() => setSelectedStudent(student)}
+                      className="w-full py-2.5 bg-slate-700/50 border border-slate-600/50 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-600/60 hover:text-white transition-all flex items-center justify-center gap-2"
+                    >
+                      Lihat Detail Jawaban
+                    </button>
+                  ) : (
+                    <div className="w-full py-2.5 bg-slate-800/50 border border-slate-700/30 rounded-lg text-sm text-slate-500 italic text-center">
+                      Privasi Terjaga
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Table View (Hidden on Mobile) */}
+        <div className="hidden md:block bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left whitespace-nowrap">
               <thead>
@@ -293,61 +372,61 @@ export default function Leaderboard() {
                 ) : (
                   data.map((student, idx) => (
                     <tr key={student.id} className="hover:bg-slate-700/30 transition-colors">
-                    {/* Rank */}
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex justify-center items-center">
-                        {renderRankIcon(idx + 1)}
-                      </div>
-                    </td>
-
-                    {/* Mahasiswa */}
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-white text-base">{student.name}</span>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-sm text-slate-400">{student.nim}</span>
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                            {student.angkatan}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Skor NUMi */}
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex flex-col items-center">
-                        <span className="text-3xl font-black text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.3)]">{student.numiScore}</span>
-                        <span className="text-[10px] text-slate-400 mt-1">{formatIndonesianDate(student.finishTimestamp)}</span>
-                        <span className="text-[10px] text-slate-400">{student.finishTime}</span>
-                      </div>
-                    </td>
-
-                    {/* Quiz Columns */}
-                    {student.quizzes.map((quiz, qIdx) => (
-                      <td key={qIdx} className="px-6 py-4 text-center">
-                        <div className="flex flex-col items-center">
-                          <span className="text-base font-semibold text-white">{quiz.correct}/{quiz.total}</span>
-                          <span className="text-xs text-slate-500 mt-1">Percobaan: {quiz.attempts}x</span>
+                      {/* Rank */}
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex justify-center items-center">
+                          {renderRankIcon(idx + 1)}
                         </div>
                       </td>
-                    ))}
 
-                    {/* Aksi */}
-                    <td className="px-6 py-4 text-center sticky right-0 bg-slate-800/90 backdrop-blur-md border-l border-slate-700/50">
-                      {isAdmin || student.nim === identity?.nim ? (
-                        <button
-                          onClick={() => setSelectedStudent(student)}
-                          className="px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-sm text-slate-200 hover:bg-slate-600/60 hover:text-white transition-all backdrop-blur-sm"
-                        >
-                          Detail Jawaban
-                        </button>
-                      ) : (
-                        <span className="text-xs text-slate-500 italic px-2 py-1 bg-slate-800/50 rounded-md border border-slate-700/30">
-                          Privasi Terjaga
-                        </span>
-                      )}
-                    </td>
-                  </tr>
+                      {/* Mahasiswa */}
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-white text-base">{student.name}</span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-sm text-slate-400">{student.nim}</span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                              {student.angkatan}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Skor NUMi */}
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl font-black text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.3)]">{student.numiScore}</span>
+                          <span className="text-[10px] text-slate-400 mt-1">{formatIndonesianDate(student.finishTimestamp)}</span>
+                          <span className="text-[10px] text-slate-400">{student.finishTime}</span>
+                        </div>
+                      </td>
+
+                      {/* Quiz Columns */}
+                      {student.quizzes.map((quiz, qIdx) => (
+                        <td key={qIdx} className="px-6 py-4 text-center">
+                          <div className="flex flex-col items-center">
+                            <span className="text-base font-semibold text-white">{quiz.correct}/{quiz.total}</span>
+                            <span className="text-xs text-slate-500 mt-1">Percobaan: {quiz.attempts}x</span>
+                          </div>
+                        </td>
+                      ))}
+
+                      {/* Aksi */}
+                      <td className="px-6 py-4 text-center sticky right-0 bg-slate-800/90 backdrop-blur-md border-l border-slate-700/50">
+                        {isAdmin || student.nim === identity?.nim ? (
+                          <button
+                            onClick={() => setSelectedStudent(student)}
+                            className="px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-sm text-slate-200 hover:bg-slate-600/60 hover:text-white transition-all backdrop-blur-sm"
+                          >
+                            Detail Jawaban
+                          </button>
+                        ) : (
+                          <span className="text-xs text-slate-500 italic px-2 py-1 bg-slate-800/50 rounded-md border border-slate-700/30">
+                            Privasi Terjaga
+                          </span>
+                        )}
+                      </td>
+                    </tr>
                   ))
                 )}
               </tbody>
@@ -410,8 +489,8 @@ export default function Leaderboard() {
             <form onSubmit={handleAdminSubmit}>
               <div className="mb-4">
                 <label className="block text-sm text-slate-400 mb-2">Masukkan PIN / Password</label>
-                <input 
-                  type="password" 
+                <input
+                  type="password"
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}

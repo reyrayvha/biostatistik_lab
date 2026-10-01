@@ -76,13 +76,6 @@ export default function AppShell() {
           <div className="app-content">{renderContent()}</div>
         </main>
       </div>
-
-      {/* Footer */}
-      <footer className="app-footer">
-        <p>
-          © {new Date().getFullYear()} Biostatistik Lab — Fakultas Kedokteran
-        </p>
-      </footer>
     </div>
   );
 }
