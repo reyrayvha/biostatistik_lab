@@ -122,16 +122,15 @@ function QuizSummaryScreen({
 
       <div className="flex gap-5 w-full mt-6">
         {hasAttemptsLeft ? (
-          <button 
-            className={`flex-1 py-3.5 rounded-xl font-medium text-base transition-colors tracking-wide ${
-              attemptsUsed === 0 
-                ? "bg-[#2563eb] text-[#f8fafc] hover:bg-[#79c0ff] font-semibold"
-                : "border border-slate-300 bg-slate-50 text-slate-700 hover:bg-[#e2e8f0]/50"
-            }`} 
+          <button
+            className={`flex-1 py-3.5 rounded-xl font-medium text-base transition-colors tracking-wide ${attemptsUsed === 0
+              ? "bg-[#2563eb] text-[#f8fafc] hover:bg-[#79c0ff] font-semibold"
+              : "border border-slate-300 bg-slate-50 text-slate-700 hover:bg-[#e2e8f0]/50"
+              }`}
             onClick={onStart}
           >
-            {attemptsUsed > 0 
-              ? (quizId === 7 ? `Ulangi Ujian Akhir (${MAX_ATTEMPTS - attemptsUsed} sisa)` : `Ulangi Kuis (${MAX_ATTEMPTS - attemptsUsed} sisa)`) 
+            {attemptsUsed > 0
+              ? (quizId === 7 ? `Ulangi Ujian Akhir (${MAX_ATTEMPTS - attemptsUsed} sisa)` : `Ulangi Kuis (${MAX_ATTEMPTS - attemptsUsed} sisa)`)
               : (quizId === 7 ? "Mulai Ujian Akhir" : "Mulai Kuis")}
           </button>
         ) : (
@@ -141,7 +140,7 @@ function QuizSummaryScreen({
         )}
 
         {bestResult && onAdvance && (
-          <button 
+          <button
             className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
             onClick={onAdvance}
           >
@@ -322,13 +321,13 @@ function QuizScorePanel({
 
   return (
     <div ref={panelRef} className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
-      
+
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
         <h3 className="text-sm font-semibold tracking-wider uppercase text-slate-500 mb-3 flex items-center gap-2">
           <Target size={18} /> Hasil Kuis
         </h3>
-        
+
         <div className="text-[6rem] font-medium tracking-tight leading-none text-slate-900">
           {percentage}
           <span className="text-2xl font-normal text-slate-500 ml-2">%</span>
@@ -348,19 +347,19 @@ function QuizScorePanel({
       <div className="flex gap-4">
         <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
           <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
-            <Target size={14}/> Benar
+            <Target size={14} /> Benar
           </div>
           <div className="text-slate-700 text-3xl font-semibold">{score}<span className="text-slate-500 text-lg font-normal ml-1">/{total}</span></div>
         </div>
         <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
           <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
-            <Zap size={14}/> Akurasi
+            <Zap size={14} /> Akurasi
           </div>
           <div className="text-slate-700 text-3xl font-semibold">{percentage}<span className="text-slate-500 text-lg font-normal ml-1">%</span></div>
         </div>
         <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
           <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
-            <RotateCcw size={14}/> Percobaan
+            <RotateCcw size={14} /> Percobaan
           </div>
           <div className="text-slate-700 text-3xl font-semibold">{attemptsUsed}<span className="text-slate-500 text-lg font-normal ml-1">/{MAX_ATTEMPTS}</span></div>
         </div>
@@ -375,14 +374,14 @@ function QuizScorePanel({
 
       {/* Actions */}
       <div className="flex gap-5 mt-4">
-        <button 
-          onClick={onRetry} 
+        <button
+          onClick={onRetry}
           className="flex-1 py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
         >
           Buka Kembali Materi {hasAttemptsLeft ? `(${MAX_ATTEMPTS - attemptsUsed} sisa)` : ""}
         </button>
-        <button 
-          onClick={onAdvance} 
+        <button
+          onClick={onAdvance}
           className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
         >
           Lanjut ke Kuis Selanjutnya
@@ -394,443 +393,452 @@ function QuizScorePanel({
 
 /** NUMi Final Exam Result Panel - COMPACT & NEUTRAL UI */
 function NUMiScorePanel({
-      score,
-      total,
-      questions,
-      currentAnswers,
-      onRetry,
-      onAdvance,
-    }: {
-      score: number;
-      total: number;
-      questions: Question[];
-      currentAnswers: Record<number, string>;
-      onRetry: () => void;
-      onAdvance?: () => void;
-    }) {
-    const numiScore = total > 0 ? Math.round((score / total) * 1000) : 0;
-    const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
+  score,
+  total,
+  questions,
+  currentAnswers,
+  onRetry,
+  onAdvance,
+}: {
+  score: number;
+  total: number;
+  questions: Question[];
+  currentAnswers: Record<number, string>;
+  onRetry: () => void;
+  onAdvance?: () => void;
+}) {
+  const numiScore = total > 0 ? Math.round((score / total) * 1000) : 0;
+  const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
 
-    const getDomainScore = (start: number, count: number) => {
-      let correct = 0;
-      for (let i = start; i < start + count; i++) {
-        const q = questions[i];
-        if (q && currentAnswers[q.id] === q.correctAnswer) correct++;
-      }
-      const pct = count > 0 ? Math.round((correct / count) * 100) : 0;
-      return { correct, total: count, pct };
+  const getDomainScore = (start: number, count: number) => {
+    let correct = 0;
+    for (let i = start; i < start + count; i++) {
+      const q = questions[i];
+      if (q && currentAnswers[q.id] === q.correctAnswer) correct++;
+    }
+    const pct = count > 0 ? Math.round((correct / count) * 100) : 0;
+    return { correct, total: count, pct };
+  };
+
+  const domains = [
+    { name: "Uji Hipotesis", ...getDomainScore(0, 7) },
+    { name: "Distribusi Data", ...getDomainScore(7, 2) },
+    { name: "Probabilitas & Teorema Bayes", ...getDomainScore(9, 2) },
+    { name: "Tes Diagnostik", ...getDomainScore(11, 3) },
+    { name: "Statistik Deskriptif", ...getDomainScore(14, 1) },
+    { name: "Desain Studi Epidemiologi", ...getDomainScore(15, 5) },
+  ];
+
+  return (
+    <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
+
+      {/* Header Section */}
+      <div className="text-center flex flex-col items-center">
+        <h3 className="text-sm font-semibold tracking-wider uppercase text-slate-500 mb-3 flex items-center gap-2">
+          <BookOpen size={18} /> Indeks Pemahaman Numerik
+        </h3>
+
+        <div className="text-[6rem] font-medium tracking-tight leading-none text-slate-900">
+          {numiScore}
+          <span className="text-2xl font-normal text-slate-500 ml-3">/ 1000</span>
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div className="flex gap-4 mt-2">
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
+          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2">Benar</div>
+          <div className="text-slate-700 text-3xl font-semibold">{score}<span className="text-slate-500 text-lg font-normal ml-1">/{total}</span></div>
+        </div>
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
+          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2">Akurasi</div>
+          <div className="text-slate-700 text-3xl font-semibold">{accuracy}<span className="text-slate-500 text-lg font-normal ml-1">%</span></div>
+        </div>
+      </div>
+
+      <hr className="border-slate-300 my-2" />
+
+      {/* Domain Breakdown */}
+      <div>
+        <h4 className="text-slate-900 text-base font-semibold mb-4">Rincian per Domain</h4>
+        <div className="space-y-4">
+          {domains.map(d => {
+            // Neutral colors: Green for very good, Yellow for okay, Blue for low (avoids aggressive red)
+            const barColor = d.pct >= 80 ? '#3fb950' : d.pct >= 60 ? '#d29922' : '#2563eb';
+            return (
+              <div key={d.name} className="flex flex-col gap-2">
+                <div className="flex justify-between items-center text-[15px]">
+                  <span className="text-slate-600">{d.name}</span>
+                  <span className="font-mono text-slate-500 font-medium">
+                    {d.correct}/{d.total} <span className="ml-1.5 text-slate-700">({d.pct}%)</span>
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-[#f8fafc] rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-700 ease-out"
+                    style={{ width: `${d.pct}%`, backgroundColor: barColor }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Interpretasi (Padat) */}
+      <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-5 mt-2">
+        <h4 className="text-slate-900 text-base font-semibold mb-4">Interpretasi NUMi</h4>
+        <div className="flex flex-wrap gap-x-12 gap-y-3 text-sm font-mono text-slate-500">
+          <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">900-1000:</span> Ahli</div>
+          <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">750-899:</span> Mahir</div>
+          <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">600-749:</span> Berkembang</div>
+          <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">&lt; 600:</span> Dasar</div>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-5 mt-4">
+        <button
+          onClick={onRetry}
+          className="flex-1 py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
+        >
+          Ulangi Ujian Akhir
+        </button>
+        <button
+          onClick={onAdvance}
+          className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+        >
+          Papan Skor
+        </button>
+      </div>
+
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main QuizPanel  —  paginated, 1 question at a time
+// ---------------------------------------------------------------------------
+
+export default function QuizPanel({ quizId }: { quizId: number }) {
+  const quiz = quizData.find((q) => q.quizId === quizId);
+
+  const quizState =
+    useAppStore((s) => s.quizStates[quizId]) ?? DEFAULT_QUIZ_STATE;
+
+  const startQuiz = useAppStore((s) => s.startQuiz);
+  const answerQuestion = useAppStore((s) => s.answerQuestion);
+  const finishQuiz = useAppStore((s) => s.finishQuiz);
+  const retryQuiz = useAppStore((s) => s.retryQuiz);
+  const advanceToNextQuiz = useAppStore((s) => s.advanceToNextQuiz);
+
+  // Local pagination state
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showResults, setShowResults] = useState(false);
+  const [forceSummary, setForceSummary] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Reset local state when navigating to a different quiz
+  useEffect(() => {
+    setCurrentIndex(0);
+    setShowResults(false);
+    setForceSummary(false);
+  }, [quizId]);
+
+  // Reset pagination when quiz restarts
+  const { started } = quizState;
+  useEffect(() => {
+    if (started) {
+      setCurrentIndex(0);
+      setShowResults(false);
+    }
+  }, [started]);
+
+  if (!quiz) return null;
+
+  const {
+    attemptsUsed,
+    currentAnswers,
+    lastResult,
+    bestResult,
+  } = quizState;
+
+  const identity = useAppStore((s) => s.identity);
+  const nim = identity?.nim || "default";
+
+  const questions = useMemo(() => {
+    // Simple PRNG hash based on nim + quizId
+    let h = 0;
+    const seed = nim + "-" + quizId;
+    for (let i = 0; i < seed.length; i++) {
+      h = Math.imul(31, h) + seed.charCodeAt(i) | 0;
+    }
+    const rand = function () {
+      h = Math.imul(h ^ (h >>> 16), 2246822507);
+      h = Math.imul(h ^ (h >>> 13), 3266489909);
+      return (h ^= h >>> 16) >>> 0;
     };
 
-    const domains = [
-      { name: "Uji Hipotesis", ...getDomainScore(0, 7) },
-      { name: "Distribusi Data", ...getDomainScore(7, 2) },
-      { name: "Probabilitas & Teorema Bayes", ...getDomainScore(9, 2) },
-      { name: "Tes Diagnostik", ...getDomainScore(11, 3) },
-      { name: "Statistik Deskriptif", ...getDomainScore(14, 1) },
-      { name: "Desain Studi Epidemiologi", ...getDomainScore(15, 5) },
-    ];
+    const shuffled = [...quiz.questions];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = rand() % (i + 1);
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, [quiz.questions, nim, quizId]);
+  const totalQuestions = questions.length;
 
+  // Current question
+  const currentQuestion = questions[currentIndex];
+  const currentAnswer = currentQuestion
+    ? currentAnswers[currentQuestion.id]
+    : undefined;
+  const isCurrentAnswered = currentAnswer !== undefined;
+  const isLastQuestion = currentIndex === totalQuestions - 1;
+
+  // Score calculation
+  const currentScore = questions.reduce((acc, q) => {
+    if (currentAnswers[q.id] === q.correctAnswer) return acc + 1;
+    return acc;
+  }, 0);
+
+  const answeredCount = Object.keys(currentAnswers).length;
+  const allAnswered = answeredCount === totalQuestions && totalQuestions > 0;
+
+  const hasFinished = lastResult !== null && !started;
+
+  // Handle "Next" button
+  const handleNext = useCallback(async () => {
+    if (isLastQuestion) {
+      setIsSubmitting(true);
+
+      // 1. Finish the quiz locally FIRST so the Zustand store is perfectly up-to-date
+      finishQuiz(quizId, currentScore, totalQuestions);
+
+      // 2. Sync to Supabase in the background
+      try {
+        const identity = useAppStore.getState().identity;
+        if (!identity) throw new Error("Identity not found");
+
+        const { supabase } = await import("@/src/lib/supabaseClient");
+
+        const { data: student, error: studentError } = await supabase
+          .from("students")
+          .upsert(
+            { nim: identity.nim, name: identity.nama, cohort: identity.angkatan },
+            { onConflict: "nim" }
+          )
+          .select("id")
+          .single();
+
+        if (studentError) throw studentError;
+
+        const states = useAppStore.getState().quizStates;
+
+        const details = quizData.map((quiz) => {
+          const state = states[quiz.quizId];
+          if (!state || state.attemptsUsed === 0) return null;
+
+          const answersToUse = state.lastResult ? state.lastResult.answers : state.currentAnswers;
+
+          const answersDetail = quiz.questions.map((q) => {
+            const selectedOpt = answersToUse[q.id];
+            const selectedIdx = q.options.indexOf(selectedOpt || "");
+            const correctIdx = q.options.indexOf(q.correctAnswer);
+
+            return {
+              id: q.id.toString(),
+              question: q.text,
+              selectedOption: selectedIdx !== -1 ? String.fromCharCode(65 + selectedIdx) : "-",
+              selectedText: selectedOpt || "-",
+              isCorrect: selectedOpt === q.correctAnswer,
+              correctOption: correctIdx !== -1 ? String.fromCharCode(65 + correctIdx) : "-",
+              correctText: q.correctAnswer,
+            };
+          });
+
+          const correctCount = answersDetail.filter((a) => a.isCorrect).length;
+
+          return {
+            title: quiz.title,
+            correct: correctCount,
+            total: quiz.questions.length,
+            attempts: state.attemptsUsed,
+            answers: answersDetail,
+          };
+        }).filter(Boolean);
+
+        // Compute numiScore safely from details to avoid 0 score if lastResult was null
+        const quiz7Detail = details.find((d) => d && (d.title.includes("Ujian Akhir") || d.title.includes("NUMi")));
+        let numiScore = 0;
+        if (quiz7Detail) {
+          numiScore = Math.round((quiz7Detail.correct / quiz7Detail.total) * 1000);
+        }
+
+        const { data: existingAttempt } = await supabase
+          .from("quiz_attempts")
+          .select("id")
+          .eq("student_id", student.id)
+          .maybeSingle();
+
+        if (existingAttempt) {
+          const { error: attemptError } = await supabase
+            .from("quiz_attempts")
+            .update({
+              total_score: numiScore,
+              completion_time: new Date().toISOString(),
+              details: details,
+            })
+            .eq("id", existingAttempt.id);
+          if (attemptError) throw attemptError;
+        } else {
+          const { error: attemptError } = await supabase
+            .from("quiz_attempts")
+            .insert({
+              student_id: student.id,
+              total_score: numiScore,
+              details: details,
+            });
+          if (attemptError) throw attemptError;
+        }
+      } catch (err: any) {
+        console.error("Error submitting quiz:", err);
+        alert("Gagal memperbarui nilai ke server: " + (err.message || "Pastikan koneksi internet stabil."));
+      } finally {
+        setIsSubmitting(false);
+        setShowResults(true);
+      }
+    } else {
+      setCurrentIndex((prev) => {
+        // Mencegah bug double-click (fast click) yang melewati soal
+        const freshAnswers = useAppStore.getState().quizStates[quizId]?.currentAnswers || {};
+        const q = questions[prev];
+        if (q && freshAnswers[q.id] !== undefined) {
+          return prev + 1;
+        }
+        return prev;
+      });
+    }
+  }, [isLastQuestion, quizId, currentScore, totalQuestions, finishQuiz, questions]);
+
+  // Handle retry from score panel (go back to summary first)
+  const handleRetryFromScore = useCallback(() => {
+    setForceSummary(true);
+    setShowResults(false);
+  }, []);
+
+  // ----- Render: Summary screen -----
+  if ((!started && !hasFinished && !showResults) || forceSummary) {
     return (
-      <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
-        
-        {/* Header Section */}
-        <div className="text-center flex flex-col items-center">
-          <h3 className="text-sm font-semibold tracking-wider uppercase text-slate-500 mb-3 flex items-center gap-2">
-            <BookOpen size={18} /> Indeks Pemahaman Numerik
-          </h3>
-          
-          <div className="text-[6rem] font-medium tracking-tight leading-none text-slate-900">
-            {numiScore}
-            <span className="text-2xl font-normal text-slate-500 ml-3">/ 1000</span>
-          </div>
-        </div>
-
-        {/* Stats Row */}
-        <div className="flex gap-4 mt-2">
-          <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
-            <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2">Benar</div>
-            <div className="text-slate-700 text-3xl font-semibold">{score}<span className="text-slate-500 text-lg font-normal ml-1">/{total}</span></div>
-          </div>
-          <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
-            <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2">Akurasi</div>
-            <div className="text-slate-700 text-3xl font-semibold">{accuracy}<span className="text-slate-500 text-lg font-normal ml-1">%</span></div>
-          </div>
-        </div>
-
-        <hr className="border-slate-300 my-2" />
-
-        {/* Domain Breakdown */}
-        <div>
-          <h4 className="text-slate-900 text-base font-semibold mb-4">Rincian per Domain</h4>
-          <div className="space-y-4">
-            {domains.map(d => {
-              // Neutral colors: Green for very good, Yellow for okay, Blue for low (avoids aggressive red)
-              const barColor = d.pct >= 80 ? '#3fb950' : d.pct >= 60 ? '#d29922' : '#2563eb';
-              return (
-                <div key={d.name} className="flex flex-col gap-2">
-                  <div className="flex justify-between items-center text-[15px]">
-                    <span className="text-slate-600">{d.name}</span>
-                    <span className="font-mono text-slate-500 font-medium">
-                      {d.correct}/{d.total} <span className="ml-1.5 text-slate-700">({d.pct}%)</span>
-                    </span>
-                  </div>
-                  <div className="h-2 w-full bg-[#f8fafc] rounded-full overflow-hidden">
-                    <div 
-                      className="h-full rounded-full transition-all duration-700 ease-out" 
-                      style={{ width: `${d.pct}%`, backgroundColor: barColor }} 
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Interpretasi (Padat) */}
-        <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-5 mt-2">
-          <h4 className="text-slate-900 text-base font-semibold mb-4">Interpretasi NUMi</h4>
-          <div className="flex flex-wrap gap-x-12 gap-y-3 text-sm font-mono text-slate-500">
-            <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">900-1000:</span> Ahli</div>
-            <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">750-899:</span> Mahir</div>
-            <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">600-749:</span> Berkembang</div>
-            <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">&lt; 600:</span> Dasar</div>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-5 mt-4">
-          <button 
-            onClick={onRetry} 
-            className="flex-1 py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
-          >
-            Ulangi Ujian Akhir
-          </button>
-          <button 
-            onClick={onAdvance} 
-            className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
-          >
-            Papan Skor
-          </button>
-        </div>
-
-      </div>
+      <QuizSummaryScreen
+        quizId={quizId}
+        title={quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
+        summary={quiz.summary}
+        attemptsUsed={attemptsUsed}
+        bestResult={bestResult}
+        onStart={() => {
+          setForceSummary(false);
+          if (attemptsUsed > 0) {
+            retryQuiz(quizId);
+          } else {
+            startQuiz(quizId);
+          }
+        }}
+        onAdvance={advanceToNextQuiz}
+      />
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Main QuizPanel  —  paginated, 1 question at a time
-  // ---------------------------------------------------------------------------
-
-  export default function QuizPanel({ quizId }: { quizId: number }) {
-    const quiz = quizData.find((q) => q.quizId === quizId);
-
-    const quizState =
-      useAppStore((s) => s.quizStates[quizId]) ?? DEFAULT_QUIZ_STATE;
-
-    const startQuiz = useAppStore((s) => s.startQuiz);
-    const answerQuestion = useAppStore((s) => s.answerQuestion);
-    const finishQuiz = useAppStore((s) => s.finishQuiz);
-    const retryQuiz = useAppStore((s) => s.retryQuiz);
-    const advanceToNextQuiz = useAppStore((s) => s.advanceToNextQuiz);
-
-    // Local pagination state
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [showResults, setShowResults] = useState(false);
-    const [forceSummary, setForceSummary] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Reset local state when navigating to a different quiz
-    useEffect(() => {
-      setCurrentIndex(0);
-      setShowResults(false);
-      setForceSummary(false);
-    }, [quizId]);
-
-    // Reset pagination when quiz restarts
-    const { started } = quizState;
-    useEffect(() => {
-      if (started) {
-        setCurrentIndex(0);
-        setShowResults(false);
-      }
-    }, [started]);
-
-    if (!quiz) return null;
-
-    const {
-      attemptsUsed,
-      currentAnswers,
-      lastResult,
-      bestResult,
-    } = quizState;
-
-    const identity = useAppStore((s) => s.identity);
-    const nim = identity?.nim || "default";
-
-    const questions = useMemo(() => {
-      // Simple PRNG hash based on nim + quizId
-      let h = 0;
-      const seed = nim + "-" + quizId;
-      for (let i = 0; i < seed.length; i++) {
-        h = Math.imul(31, h) + seed.charCodeAt(i) | 0;
-      }
-      const rand = function() {
-        h = Math.imul(h ^ (h >>> 16), 2246822507);
-        h = Math.imul(h ^ (h >>> 13), 3266489909);
-        return (h ^= h >>> 16) >>> 0;
-      };
-
-      const shuffled = [...quiz.questions];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = rand() % (i + 1);
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    }, [quiz.questions, nim, quizId]);
-    const totalQuestions = questions.length;
-
-    // Current question
-    const currentQuestion = questions[currentIndex];
-    const currentAnswer = currentQuestion
-      ? currentAnswers[currentQuestion.id]
-      : undefined;
-    const isCurrentAnswered = currentAnswer !== undefined;
-    const isLastQuestion = currentIndex === totalQuestions - 1;
-
-    // Score calculation
-    const currentScore = questions.reduce((acc, q) => {
-      if (currentAnswers[q.id] === q.correctAnswer) return acc + 1;
-      return acc;
-    }, 0);
-
-    const answeredCount = Object.keys(currentAnswers).length;
-    const allAnswered = answeredCount === totalQuestions && totalQuestions > 0;
-
-    const hasFinished = lastResult !== null && !started;
-
-    // Handle "Next" button
-    const handleNext = useCallback(async () => {
-      if (isLastQuestion) {
-        setIsSubmitting(true);
-        
-        // 1. Finish the quiz locally FIRST so the Zustand store is perfectly up-to-date
-        finishQuiz(quizId, currentScore, totalQuestions);
-
-        // 2. Sync to Supabase in the background
-        try {
-          const identity = useAppStore.getState().identity;
-          if (!identity) throw new Error("Identity not found");
-
-          const { supabase } = await import("@/src/lib/supabaseClient");
-
-          const { data: student, error: studentError } = await supabase
-            .from("students")
-            .upsert(
-              { nim: identity.nim, name: identity.nama, cohort: identity.angkatan },
-              { onConflict: "nim" }
-            )
-            .select("id")
-            .single();
-
-          if (studentError) throw studentError;
-
-          const states = useAppStore.getState().quizStates;
-          
-          const details = quizData.map((quiz) => {
-            const state = states[quiz.quizId];
-            if (!state || state.attemptsUsed === 0) return null;
-            
-            const answersToUse = state.lastResult ? state.lastResult.answers : state.currentAnswers;
-
-            const answersDetail = quiz.questions.map((q) => {
-              const selectedOpt = answersToUse[q.id];
-              const selectedIdx = q.options.indexOf(selectedOpt || "");
-              const correctIdx = q.options.indexOf(q.correctAnswer);
-              
-              return {
-                id: q.id.toString(),
-                question: q.text,
-                selectedOption: selectedIdx !== -1 ? String.fromCharCode(65 + selectedIdx) : "-",
-                selectedText: selectedOpt || "-",
-                isCorrect: selectedOpt === q.correctAnswer,
-                correctOption: correctIdx !== -1 ? String.fromCharCode(65 + correctIdx) : "-",
-                correctText: q.correctAnswer,
-              };
-            });
-
-            const correctCount = answersDetail.filter((a) => a.isCorrect).length;
-
-            return {
-              title: quiz.title,
-              correct: correctCount,
-              total: quiz.questions.length,
-              attempts: state.attemptsUsed,
-              answers: answersDetail,
-            };
-          }).filter(Boolean);
-
-          const quiz7State = states[7];
-          let numiScore = 0;
-          if (quiz7State && quiz7State.lastResult) {
-            numiScore = Math.round((quiz7State.lastResult.score / quiz7State.lastResult.total) * 1000);
-          }
-
-          const { data: existingAttempt } = await supabase
-            .from("quiz_attempts")
-            .select("id")
-            .eq("student_id", student.id)
-            .maybeSingle();
-
-          if (existingAttempt) {
-            const { error: attemptError } = await supabase
-              .from("quiz_attempts")
-              .update({
-                total_score: numiScore,
-                completion_time: new Date().toISOString(),
-                details: details,
-              })
-              .eq("id", existingAttempt.id);
-            if (attemptError) throw attemptError;
-          } else {
-            const { error: attemptError } = await supabase
-              .from("quiz_attempts")
-              .insert({
-                student_id: student.id,
-                total_score: numiScore,
-                details: details,
-              });
-            if (attemptError) throw attemptError;
-          }
-        } catch (err: any) {
-          console.error("Error submitting quiz:", err);
-          alert("Gagal memperbarui nilai ke server: " + (err.message || "Pastikan koneksi internet stabil."));
-        } finally {
-          setIsSubmitting(false);
-          setShowResults(true);
-        }
-      } else {
-        setCurrentIndex((prev) => prev + 1);
-      }
-    }, [isLastQuestion, quizId, currentScore, totalQuestions, finishQuiz]);
-
-    // Handle retry from score panel (go back to summary first)
-    const handleRetryFromScore = useCallback(() => {
-      setForceSummary(true);
-      setShowResults(false);
-    }, []);
-
-    // ----- Render: Summary screen -----
-    if ((!started && !hasFinished && !showResults) || forceSummary) {
+  // ----- Render: Score results -----
+  if ((showResults || hasFinished) && !forceSummary) {
+    if (quizId === 7) {
       return (
-        <QuizSummaryScreen
-          quizId={quizId}
-          title={quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
-          summary={quiz.summary}
-          attemptsUsed={attemptsUsed}
-          bestResult={bestResult}
-          onStart={() => {
-            setForceSummary(false);
-            if (attemptsUsed > 0) {
-              retryQuiz(quizId);
-            } else {
-              startQuiz(quizId);
-            }
-          }}
-          onAdvance={advanceToNextQuiz}
-        />
-      );
-    }
-
-    // ----- Render: Score results -----
-    if ((showResults || hasFinished) && !forceSummary) {
-      if (quizId === 7) {
-        return (
-          <NUMiScorePanel
-            score={lastResult ? lastResult.score : currentScore}
-            total={totalQuestions}
-            questions={questions}
-            currentAnswers={currentAnswers}
-            onRetry={handleRetryFromScore}
-            onAdvance={advanceToNextQuiz}
-          />
-        );
-      }
-
-      const displayAttemptsUsed = lastResult ? attemptsUsed : attemptsUsed + 1;
-
-      return (
-        <QuizScorePanel
+        <NUMiScorePanel
           score={lastResult ? lastResult.score : currentScore}
           total={totalQuestions}
-          attemptsUsed={displayAttemptsUsed}
-          quote={quiz.quote}
+          questions={questions}
+          currentAnswers={currentAnswers}
           onRetry={handleRetryFromScore}
           onAdvance={advanceToNextQuiz}
         />
       );
     }
 
-    // ----- Render: Paginated question view -----
+    const displayAttemptsUsed = lastResult ? attemptsUsed : attemptsUsed + 1;
+
     return (
-      <div className="quiz-panel">
-        {/* Header bar */}
-        <div className="quiz-header-bar">
-          <h2 className="quiz-header-title">
-            {quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
-          </h2>
-          <span className="quiz-header-meta">
-            {currentIndex + 1} / {totalQuestions}
-          </span>
-        </div>
-
-        {/* Segmented progress bar */}
-        <SegmentedProgressBar
-          questions={questions}
-          currentAnswers={currentAnswers}
-          currentIndex={currentIndex}
-          onSegmentClick={(idx) => {
-            // Allow navigating to answered questions or current
-            if (idx <= answeredCount) {
-              setCurrentIndex(idx);
-            }
-          }}
-        />
-
-        {/* Single question */}
-        {currentQuestion && (
-          <QuestionView
-            question={currentQuestion}
-            index={currentIndex}
-            total={totalQuestions}
-            selectedAnswer={currentAnswer}
-            onAnswer={(answer) =>
-              answerQuestion(quizId, currentQuestion.id, answer)
-            }
-          />
-        )}
-
-        {/* Next / See Results button */}
-        {isCurrentAnswered && (
-          <button className="quiz-next-btn" onClick={handleNext} disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 size={16} className="animate-spin" />
-                Menyimpan Hasil...
-              </>
-            ) : isLastQuestion ? (
-              <>
-                <Eye size={16} />
-                Lihat Hasil
-              </>
-            ) : (
-              <>
-                Selanjutnya
-                <ArrowRight size={16} />
-              </>
-            )}
-          </button>
-        )}
-      </div>
+      <QuizScorePanel
+        score={lastResult ? lastResult.score : currentScore}
+        total={totalQuestions}
+        attemptsUsed={displayAttemptsUsed}
+        quote={quiz.quote}
+        onRetry={handleRetryFromScore}
+        onAdvance={advanceToNextQuiz}
+      />
     );
   }
+
+  // ----- Render: Paginated question view -----
+  return (
+    <div className="quiz-panel">
+      {/* Header bar */}
+      <div className="quiz-header-bar">
+        <h2 className="quiz-header-title">
+          {quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
+        </h2>
+        <span className="quiz-header-meta">
+          {currentIndex + 1} / {totalQuestions}
+        </span>
+      </div>
+
+      {/* Segmented progress bar */}
+      <SegmentedProgressBar
+        questions={questions}
+        currentAnswers={currentAnswers}
+        currentIndex={currentIndex}
+        onSegmentClick={(idx) => {
+          // Allow navigating to answered questions or current
+          if (idx <= answeredCount) {
+            setCurrentIndex(idx);
+          }
+        }}
+      />
+
+      {/* Single question */}
+      {currentQuestion && (
+        <QuestionView
+          question={currentQuestion}
+          index={currentIndex}
+          total={totalQuestions}
+          selectedAnswer={currentAnswer}
+          onAnswer={(answer) =>
+            answerQuestion(quizId, currentQuestion.id, answer)
+          }
+        />
+      )}
+
+      {/* Next / See Results button */}
+      {isCurrentAnswered && (
+        <button className="quiz-next-btn" onClick={handleNext} disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <Loader2 size={16} className="animate-spin" />
+              Menyimpan Hasil...
+            </>
+          ) : isLastQuestion ? (
+            <>
+              <Eye size={16} />
+              Lihat Hasil
+            </>
+          ) : (
+            <>
+              Selanjutnya
+              <ArrowRight size={16} />
+            </>
+          )}
+        </button>
+      )}
+    </div>
+  );
+}
 

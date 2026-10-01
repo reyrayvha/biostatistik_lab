@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X, Loader2, Lock, Trash2, RefreshCw } from "lucide-react";
+import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X, Loader2, Lock, Trash2, RefreshCw, LogOut, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import * as XLSX from "xlsx";
 import { supabase } from "@/src/lib/supabaseClient";
 import { useAppStore } from "@/src/store/useAppStore";
@@ -46,6 +46,16 @@ const formatIndonesianDate = (timestamp: number) => {
   }).format(new Date(timestamp));
 };
 
+const QUIZ_COLUMNS = [
+  { id: 1, name: "Statistik", keyword: "statistik", total: 5 },
+  { id: 2, name: "Distribusi", keyword: "distribusi", total: 5 },
+  { id: 3, name: "Probabilitas", keyword: "probabilitas", total: 5 },
+  { id: 4, name: "Uji Hipotesis", keyword: "hipotesis", total: 5 },
+  { id: 5, name: "Diagnostik", keyword: "diagnostik", total: 5 },
+  { id: 6, name: "Desain Studi", keyword: "desain", total: 5 },
+  { id: 7, name: "Ujian Akhir", keyword: "akhir", total: 20 },
+];
+
 export default function Leaderboard() {
   const identity = useAppStore((s) => s.identity);
   const [selectedStudent, setSelectedStudent] = useState<StudentRecord | null>(null);
@@ -57,6 +67,7 @@ export default function Leaderboard() {
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
   const [adminError, setAdminError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const fetchLeaderboard = async () => {
     try {
@@ -136,9 +147,16 @@ export default function Leaderboard() {
       setShowAdminModal(false);
       setAdminPassword("");
       setAdminError("");
+      setShowPassword(false);
     } else {
       setAdminError("PIN salah!");
     }
+  };
+
+  const handleAdminLogout = () => {
+    setIsAdmin(false);
+    setAdminPassword("");
+    setAdminError("");
   };
 
   const handleDeleteAll = async () => {
@@ -228,34 +246,43 @@ export default function Leaderboard() {
             Papan Skor
           </h1>
 
-          {isAdmin ? (
-            <div className="flex gap-3">
-              <button
-                onClick={handleDeleteAll}
-                className="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-lg text-rose-600 hover:bg-rose-600/30 transition-colors shadow-[0_0_15px_rgba(225,29,72,0.1)] backdrop-blur-sm font-medium"
-              >
-                <Trash2 size={18} />
-                <span className="hidden sm:inline">Hapus Semua Data</span>
-              </button>
-              <button
-                onClick={handleExportExcel}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 border border-emerald-500 rounded-lg text-emerald-700 hover:bg-emerald-600/30 transition-colors shadow-[0_0_15px_rgba(16,185,129,0.1)] backdrop-blur-sm font-medium"
-              >
-                <Download size={18} />
-                <span className="hidden sm:inline">Export to Excel</span>
-              </button>
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <button
-                onClick={fetchLeaderboard}
-                className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all font-medium text-sm shadow-sm"
-                title="Refresh Papan Skor"
-                disabled={loading}
-              >
-                <RefreshCw size={16} className={loading ? "animate-spin text-blue-600" : "text-slate-500 hover:text-blue-600"} />
-                <span className="hidden sm:inline">Refresh</span>
-              </button>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <button
+              onClick={fetchLeaderboard}
+              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all font-medium text-sm shadow-sm"
+              title="Refresh Papan Skor"
+              disabled={loading}
+            >
+              <RefreshCw size={16} className={loading ? "animate-spin text-blue-600" : "text-slate-500"} />
+              <span className="hidden sm:inline">Refresh</span>
+            </button>
+
+            {isAdmin ? (
+              <>
+                <button
+                  onClick={handleDeleteAll}
+                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-red-50 border border-red-200 rounded-lg text-rose-600 hover:bg-red-100 transition-colors font-medium text-sm shadow-sm"
+                >
+                  <Trash2 size={16} />
+                  <span className="hidden sm:inline">Hapus Semua Data</span>
+                </button>
+                <button
+                  onClick={handleExportExcel}
+                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 hover:bg-emerald-100 transition-colors font-medium text-sm shadow-sm"
+                >
+                  <Download size={16} />
+                  <span className="hidden sm:inline">Export to Excel</span>
+                </button>
+                <button
+                  onClick={handleAdminLogout}
+                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition-all font-medium text-sm shadow-sm"
+                  title="Keluar Mode Dosen"
+                >
+                  <LogOut size={16} className="text-slate-500" />
+                  <span>Logout</span>
+                </button>
+              </>
+            ) : (
               <button
                 onClick={() => setShowAdminModal(true)}
                 className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-slate-800 hover:bg-slate-100 transition-all font-medium text-sm shadow-sm"
@@ -264,9 +291,40 @@ export default function Leaderboard() {
                 <Lock size={16} className="text-blue-600" />
                 <span>Mode Dosen</span>
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
+
+        {/* Admin Mode Card & Logout */}
+        {isAdmin && (
+          <div className="bg-white border border-indigo-100 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm bg-gradient-to-r from-indigo-50/80 via-white to-blue-50/60">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200 shrink-0">
+                <ShieldCheck size={24} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base font-bold text-slate-800">Mode Dosen Aktif</h2>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 border border-indigo-200">
+                    Akses Admin
+                  </span>
+                </div>
+                <p className="text-sm text-slate-500 mt-0.5">
+                  Anda memiliki akses penuh untuk melihat detail jawaban seluruh mahasiswa, mengekspor rekap nilai, dan mereset data.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end shrink-0">
+              <button
+                onClick={handleAdminLogout}
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-slate-700 hover:text-rose-600 rounded-xl text-sm font-semibold transition-all shadow-sm"
+              >
+                <LogOut size={16} />
+                <span>Logout Mode Dosen</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Mobile View (Cards) */}
         <div className="md:hidden space-y-4 pb-12">
@@ -313,13 +371,16 @@ export default function Leaderboard() {
                 {/* Quizzes Summary (Horizontal Scroll) */}
                 <div className="overflow-x-auto pb-2 -mx-4 px-4 snap-x">
                   <div className="flex gap-2 w-max">
-                    {student.quizzes.map((quiz, qIdx) => {
-                      const quizNames = ["Statistik", "Distribusi", "Probabilitas", "Uji Hipotesis", "Diagnostik", "Desain Studi", "Ujian Akhir"];
-                      const qName = quizNames[qIdx] || `Q${qIdx + 1}`;
+                    {QUIZ_COLUMNS.map((col) => {
+                      const quiz = student.quizzes.find((q) =>
+                        q.title.toLowerCase().includes(col.keyword.toLowerCase())
+                      );
                       return (
-                        <div key={qIdx} className="bg-white border border-slate-200 rounded-lg p-2 min-w-[100px] flex flex-col items-center justify-center snap-center">
-                          <span className="text-[10px] text-slate-500 truncate w-full text-center">{qName}</span>
-                          <span className="text-sm font-bold text-slate-800 mt-1">{quiz.correct}/{quiz.total}</span>
+                        <div key={col.id} className="bg-white border border-slate-200 rounded-lg p-2 min-w-[100px] flex flex-col items-center justify-center snap-center">
+                          <span className="text-[10px] text-slate-500 truncate w-full text-center">{col.name}</span>
+                          <span className={`text-sm font-bold mt-1 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
+                            {quiz ? `${quiz.correct}/${quiz.total}` : `0/${col.total}`}
+                          </span>
                         </div>
                       );
                     })}
@@ -368,7 +429,7 @@ export default function Leaderboard() {
               <tbody className="divide-y divide-slate-200">
                 {loading ? (
                   <tr>
-                    <td colSpan={10} className="px-6 py-12 text-center">
+                    <td colSpan={11} className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center justify-center gap-3 text-slate-500">
                         <Loader2 className="animate-spin text-blue-600" size={32} />
                         <p className="font-medium">Memuat data papan skor...</p>
@@ -377,7 +438,7 @@ export default function Leaderboard() {
                   </tr>
                 ) : data.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="px-6 py-12 text-center text-slate-500 font-medium">
+                    <td colSpan={11} className="px-6 py-12 text-center text-slate-500 font-medium">
                       Belum ada data nilai kuis mahasiswa.
                     </td>
                   </tr>
@@ -414,14 +475,37 @@ export default function Leaderboard() {
                       </td>
 
                       {/* Quiz Columns */}
-                      {student.quizzes.map((quiz, qIdx) => (
-                        <td key={qIdx} className="px-6 py-4 text-center">
-                          <div className="flex flex-col items-center">
-                            <span className="text-base font-semibold text-slate-800">{quiz.correct}/{quiz.total}</span>
-                            <span className="text-xs text-slate-500 mt-1">Percobaan: {quiz.attempts}x</span>
-                          </div>
-                        </td>
-                      ))}
+                      {QUIZ_COLUMNS.map((col) => {
+                        const quiz = student.quizzes.find((q) =>
+                          q.title.toLowerCase().includes(col.keyword.toLowerCase())
+                        );
+
+                        return (
+                          <td key={col.id} className="px-6 py-4 text-center">
+                            <div className="flex flex-col items-center">
+                              {quiz ? (
+                                <>
+                                  <span className="text-base font-semibold text-slate-800">
+                                    {quiz.correct}/{quiz.total}
+                                  </span>
+                                  <span className="text-xs text-slate-500 mt-1">
+                                    Percobaan: {quiz.attempts}x
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="text-base font-semibold text-slate-400">
+                                    0/{col.total}
+                                  </span>
+                                  <span className="text-xs text-slate-400 mt-1">
+                                    Percobaan: 0x
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                        );
+                      })}
 
                       {/* Aksi */}
                       <td className="px-6 py-4 text-center sticky right-0 bg-slate-50  border-l border-slate-200">
@@ -501,18 +585,37 @@ export default function Leaderboard() {
             <form onSubmit={handleAdminSubmit}>
               <div className="mb-4">
                 <label className="block text-sm text-slate-500 mb-2">Masukkan PIN / Password</label>
-                <input
-                  type="password"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-slate-800 focus:outline-none focus:border-indigo-500"
-                  value={adminPassword}
-                  onChange={(e) => setAdminPassword(e.target.value)}
-                  autoFocus
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-4 pr-11 py-2 text-slate-800 focus:outline-none focus:border-indigo-500"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 transition-colors"
+                    title={showPassword ? "Sembunyikan password" : "Lihat password"}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
                 {adminError && <p className="text-rose-600 text-sm mt-2">{adminError}</p>}
               </div>
               <div className="flex justify-end gap-3">
-                <button type="button" onClick={() => setShowAdminModal(false)} className="px-4 py-2 text-slate-500 hover:text-slate-800">Batal</button>
-                <button type="submit" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-slate-800 rounded-lg transition-colors">Masuk</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAdminModal(false);
+                    setShowPassword(false);
+                  }}
+                  className="px-4 py-2 text-slate-500 hover:text-slate-800"
+                >
+                  Batal
+                </button>
+                <button type="submit" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition-colors">Masuk</button>
               </div>
             </form>
           </div>
