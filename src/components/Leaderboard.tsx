@@ -349,71 +349,40 @@ export default function Leaderboard() {
             </div>
           ) : (
             data.map((student, idx) => (
-              <div key={student.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+              <div key={student.id} className="bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
                 
-                {/* Mode Dosen / Pemilik Akun */}
-                {isAdmin || student.nim === identity?.nim ? (
-                  <>
-                    {/* Header Card */}
-                    <div className="flex flex-col pr-16 border-b border-slate-100 pb-3 mb-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs">Rank #{idx + 1}</span>
-                        <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">{student.angkatan}</span>
-                      </div>
-                      <span className="font-bold text-slate-800 text-lg leading-tight break-words">{student.name}</span>
-                      <span className="text-sm text-slate-500">{student.nim}</span>
-                    </div>
+                {/* Header Card */}
+                <div className="flex flex-col pr-16 border-b border-slate-100 pb-2 mb-2">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-[10px] md:text-xs">Rank #{idx + 1}</span>
+                    <span className="text-[10px] md:text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">{student.angkatan}</span>
+                  </div>
+                  <span className="font-bold text-slate-800 text-base md:text-lg leading-tight break-words">{student.name}</span>
+                  <span className="text-xs md:text-sm text-slate-500">{student.nim}</span>
+                </div>
 
-                    {/* Highlight Card */}
-                    <div className="flex justify-between items-center bg-blue-50/40 p-3 rounded-lg border border-blue-50/50">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-blue-600 font-semibold uppercase tracking-wider mb-0.5">Skor NUMi</span>
-                        <span className="text-2xl font-bold text-blue-600 leading-none">{student.numiScore}</span>
-                      </div>
-                      <div className="flex flex-col items-end text-xs text-slate-500">
-                        <span className="font-medium">{formatIndonesianDate(student.finishTimestamp)}</span>
-                        <span>{student.finishTime}</span>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {/* Header Card (Mode Privasi) */}
-                    <div className="flex flex-col pr-16 border-b border-slate-100 pb-3 mb-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs">Rank #{idx + 1}</span>
-                      </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Lock size={16} className="text-slate-400" />
-                        <span className="blur-[5px] select-none text-slate-400 font-bold text-lg leading-tight">Nama Dirahasiakan</span>
-                      </div>
-                      <span className="text-xs text-slate-400 mt-0.5">Identitas Disembunyikan</span>
-                    </div>
-
-                    {/* Highlight Card (Mode Privasi) */}
-                    <div className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-100">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Skor NUMi</span>
-                        <span className="text-2xl font-bold text-slate-300 blur-[4px] leading-none">000</span>
-                      </div>
-                      <div className="flex flex-col items-end text-xs text-slate-300 blur-[3px]">
-                        <span>12 Jan 2026</span>
-                        <span>12:00 WIB</span>
-                      </div>
-                    </div>
-                  </>
-                )}
+                {/* Highlight Card */}
+                <div className="flex justify-between items-center bg-blue-50/40 p-2 md:p-3 rounded-lg border border-blue-50/50">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] md:text-xs text-blue-600 font-semibold uppercase tracking-wider mb-0.5">Skor NUMi</span>
+                    <span className="text-xl md:text-2xl font-bold text-blue-600 leading-none">{student.numiScore}</span>
+                  </div>
+                  <div className="flex flex-col items-end text-[10px] md:text-xs text-slate-500">
+                    <span className="font-medium">{formatIndonesianDate(student.finishTimestamp)}</span>
+                    <span>{student.finishTime}</span>
+                  </div>
+                </div>
 
                 {/* Grid Nilai (Penting) */}
-                <div className="grid grid-cols-2 gap-2 mt-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
                   {QUIZ_COLUMNS.map((col) => {
                     const quiz = student.quizzes.find((q) =>
                       q.title.toLowerCase().includes(col.keyword.toLowerCase())
                     );
                     return (
                       <div key={col.id} className="bg-slate-50 p-2 rounded-lg text-center flex flex-col items-center justify-center border border-slate-100">
-                        <span className="text-[11px] text-slate-500 font-medium truncate w-full">{col.name}</span>
-                        <span className={`text-base font-bold mt-0.5 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
+                        <span className="text-[10px] md:text-[11px] text-slate-500 font-medium w-full truncate">{col.name}</span>
+                        <span className={`text-sm md:text-base font-bold mt-0.5 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
                           {quiz ? `${quiz.correct}/${quiz.total}` : `0/${col.total}`}
                         </span>
                       </div>
@@ -422,19 +391,13 @@ export default function Leaderboard() {
                 </div>
 
                 {/* Footer Card: Action */}
-                <div className="pt-4 mt-4 border-t border-slate-100">
-                  {isAdmin || student.nim === identity?.nim ? (
-                    <button
-                      onClick={() => setSelectedStudent(student)}
-                      className="w-full py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-100 rounded-lg text-sm font-semibold transition-colors"
-                    >
-                      Lihat Detail Jawaban
-                    </button>
-                  ) : (
-                    <div className="w-full py-2 bg-slate-50 text-slate-400 rounded-lg text-sm text-center italic border border-slate-100">
-                      Privasi Terjaga
-                    </div>
-                  )}
+                <div className="pt-3 mt-3 border-t border-slate-100">
+                  <button
+                    onClick={() => setSelectedStudent(student)}
+                    className="w-full py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-100 rounded-lg text-[13px] md:text-sm font-semibold transition-colors"
+                  >
+                    Lihat Detail Jawaban
+                  </button>
                 </div>
               </div>
             ))
@@ -628,7 +591,7 @@ export default function Leaderboard() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-6 border-t border-slate-200 flex justify-end">
+            <div className="p-4 pb-28 md:p-6 md:pb-6 border-t border-slate-200 flex justify-end bg-white">
               <button
                 onClick={() => setSelectedStudent(null)}
                 className="px-6 py-2.5 bg-slate-100 text-slate-800 rounded-lg hover:bg-slate-600 transition-colors font-medium"
@@ -699,31 +662,33 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
     <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 hover:bg-white shadow-sm transition-colors"
+        className="w-full flex items-center justify-between py-2.5 px-3 md:p-4 hover:bg-white shadow-sm transition-colors"
       >
-        <div className="flex items-center gap-4">
-          <span className="font-semibold text-slate-800">{quiz.title}</span>
-          <span className={`text-xs px-2 py-1 rounded-md font-medium ${quiz.correct === quiz.total
+        <div className="flex items-center gap-3">
+          <span className="font-semibold text-slate-800 text-sm md:text-base text-left leading-tight">{quiz.title}</span>
+          <span className={`text-[10px] md:text-xs px-2 py-0.5 rounded-md font-medium whitespace-nowrap ${quiz.correct === quiz.total
             ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
             : "bg-blue-50 text-blue-600 border border-blue-200"
             }`}>
             Skor: {quiz.correct}/{quiz.total}
           </span>
         </div>
-        {isOpen ? <ChevronUp size={20} className="text-slate-500" /> : <ChevronDown size={20} className="text-slate-500" />}
+        <div className="shrink-0 ml-2">
+          {isOpen ? <ChevronUp size={18} className="text-slate-500" /> : <ChevronDown size={18} className="text-slate-500" />}
+        </div>
       </button>
 
       {isOpen && (
-        <div className="p-4 border-t border-slate-200 bg-white/30">
-          <div className="flex flex-col gap-3 mt-2">
+        <div className="p-3 md:p-4 border-t border-slate-200 bg-white/30">
+          <div className="flex flex-col gap-2 mt-1">
             {quiz.answers.map((ans, idx) => (
-              <div key={idx} className="bg-slate-50/50 border border-slate-200 rounded-lg p-4">
+              <div key={idx} className="bg-slate-50/50 border border-slate-200 rounded-lg p-3 md:p-4">
                 {/* Header Soal */}
-                <div className="flex items-start gap-3">
-                  <span className="shrink-0 px-2.5 py-1 rounded-md bg-white text-xs font-bold text-slate-500 border border-slate-200">
+                <div className="flex items-start gap-2 md:gap-3">
+                  <span className="shrink-0 px-2 md:px-2.5 py-0.5 md:py-1 rounded-md bg-white text-[10px] md:text-xs font-bold text-slate-500 border border-slate-200">
                     {ans.id}
                   </span>
-                  <p className="text-slate-800 text-sm leading-relaxed mt-0.5">
+                  <p className="text-slate-800 text-[13px] md:text-sm leading-relaxed mt-0.5">
                     {ans.question}
                   </p>
                 </div>

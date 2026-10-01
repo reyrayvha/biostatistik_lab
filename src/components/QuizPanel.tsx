@@ -430,7 +430,7 @@ function NUMiScorePanel({
   ];
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
+    <div className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 md:p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
 
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
@@ -438,21 +438,21 @@ function NUMiScorePanel({
           <BookOpen size={18} /> Indeks Pemahaman Numerik
         </h3>
 
-        <div className="text-[6rem] font-medium tracking-tight leading-none text-slate-900">
+        <div className="text-5xl md:text-[6rem] font-medium tracking-tight leading-none text-slate-900 mt-2 md:mt-0">
           {numiScore}
-          <span className="text-2xl font-normal text-slate-500 ml-3">/ 1000</span>
+          <span className="text-lg md:text-2xl font-normal text-slate-500 ml-2 md:ml-3">/ 1000</span>
         </div>
       </div>
 
       {/* Stats Row */}
-      <div className="flex gap-4 mt-2">
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
-          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2">Benar</div>
-          <div className="text-slate-700 text-3xl font-semibold">{score}<span className="text-slate-500 text-lg font-normal ml-1">/{total}</span></div>
+      <div className="flex gap-2 md:gap-4 mt-2">
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-4 text-center">
+          <div className="text-slate-500 text-[10px] md:text-xs uppercase font-bold tracking-widest mb-1 md:mb-2">Benar</div>
+          <div className="text-slate-700 text-2xl md:text-3xl font-semibold">{score}<span className="text-slate-500 text-sm md:text-lg font-normal ml-1">/{total}</span></div>
         </div>
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
-          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2">Akurasi</div>
-          <div className="text-slate-700 text-3xl font-semibold">{accuracy}<span className="text-slate-500 text-lg font-normal ml-1">%</span></div>
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-4 text-center">
+          <div className="text-slate-500 text-[10px] md:text-xs uppercase font-bold tracking-widest mb-1 md:mb-2">Akurasi</div>
+          <div className="text-slate-700 text-2xl md:text-3xl font-semibold">{accuracy}<span className="text-slate-500 text-sm md:text-lg font-normal ml-1">%</span></div>
         </div>
       </div>
 
