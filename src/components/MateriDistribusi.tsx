@@ -6,11 +6,11 @@ import InteractiveDistribution from './InteractiveDistribution';
 
 export default function MateriDistribusi() {
   return (
-    <div className="flex flex-col gap-10 text-slate-700 font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
+    <div className="flex flex-col gap-6 md:gap-10 text-sm md:text-base text-slate-700 leading-relaxed font-sans">
 
       {/* 1. Skenario */}
       <div>
-        <h3 className="text-2xl font-bold tracking-tight text-blue-600 mb-4">
+        <h3 className="text-xl md:text-2xl font-bold text-blue-600 mb-2 md:mb-4 leading-snug">
           Hasil Lab yang Membuat Mahasiswa Kedokteran Panik
         </h3>
         <p className="mb-4">
@@ -31,7 +31,7 @@ export default function MateriDistribusi() {
 
       {/* 2. Kurva Lonceng */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Kurva Lonceng — Tempat Sebagian Besar Kedokteran Berada
         </h4>
         <p className="mb-4">
@@ -60,7 +60,7 @@ export default function MateriDistribusi() {
 
       {/* 3. Aturan 68-95-99.7 */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Aturan yang Akan Kamu Gunakan Setiap Hari: 68-95-99,7
         </h4>
         <p className="mb-5">Ini aturan paling berguna dalam biostatistik:</p>
@@ -89,7 +89,7 @@ export default function MateriDistribusi() {
 
       {/* 4. Z-Score */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Z-Score: Penerjemah Universal</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">Z-Score: Penerjemah Universal</h4>
         <p className="mb-4">
           Lab berbeda punya satuan berbeda — hemoglobin dalam g/dL, trombosit dalam ribu/μL,
           kreatinin dalam mg/dL. Bagaimana membandingkan seberapa &quot;abnormal&quot; masing-masing?
@@ -112,7 +112,7 @@ export default function MateriDistribusi() {
 
       {/* 5. TLP */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Mengapa Statistik Benar-Benar Bekerja: Teorema Limit Pusat
         </h4>
         <p className="mb-4">

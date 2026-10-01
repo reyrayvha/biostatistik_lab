@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useMemo } from 'react';
 import { Bookmark, BarChart3, Settings2 } from 'lucide-react';
@@ -90,11 +90,11 @@ export default function Quiz1Summary() {
     }`;
 
   return (
-    <div className="flex flex-col gap-10 text-slate-700 font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
+    <div className="flex flex-col gap-6 md:gap-10 text-sm md:text-base text-slate-700 leading-relaxed font-sans">
 
       {/* 1. Skenario */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           UGD yang Tidak Bisa Mengukur Waktu Tunggunya Sendiri
         </h4>
         <p className="mb-4">
@@ -110,7 +110,7 @@ export default function Quiz1Summary() {
 
       {/* 2. Definisi */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Tiga Cara Menemukan &quot;Nilai Tengah&quot;</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Tiga Cara Menemukan &quot;Nilai Tengah&quot;</h4>
         <p className="mb-6">
           Bayangkan begini: 10 pasien datang ke klinikmu hari ini. Kamu ingin tahu seperti apa pasien &quot;tipikal&quot;.
         </p>
@@ -131,7 +131,7 @@ export default function Quiz1Summary() {
 
       {/* 3. Standar Deviasi */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Mengapa &quot;Sebaran&quot; Bisa Menyelamatkan Nyawa</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">Mengapa &quot;Sebaran&quot; Bisa Menyelamatkan Nyawa</h4>
         <p className="mb-4">
           Ini skenario yang akan kamu hadapi saat residensi: dua obat tekanan darah sama-sama menurunkan sistolik 10 mmHg rata-rata. Mean identik. Dokter seniormu bertanya: &quot;Mana yang akan kamu resepkan?&quot;
         </p>
@@ -158,7 +158,7 @@ export default function Quiz1Summary() {
 
       {/* 5. Bentuk Distribusi */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">Membaca Bentuk Penyakit</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Membaca Bentuk Penyakit</h4>
         <p className="mb-4">
           Dokter seniormu membuka dua histogram. &quot;Beritahu aku yang mana miring kanan.&quot;
         </p>

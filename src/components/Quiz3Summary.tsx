@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useMemo } from "react";
 import { Bookmark, Calculator, FlaskConical } from "lucide-react";
@@ -89,11 +89,11 @@ export default function Quiz3Summary() {
     }`;
 
   return (
-    <div className="flex flex-col gap-10 text-slate-700 font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
+    <div className="flex flex-col gap-6 md:gap-10 text-sm md:text-base text-slate-700 leading-relaxed font-sans">
 
       {/* 1. Skenario */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Tes yang Benar 99% — tapi Tetap Salah
         </h4>
         <p className="mb-4">
@@ -123,7 +123,7 @@ export default function Quiz3Summary() {
 
       {/* 2. Intuisi Bayesian */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Mengapa Intuisimu Sudah Bayesian</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">Mengapa Intuisimu Sudah Bayesian</h4>
         <p className="mb-4">
           Kamu sudah melakukan ini setiap hari. Ketika atlet 25 tahun datang dengan nyeri dada, otakmu
           memberikan probabilitas pre-test yang rendah untuk serangan jantung. Ketika perokok 68 tahun
@@ -141,7 +141,7 @@ export default function Quiz3Summary() {
 
       {/* 3. Tabel 2×2 Penjelasan */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Tabel 2×2: Kalkulator Diagnostikmu</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">Tabel 2×2: Kalkulator Diagnostikmu</h4>
         <p className="mb-4">
           Ini alat praktisnya. Bayangkan menguji 10.000 orang. Prevalensi: 5%, sensitivitas: 90%, spesifisitas: 95%.
         </p>
@@ -159,7 +159,7 @@ export default function Quiz3Summary() {
 
       {/* 4. Likelihood Ratio */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Rasio Kemungkinan: Jalan Pintas yang Disukai Dokter Senior
         </h4>
         <p className="mb-3">
@@ -186,7 +186,7 @@ export default function Quiz3Summary() {
 
       {/* 5. Kapan TIDAK Memesan Tes */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Pelajarannya: Kapan TIDAK Memesan Tes
         </h4>
         <p className="mb-4">

@@ -85,11 +85,11 @@ export default function Quiz4Summary() {
   }, [zVal, alpha]);
 
   return (
-    <div className="flex flex-col gap-10 text-slate-700 font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
+    <div className="flex flex-col gap-6 md:gap-10 text-sm md:text-base text-slate-700 leading-relaxed font-sans">
       
       {/* 1. Obat yang Berhasil */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Obat yang "Berhasil" (tapi Tidak Berarti)
         </h4>
         <p className="mb-4">
@@ -108,7 +108,7 @@ export default function Quiz4Summary() {
 
       {/* 2. Apa Arti P-Value Sebenarnya */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Apa Arti P-Value Sebenarnya (Semua Orang Salah Memahami Ini)
         </h4>
         <p className="mb-4">
@@ -131,7 +131,7 @@ export default function Quiz4Summary() {
 
       {/* 3. Dua Cara untuk Salah */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Dua Cara untuk Salah (Analogi UGD)
         </h4>
         <p className="mb-4">Kamu di UGD. Dua jenis kesalahan yang merusak malammu:</p>
@@ -153,7 +153,7 @@ export default function Quiz4Summary() {
 
       {/* 4. Power */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Power: Mengapa Studi Kecil Berbahaya
         </h4>
         <p className="mb-4">

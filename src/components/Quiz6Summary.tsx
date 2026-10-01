@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import { Bookmark, Plus, Minus } from "lucide-react";
@@ -72,11 +72,11 @@ export default function Quiz6Summary() {
   ];
 
   return (
-    <div className="flex flex-col gap-10 text-slate-700 font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
+    <div className="flex flex-col gap-6 md:gap-10 text-sm md:text-base text-slate-700 leading-relaxed font-sans">
       
       {/* 1. Kontroversi Kopi */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Kontroversi Kopi yang Menipu Satu Generasi
         </h4>
         <p className="mb-4">
@@ -95,7 +95,7 @@ export default function Quiz6Summary() {
 
       {/* 2. Tangga Bukti */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">Tangga Bukti</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Tangga Bukti</h4>
         <p className="mb-4">
           Bayangkan desain studi sebagai tangga kepercayaan:
         </p>
@@ -115,7 +115,7 @@ export default function Quiz6Summary() {
 
       {/* 3. NNT */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">NNT: Angka yang Benar-Benar Membantu Pasienmu</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">NNT: Angka yang Benar-Benar Membantu Pasienmu</h4>
         <p className="mb-4">
           Medical rep berkata: &quot;Statin kami mengurangi serangan jantung 36%!&quot; Kedengarannya luar biasa.
         </p>
@@ -129,7 +129,7 @@ export default function Quiz6Summary() {
 
       {/* 4. Paradoks Skrining */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">Paradoks Skrining: Ketika Deteksi Dini Berbohong</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Paradoks Skrining: Ketika Deteksi Dini Berbohong</h4>
         <p className="mb-4">
           Pusat kanker mengumumkan: &quot;Ketahanan hidup 5 tahun meningkat dari 40% menjadi 65% sejak kita mulai skrining!&quot; Dewan merayakan. Lalu seorang epidemiolog yang tajam bertanya: &quot;Apakah lebih sedikit orang yang benar-benar meninggal?&quot;
         </p>
@@ -149,7 +149,7 @@ export default function Quiz6Summary() {
 
       {/* 5. Bias & Confounding */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">Bias: Penyabotase Tak Terlihat</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Bias: Penyabotase Tak Terlihat</h4>
         <p className="mb-4">
           Setiap studi punya musuh:
         </p>
