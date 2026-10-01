@@ -109,7 +109,7 @@ export default function AppShell() {
             onClick={() => setIsNavOpen(!isNavOpen)}
             aria-label="Toggle Navigation"
           >
-            {isNavOpen ? <X size={24} /> : <Menu size={24} />}
+            {isNavOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         )}
 

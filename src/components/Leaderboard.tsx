@@ -391,14 +391,16 @@ export default function Leaderboard() {
                 </div>
 
                 {/* Footer Card: Action */}
-                <div className="pt-3 mt-3 border-t border-slate-100">
-                  <button
-                    onClick={() => setSelectedStudent(student)}
-                    className="w-full py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-100 rounded-lg text-[13px] md:text-sm font-semibold transition-colors"
-                  >
-                    Lihat Detail Jawaban
-                  </button>
-                </div>
+                {(isAdmin || student.nim === identity?.nim) && (
+                  <div className="pt-3 mt-3 border-t border-slate-100">
+                    <button
+                      onClick={() => setSelectedStudent(student)}
+                      className="w-full py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-100 rounded-lg text-[13px] md:text-sm font-semibold transition-colors"
+                    >
+                      Lihat Detail Jawaban
+                    </button>
+                  </div>
+                )}
               </div>
             ))
           )}
@@ -662,18 +664,18 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
     <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between py-2.5 px-3 md:p-4 hover:bg-white shadow-sm transition-colors"
+        className="w-full flex flex-row items-center justify-between py-2.5 px-3 md:p-4 hover:bg-white shadow-sm transition-colors gap-2"
       >
-        <div className="flex items-center gap-3">
-          <span className="font-semibold text-slate-800 text-sm md:text-base text-left leading-tight">{quiz.title}</span>
+        <span className="font-semibold text-slate-800 text-sm md:text-base text-left leading-tight flex-1">
+          {quiz.title}
+        </span>
+        <div className="flex flex-row items-center gap-2 shrink-0">
           <span className={`text-[10px] md:text-xs px-2 py-0.5 rounded-md font-medium whitespace-nowrap ${quiz.correct === quiz.total
             ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
             : "bg-blue-50 text-blue-600 border border-blue-200"
             }`}>
             Skor: {quiz.correct}/{quiz.total}
           </span>
-        </div>
-        <div className="shrink-0 ml-2">
           {isOpen ? <ChevronUp size={18} className="text-slate-500" /> : <ChevronDown size={18} className="text-slate-500" />}
         </div>
       </button>
