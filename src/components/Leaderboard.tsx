@@ -255,7 +255,7 @@ export default function Leaderboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-700 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-700 p-4 pb-32 md:p-8 md:pb-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header */}
@@ -337,57 +337,83 @@ export default function Leaderboard() {
         )}
 
         {/* Mobile View (Cards) */}
-        <div className="md:hidden w-full min-w-0 space-y-4 pb-32">
+        <div className="block md:hidden flex flex-col gap-4 w-full">
           {loading ? (
-            <div className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-slate-500">
+            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-3 text-slate-500">
               <Loader2 className="animate-spin text-blue-600" size={32} />
               <p className="font-medium">Memuat data papan skor...</p>
             </div>
           ) : data.length === 0 ? (
-            <div className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-8 text-center text-slate-500 font-medium">
+            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm text-center text-slate-500 font-medium">
               Belum ada data nilai kuis mahasiswa.
             </div>
           ) : (
             data.map((student, idx) => (
-              <div key={student.id} className="bg-white shadow-sm border border-slate-200 rounded-xl p-4 flex flex-col gap-4 relative overflow-hidden mb-4 w-full min-w-0">
-                {/* Rank Badge */}
-                <div className="absolute top-0 right-0 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-bl-xl font-bold text-sm border-b border-l border-blue-200">
-                  Rank #{idx + 1}
-                </div>
+              <div key={student.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                
+                {/* Mode Dosen / Pemilik Akun */}
+                {isAdmin || student.nim === identity?.nim ? (
+                  <>
+                    {/* Header Card */}
+                    <div className="flex flex-col pr-16 border-b border-slate-100 pb-3 mb-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs">Rank #{idx + 1}</span>
+                        <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">{student.angkatan}</span>
+                      </div>
+                      <span className="font-bold text-slate-800 text-lg leading-tight break-words">{student.name}</span>
+                      <span className="text-sm text-slate-500">{student.nim}</span>
+                    </div>
 
-                {/* Header Card: Student Info */}
-                <div className="flex flex-col pr-24">
-                  <span className="font-bold text-slate-800 text-lg leading-tight break-words">{student.name}</span>
-                  <div className="flex flex-wrap items-center gap-2 mt-2">
-                    <span className="text-sm text-slate-500">{student.nim}</span>
-                    <span className="px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700">
-                      {student.angkatan}
-                    </span>
-                  </div>
-                </div>
+                    {/* Highlight Card */}
+                    <div className="flex justify-between items-center bg-blue-50/40 p-3 rounded-lg border border-blue-50/50">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-blue-600 font-semibold uppercase tracking-wider mb-0.5">Skor NUMi</span>
+                        <span className="text-2xl font-bold text-blue-600 leading-none">{student.numiScore}</span>
+                      </div>
+                      <div className="flex flex-col items-end text-xs text-slate-500">
+                        <span className="font-medium">{formatIndonesianDate(student.finishTimestamp)}</span>
+                        <span>{student.finishTime}</span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Header Card (Mode Privasi) */}
+                    <div className="flex flex-col pr-16 border-b border-slate-100 pb-3 mb-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs">Rank #{idx + 1}</span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Lock size={16} className="text-slate-400" />
+                        <span className="blur-[5px] select-none text-slate-400 font-bold text-lg leading-tight">Nama Dirahasiakan</span>
+                      </div>
+                      <span className="text-xs text-slate-400 mt-0.5">Identitas Disembunyikan</span>
+                    </div>
 
-                {/* Sub-header Card: Score Info */}
-                <div className="bg-blue-50/50 rounded-xl p-3 flex justify-between items-center border border-blue-100">
-                  <div className="flex flex-col">
-                    <span className="text-xs text-blue-600 uppercase tracking-wider font-bold">Skor Total</span>
-                    <span className="text-3xl font-black text-blue-700 leading-none mt-1">{student.numiScore}</span>
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <span className="text-xs text-slate-600 font-medium text-right">{formatIndonesianDate(student.finishTimestamp)}</span>
-                    <span className="text-xs text-slate-500 text-right">{student.finishTime}</span>
-                  </div>
-                </div>
+                    {/* Highlight Card (Mode Privasi) */}
+                    <div className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Skor NUMi</span>
+                        <span className="text-2xl font-bold text-slate-300 blur-[4px] leading-none">000</span>
+                      </div>
+                      <div className="flex flex-col items-end text-xs text-slate-300 blur-[3px]">
+                        <span>12 Jan 2026</span>
+                        <span>12:00 WIB</span>
+                      </div>
+                    </div>
+                  </>
+                )}
 
-                {/* Body Card: Quizzes Summary (Grid) */}
-                <div className="grid grid-cols-3 gap-2">
+                {/* Grid Nilai (Penting) */}
+                <div className="grid grid-cols-2 gap-2 mt-4">
                   {QUIZ_COLUMNS.map((col) => {
                     const quiz = student.quizzes.find((q) =>
                       q.title.toLowerCase().includes(col.keyword.toLowerCase())
                     );
                     return (
-                      <div key={col.id} className="bg-slate-50 border border-slate-200 rounded-lg p-2 flex flex-col items-center justify-center text-center">
-                        <span className="text-[10px] sm:text-[11px] text-slate-500 font-medium truncate w-full">{col.name}</span>
-                        <span className={`text-sm sm:text-base font-bold mt-1 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
+                      <div key={col.id} className="bg-slate-50 p-2 rounded-lg text-center flex flex-col items-center justify-center border border-slate-100">
+                        <span className="text-[11px] text-slate-500 font-medium truncate w-full">{col.name}</span>
+                        <span className={`text-base font-bold mt-0.5 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
                           {quiz ? `${quiz.correct}/${quiz.total}` : `0/${col.total}`}
                         </span>
                       </div>
@@ -396,16 +422,16 @@ export default function Leaderboard() {
                 </div>
 
                 {/* Footer Card: Action */}
-                <div className="pt-3 border-t border-slate-200 mt-1">
+                <div className="pt-4 mt-4 border-t border-slate-100">
                   {isAdmin || student.nim === identity?.nim ? (
                     <button
                       onClick={() => setSelectedStudent(student)}
-                      className="w-full py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-sm font-medium text-slate-800 hover:bg-slate-200 hover:text-slate-800 transition-all flex items-center justify-center gap-2"
+                      className="w-full py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-100 rounded-lg text-sm font-semibold transition-colors"
                     >
                       Lihat Detail Jawaban
                     </button>
                   ) : (
-                    <div className="w-full py-2 bg-white shadow-sm border border-slate-200 rounded-lg text-sm text-slate-500 italic text-center">
+                    <div className="w-full py-2 bg-slate-50 text-slate-400 rounded-lg text-sm text-center italic border border-slate-100">
                       Privasi Terjaga
                     </div>
                   )}
