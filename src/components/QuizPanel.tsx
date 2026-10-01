@@ -24,6 +24,7 @@ import {
   Quote,
   ChevronDown,
   ChevronUp,
+  Loader2,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -536,6 +537,7 @@ function NUMiScorePanel({
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showResults, setShowResults] = useState(false);
     const [forceSummary, setForceSummary] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Reset local state when navigating to a different quiz
     useEffect(() => {
@@ -585,15 +587,94 @@ function NUMiScorePanel({
     const hasFinished = lastResult !== null && !started;
 
     // Handle "Next" button
-    const handleNext = useCallback(() => {
+    const handleNext = useCallback(async () => {
       if (isLastQuestion) {
-        // Finish the quiz and show results
-        finishQuiz(quizId, currentScore, totalQuestions);
-        setShowResults(true);
+        if (quizId === 7) {
+          setIsSubmitting(true);
+          try {
+            const identity = useAppStore.getState().identity;
+            if (!identity) throw new Error("Identity not found");
+
+            const { supabase } = await import("@/src/lib/supabaseClient");
+
+            const { data: student, error: studentError } = await supabase
+              .from("students")
+              .upsert(
+                { nim: identity.nim, name: identity.nama, cohort: identity.angkatan },
+                { onConflict: "nim" }
+              )
+              .select("id")
+              .single();
+
+            if (studentError) throw studentError;
+
+            const states = useAppStore.getState().quizStates;
+            const details = Object.entries(states).map(([qId, state]) => {
+              const qIdNum = parseInt(qId);
+              const quiz = quizData.find((q) => q.quizId === qIdNum);
+              if (!quiz) return null;
+
+              const isCurrentQuiz = qIdNum === 7;
+
+              const answersDetail = quiz.questions.map((q) => {
+                // If this is the current quiz being finished, currentAnswers might still have the latest answer,
+                // but let's be safe and use currentAnswers from state.
+                const selectedOpt = isCurrentQuiz ? currentAnswers[q.id] : state.currentAnswers[q.id];
+                const selectedIdx = q.options.indexOf(selectedOpt || "");
+                const correctIdx = q.options.indexOf(q.correctAnswer);
+                
+                return {
+                  id: q.id.toString(),
+                  question: q.text,
+                  selectedOption: selectedIdx !== -1 ? String.fromCharCode(65 + selectedIdx) : "-",
+                  selectedText: selectedOpt || "-",
+                  isCorrect: selectedOpt === q.correctAnswer,
+                  correctOption: correctIdx !== -1 ? String.fromCharCode(65 + correctIdx) : "-",
+                  correctText: q.correctAnswer,
+                };
+              });
+
+              const correctCount = answersDetail.filter((a) => a.isCorrect).length;
+
+              return {
+                title: quiz.title,
+                correct: isCurrentQuiz ? currentScore : correctCount,
+                total: quiz.questions.length,
+                attempts: state.attemptsUsed + (isCurrentQuiz ? 1 : 0),
+                answers: answersDetail,
+              };
+            }).filter(Boolean);
+
+            const numiScore = totalQuestions > 0 ? Math.round((currentScore / totalQuestions) * 1000) : 0;
+
+            const { error: attemptError } = await supabase
+              .from("quiz_attempts")
+              .insert({
+                student_id: student.id,
+                total_score: numiScore,
+                details: details,
+              });
+
+            if (attemptError) throw attemptError;
+          } catch (err) {
+            console.error("Error submitting quiz:", err);
+            alert("Terjadi kesalahan saat menyimpan kuis. Pastikan koneksi internet Anda stabil.");
+            setIsSubmitting(false);
+            return;
+          }
+          
+          setIsSubmitting(false);
+          finishQuiz(quizId, currentScore, totalQuestions);
+          setShowResults(true);
+        } else {
+          // Finish the quiz and show results
+          finishQuiz(quizId, currentScore, totalQuestions);
+          setShowResults(true);
+        }
       } else {
         setCurrentIndex((prev) => prev + 1);
       }
-    }, [isLastQuestion, quizId, currentScore, totalQuestions, finishQuiz]);
+    }, [isLastQuestion, quizId, currentScore, totalQuestions, finishQuiz, currentAnswers]);
 
     // Handle retry from score panel (go back to summary first)
     const handleRetryFromScore = useCallback(() => {
@@ -693,8 +774,13 @@ function NUMiScorePanel({
 
         {/* Next / See Results button */}
         {isCurrentAnswered && (
-          <button className="quiz-next-btn" onClick={handleNext}>
-            {isLastQuestion ? (
+          <button className="quiz-next-btn" onClick={handleNext} disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                Menyimpan Hasil...
+              </>
+            ) : isLastQuestion ? (
               <>
                 <Eye size={16} />
                 Lihat Hasil

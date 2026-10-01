@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X, Loader2, Lock, Trash2 } from "lucide-react";
 import * as XLSX from "xlsx";
+import { supabase } from "@/src/lib/supabaseClient";
+import { useAppStore } from "@/src/store/useAppStore";
 
 // --- Types ---
 type AnswerDetail = {
@@ -34,104 +36,6 @@ type StudentRecord = {
   quizzes: QuizResult[];
 };
 
-// --- Mock Data ---
-function generateMockAnswers(topic: string, results: boolean[]): AnswerDetail[] {
-  return results.map((isCorrect, i) => {
-    const isTopic1 = topic === "Statistik" || topic === "Distribusi";
-
-    const questionText = isTopic1
-      ? `Berapa persen data populasi normal yang berada dalam ±2 Standar Deviasi?`
-      : `Desain studi apa yang paling rentan terhadap recall bias?`;
-
-    const correctOption = isTopic1 ? "B" : "C";
-    const correctText = isTopic1 ? "95%" : "Case-Control";
-
-    const wrongOption = isTopic1 ? "A" : "A";
-    const wrongText = isTopic1 ? "68%" : "Cohort";
-
-    return {
-      id: `Q${i + 1}`,
-      question: questionText,
-      selectedOption: isCorrect ? correctOption : wrongOption,
-      selectedText: isCorrect ? correctText : wrongText,
-      isCorrect,
-      correctOption,
-      correctText
-    };
-  });
-}
-
-const mockData: StudentRecord[] = [
-  {
-    id: "1",
-    name: "Dr. Budi Santoso",
-    nim: "123456789",
-    angkatan: "2023",
-    numiScore: 850,
-    finishTime: "10:20 WIB",
-    finishTimestamp: 1696130400000,
-    quizzes: [
-      { title: "Statistik", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Statistik", [true, true, true, true, true]) },
-      { title: "Distribusi", correct: 4, total: 5, attempts: 2, answers: generateMockAnswers("Distribusi", [true, true, true, false, true]) },
-      { title: "Probabilitas", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Probabilitas", [true, true, true, true, true]) },
-      { title: "Uji Hipotesis", correct: 3, total: 5, attempts: 2, answers: generateMockAnswers("Uji Hipotesis", [true, false, true, false, true]) },
-      { title: "Diagnostik", correct: 4, total: 5, attempts: 1, answers: generateMockAnswers("Diagnostik", [true, true, false, true, true]) },
-      { title: "Desain Studi", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Desain Studi", [true, true, true, true, true]) },
-    ],
-  },
-  {
-    id: "2",
-    name: "Siti Aminah",
-    nim: "987654321",
-    angkatan: "2023",
-    numiScore: 850,
-    finishTime: "10:21 WIB",
-    finishTimestamp: 1696130460000,
-    quizzes: [
-      { title: "Statistik", correct: 4, total: 5, attempts: 1, answers: generateMockAnswers("Statistik", [true, true, false, true, true]) },
-      { title: "Distribusi", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Distribusi", [true, true, true, true, true]) },
-      { title: "Probabilitas", correct: 4, total: 5, attempts: 2, answers: generateMockAnswers("Probabilitas", [true, false, true, true, true]) },
-      { title: "Uji Hipotesis", correct: 4, total: 5, attempts: 1, answers: generateMockAnswers("Uji Hipotesis", [true, true, true, false, true]) },
-      { title: "Diagnostik", correct: 4, total: 5, attempts: 2, answers: generateMockAnswers("Diagnostik", [true, true, true, false, true]) },
-      { title: "Desain Studi", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Desain Studi", [true, true, true, true, true]) },
-    ],
-  },
-  {
-    id: "3",
-    name: "Andi Wijaya",
-    nim: "112233445",
-    angkatan: "2024",
-    numiScore: 920,
-    finishTime: "09:45 WIB",
-    finishTimestamp: 1696128300000,
-    quizzes: [
-      { title: "Statistik", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Statistik", [true, true, true, true, true]) },
-      { title: "Distribusi", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Distribusi", [true, true, true, true, true]) },
-      { title: "Probabilitas", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Probabilitas", [true, true, true, true, true]) },
-      { title: "Uji Hipotesis", correct: 4, total: 5, attempts: 1, answers: generateMockAnswers("Uji Hipotesis", [true, true, false, true, true]) },
-      { title: "Diagnostik", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Diagnostik", [true, true, true, true, true]) },
-      { title: "Desain Studi", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Desain Studi", [true, true, true, true, true]) },
-    ],
-  },
-  {
-    id: "4",
-    name: "Ratna Sari",
-    nim: "556677889",
-    angkatan: "2022",
-    numiScore: 780,
-    finishTime: "11:05 WIB",
-    finishTimestamp: 1696133100000,
-    quizzes: [
-      { title: "Statistik", correct: 3, total: 5, attempts: 2, answers: generateMockAnswers("Statistik", [true, false, true, false, true]) },
-      { title: "Distribusi", correct: 4, total: 5, attempts: 1, answers: generateMockAnswers("Distribusi", [true, true, true, false, true]) },
-      { title: "Probabilitas", correct: 3, total: 5, attempts: 2, answers: generateMockAnswers("Probabilitas", [false, true, true, false, true]) },
-      { title: "Uji Hipotesis", correct: 5, total: 5, attempts: 1, answers: generateMockAnswers("Uji Hipotesis", [true, true, true, true, true]) },
-      { title: "Diagnostik", correct: 3, total: 5, attempts: 2, answers: generateMockAnswers("Diagnostik", [true, false, false, true, true]) },
-      { title: "Desain Studi", correct: 4, total: 5, attempts: 1, answers: generateMockAnswers("Desain Studi", [true, true, true, true, false]) },
-    ],
-  }
-];
-
 // Helper to format date
 const formatIndonesianDate = (timestamp: number) => {
   return new Intl.DateTimeFormat('id-ID', {
@@ -143,20 +47,123 @@ const formatIndonesianDate = (timestamp: number) => {
 };
 
 export default function Leaderboard() {
+  const identity = useAppStore((s) => s.identity);
   const [selectedStudent, setSelectedStudent] = useState<StudentRecord | null>(null);
+  const [data, setData] = useState<StudentRecord[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Sort students: Score DESC, then finishTimestamp ASC
-  const sortedData = useMemo(() => {
-    return [...mockData].sort((a, b) => {
-      if (b.numiScore !== a.numiScore) {
-        return b.numiScore - a.numiScore;
+  // Admin Mode State
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminError, setAdminError] = useState("");
+
+  const fetchLeaderboard = async () => {
+    try {
+      setLoading(true);
+      let query = supabase
+        .from("quiz_attempts")
+        .select(`
+          total_score,
+          completion_time,
+          details,
+          students!inner (
+            id,
+            name,
+            nim,
+            cohort
+          )
+        `)
+        .order("total_score", { ascending: false })
+        .order("completion_time", { ascending: true });
+
+      // Fetch all students for the public global leaderboard
+      // No filter by nim here
+
+
+      const { data: attempts, error } = await query;
+
+      if (error) {
+        throw error;
       }
-      return a.finishTimestamp - b.finishTimestamp;
-    });
-  }, []);
+
+      if (attempts) {
+        const formattedData: StudentRecord[] = attempts.map((attempt: any) => ({
+          id: attempt.students.id,
+          name: attempt.students.name,
+          nim: attempt.students.nim,
+          angkatan: attempt.students.cohort,
+          numiScore: attempt.total_score,
+          finishTimestamp: new Date(attempt.completion_time).getTime(),
+          finishTime: new Intl.DateTimeFormat('id-ID', {
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZoneName: 'short'
+          }).format(new Date(attempt.completion_time)),
+          quizzes: attempt.details || [],
+        }));
+        
+        setData(formattedData);
+      }
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaderboard();
+
+    const channel = supabase
+      .channel('public:quiz_attempts')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'quiz_attempts' }, (payload) => {
+        fetchLeaderboard();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isAdmin]);
+
+  const handleAdminSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminPassword === 'admin123') {
+      setIsAdmin(true);
+      setShowAdminModal(false);
+      setAdminPassword("");
+      setAdminError("");
+    } else {
+      setAdminError("PIN salah!");
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    if (!confirm("Apakah Anda yakin ingin menghapus SEMUA data mahasiswa dan nilai kuis? Tindakan ini tidak dapat dibatalkan!")) {
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      const { error } = await supabase
+        .from('students')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000');
+      
+      if (error) throw error;
+      alert("Semua data berhasil dihapus.");
+      fetchLeaderboard();
+    } catch (error) {
+      console.error("Error deleting data:", error);
+      alert("Gagal menghapus data.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleExportExcel = () => {
-    const exportData = sortedData.map((student, index) => {
+    const exportData = data.map((student, index) => {
       const rowData: Record<string, string | number> = {
         "Peringkat": parseInt(String(index + 1), 10), // Explicit number to prevent percentage formatting
         "Nama Mahasiswa": student.name,
@@ -203,7 +210,7 @@ export default function Leaderboard() {
     XLSX.writeFile(workbook, "Rekap_Nilai_NUMi.xlsx");
   };
 
-  const renderRankIcon = (rank: number) => {
+  const renderRankIcon = (rank: number | string) => {
     return <span className="text-slate-400 font-bold text-lg">{rank}</span>;
   };
 
@@ -212,18 +219,38 @@ export default function Leaderboard() {
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative">
           <h1 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
             <Trophy className="text-indigo-400" size={32} />
             Papan Skor Global (NUMi)
           </h1>
-          <button
-            onClick={handleExportExcel}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 border border-emerald-500 rounded-lg text-emerald-400 hover:bg-emerald-600/30 transition-colors shadow-[0_0_15px_rgba(16,185,129,0.1)] backdrop-blur-sm font-medium"
-          >
-            <Download size={18} />
-            Export to Excel
-          </button>
+          
+          {isAdmin ? (
+            <div className="flex gap-3">
+              <button
+                onClick={handleDeleteAll}
+                className="flex items-center gap-2 px-4 py-2 bg-rose-600/20 border border-rose-500 rounded-lg text-rose-400 hover:bg-rose-600/30 transition-colors shadow-[0_0_15px_rgba(225,29,72,0.1)] backdrop-blur-sm font-medium"
+              >
+                <Trash2 size={18} />
+                Hapus Semua Data
+              </button>
+              <button
+                onClick={handleExportExcel}
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 border border-emerald-500 rounded-lg text-emerald-400 hover:bg-emerald-600/30 transition-colors shadow-[0_0_15px_rgba(16,185,129,0.1)] backdrop-blur-sm font-medium"
+              >
+                <Download size={18} />
+                Export to Excel
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setShowAdminModal(true)}
+              className="absolute top-0 right-0 p-2 text-slate-800 hover:text-slate-500 transition-colors"
+              title="Mode Dosen"
+            >
+              <Lock size={16} />
+            </button>
+          )}
         </div>
 
         {/* Table Panel */}
@@ -245,8 +272,24 @@ export default function Leaderboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700/50">
-                {sortedData.map((student, idx) => (
-                  <tr key={student.id} className="hover:bg-slate-700/30 transition-colors">
+                {loading ? (
+                  <tr>
+                    <td colSpan={10} className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center justify-center gap-3 text-slate-400">
+                        <Loader2 className="animate-spin text-indigo-500" size={32} />
+                        <p className="font-medium">Memuat data papan skor...</p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : data.length === 0 ? (
+                  <tr>
+                    <td colSpan={10} className="px-6 py-12 text-center text-slate-400 font-medium">
+                      Belum ada data nilai kuis mahasiswa.
+                    </td>
+                  </tr>
+                ) : (
+                  data.map((student, idx) => (
+                    <tr key={student.id} className="hover:bg-slate-700/30 transition-colors">
                     {/* Rank */}
                     <td className="px-6 py-4 text-center">
                       <div className="flex justify-center items-center">
@@ -288,15 +331,22 @@ export default function Leaderboard() {
 
                     {/* Aksi */}
                     <td className="px-6 py-4 text-center sticky right-0 bg-slate-800/90 backdrop-blur-md border-l border-slate-700/50">
-                      <button
-                        onClick={() => setSelectedStudent(student)}
-                        className="px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-sm text-slate-200 hover:bg-slate-600/60 hover:text-white transition-all backdrop-blur-sm"
-                      >
-                        Detail Jawaban
-                      </button>
+                      {isAdmin || student.nim === identity?.nim ? (
+                        <button
+                          onClick={() => setSelectedStudent(student)}
+                          className="px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-sm text-slate-200 hover:bg-slate-600/60 hover:text-white transition-all backdrop-blur-sm"
+                        >
+                          Detail Jawaban
+                        </button>
+                      ) : (
+                        <span className="text-xs text-slate-500 italic px-2 py-1 bg-slate-800/50 rounded-md border border-slate-700/30">
+                          Privasi Terjaga
+                        </span>
+                      )}
                     </td>
                   </tr>
-                ))}
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -344,6 +394,33 @@ export default function Leaderboard() {
               </button>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* Admin Login Modal */}
+      {showAdminModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAdminModal(false)}></div>
+          <div className="relative w-full max-w-sm bg-slate-800 border border-slate-600/50 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-xl font-bold text-white mb-4">Mode Dosen</h3>
+            <form onSubmit={handleAdminSubmit}>
+              <div className="mb-4">
+                <label className="block text-sm text-slate-400 mb-2">Masukkan PIN / Password</label>
+                <input 
+                  type="password" 
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  autoFocus
+                />
+                {adminError && <p className="text-rose-400 text-sm mt-2">{adminError}</p>}
+              </div>
+              <div className="flex justify-end gap-3">
+                <button type="button" onClick={() => setShowAdminModal(false)} className="px-4 py-2 text-slate-400 hover:text-white">Batal</button>
+                <button type="submit" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-colors">Masuk</button>
+              </div>
+            </form>
           </div>
         </div>
       )}

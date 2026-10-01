@@ -167,6 +167,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   isTabUnlocked: (tab) => {
+    if (tab === "leaderboard") return true;
     const idx = TAB_ORDER.indexOf(tab);
     return idx <= get().unlockedIndex;
   },

@@ -6,7 +6,7 @@ import {
   TAB_LABELS,
   type TabId,
 } from "@/src/store/useAppStore";
-import { Circle, CircleCheck, Lock } from "lucide-react";
+import { Circle, CircleCheck, Lock, Trophy } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Component
@@ -44,7 +44,9 @@ export default function TabNavigation() {
             >
               {/* Icon badge */}
               <span className="tab-icon-badge">
-                {!unlocked ? (
+                {tabId === "leaderboard" ? (
+                  <Trophy size={16} />
+                ) : !unlocked ? (
                   <Lock size={15} />
                 ) : isCompleted ? (
                   <CircleCheck size={16} />
