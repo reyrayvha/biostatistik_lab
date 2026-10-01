@@ -148,16 +148,27 @@ export default function Leaderboard() {
     };
   }, [isAdmin]);
 
-  const handleAdminSubmit = (e: React.FormEvent) => {
+  const handleAdminSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (adminPassword === 'admin123') {
-      setIsAdmin(true);
-      setShowAdminModal(false);
-      setAdminPassword("");
-      setAdminError("");
-      setShowPassword(false);
-    } else {
-      setAdminError("PIN salah!");
+    try {
+      const response = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword }),
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setIsAdmin(true);
+        setShowAdminModal(false);
+        setAdminPassword("");
+        setAdminError("");
+        setShowPassword(false);
+      } else {
+        setAdminError("PIN salah!");
+      }
+    } catch (err) {
+      setAdminError("Gagal menghubungi server");
     }
   };
 
