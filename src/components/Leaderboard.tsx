@@ -337,7 +337,7 @@ export default function Leaderboard() {
         )}
 
         {/* Mobile View (Cards) */}
-        <div className="md:hidden space-y-4 pb-24">
+        <div className="md:hidden w-full min-w-0 space-y-4 pb-24">
           {loading ? (
             <div className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-slate-500">
               <Loader2 className="animate-spin text-blue-600" size={32} />
@@ -349,62 +349,34 @@ export default function Leaderboard() {
             </div>
           ) : (
             data.map((student, idx) => (
-              <div key={student.id} className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden shadow-xl">
+              <div key={student.id} className="w-full min-w-0 bg-white shadow-sm border border-slate-200 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden shadow-xl">
                 {/* Rank Badge */}
                 <div className="absolute top-0 right-0 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-bl-xl font-bold text-sm border-b border-l border-blue-200">
                   Rank #{idx + 1}
                 </div>
 
-                {/* Top Section: Student Info & Score */}
-                {isAdmin || student.nim === identity?.nim ? (
-                  <>
-                    {/* Student Info */}
-                    <div className="flex flex-col pr-20">
-                      <span className="font-bold text-slate-800 text-lg leading-tight">{student.name}</span>
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="text-sm text-slate-500">{student.nim}</span>
-                        <span className="px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700">
-                          {student.angkatan}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Score Info */}
-                    <div className="bg-slate-50/50 rounded-xl p-4 flex justify-between items-center border border-slate-200">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Skor NUMi</span>
-                        <span className="text-3xl font-black text-blue-600">{student.numiScore}</span>
-                      </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <span className="text-xs text-slate-500 text-right">{formatIndonesianDate(student.finishTimestamp)}</span>
-                        <span className="text-xs text-slate-500 text-right">{student.finishTime}</span>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                        <Lock size={18} className="text-slate-400" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="blur-[5px] select-none text-slate-300 font-bold text-lg leading-tight">Nama Dirahasiakan</span>
-                        <span className="text-xs text-slate-400 font-medium mt-0.5">Identitas Disembunyikan</span>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-slate-50/50 rounded-xl p-4 flex justify-between items-center border border-slate-200">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Skor NUMi</span>
-                        <span className="text-3xl font-black text-slate-300 blur-[4px] select-none">000</span>
-                      </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <span className="text-xs text-slate-300 blur-[3px] select-none">12 Jan 2026</span>
-                        <span className="text-xs text-slate-300 blur-[3px] select-none">12:00 WIB</span>
-                      </div>
-                    </div>
+                {/* Student Info */}
+                <div className="flex flex-col pr-20">
+                  <span className="font-bold text-slate-800 text-lg leading-tight">{student.name}</span>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-sm text-slate-500">{student.nim}</span>
+                    <span className="px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700">
+                      {student.angkatan}
+                    </span>
                   </div>
-                )}
+                </div>
+
+                {/* Score Info */}
+                <div className="bg-slate-50/50 rounded-xl p-4 flex justify-between items-center border border-slate-200">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Skor NUMi</span>
+                    <span className="text-3xl font-black text-blue-600">{student.numiScore}</span>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="text-xs text-slate-500 text-right">{formatIndonesianDate(student.finishTimestamp)}</span>
+                    <span className="text-xs text-slate-500 text-right">{student.finishTime}</span>
+                  </div>
+                </div>
 
                 {/* Quizzes Summary (Horizontal Scroll) */}
                 <div className="overflow-x-auto pb-2 -mx-4 px-4 snap-x">
