@@ -287,49 +287,40 @@ export default function Leaderboard() {
                   title="Keluar Mode Dosen"
                 >
                   <LogOut size={16} className="text-slate-500" />
-                  <span>Logout</span>
+                  <span>Logout Dosen</span>
                 </button>
               </>
             ) : (
               <button
                 onClick={() => setShowAdminModal(true)}
-                className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-slate-800 hover:bg-slate-100 transition-all font-medium text-sm shadow-sm"
-                title="Akses Mode Dosen"
+                className="p-2 sm:px-2.5 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center"
+                title="Akses Dosen"
+                aria-label="Akses Dosen"
               >
-                <Lock size={16} className="text-blue-600" />
-                <span>Mode Dosen</span>
+                <Lock size={16} />
               </button>
             )}
           </div>
         </div>
 
-        {/* Admin Mode Card & Logout */}
+        {/* Admin Card */}
         {isAdmin && (
-          <div className="bg-white border border-indigo-100 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm bg-gradient-to-r from-indigo-50/80 via-white to-blue-50/60">
+          <div className="bg-white border border-indigo-100 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 shadow-sm bg-gradient-to-r from-indigo-50/80 via-white to-blue-50/60">
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200 shrink-0">
                 <ShieldCheck size={24} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-base font-bold text-slate-800">Mode Dosen Aktif</h2>
+                  <h2 className="text-base font-bold text-slate-800">Admin</h2>
                   <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 border border-indigo-200">
-                    Akses Admin
+                    Akses Penuh
                   </span>
                 </div>
                 <p className="text-sm text-slate-500 mt-0.5">
                   Anda memiliki akses penuh untuk melihat detail jawaban seluruh mahasiswa, mengekspor rekap nilai, dan mereset data.
                 </p>
               </div>
-            </div>
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end shrink-0">
-              <button
-                onClick={handleAdminLogout}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-slate-700 hover:text-rose-600 rounded-xl text-sm font-semibold transition-all shadow-sm"
-              >
-                <LogOut size={16} />
-                <span>Logout Mode Dosen</span>
-              </button>
             </div>
           </div>
         )}
@@ -451,7 +442,7 @@ export default function Leaderboard() {
           >
             <table className="w-full text-left whitespace-nowrap border-collapse">
               <thead className="sticky top-0 z-20 bg-slate-100 shadow-xs">
-                <tr className="border-b border-slate-200 text-slate-600 text-xs uppercase tracking-wider">
+                <tr className="border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
                   <th className="px-3 py-3 font-semibold text-center w-14 sticky left-0 bg-slate-100 z-30 shadow-[1px_0_0_0_#e2e8f0]">Rank</th>
                   <th className="px-4 py-3 font-semibold min-w-[170px] sticky left-14 bg-slate-100 z-30 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">Mahasiswa</th>
                   <th className="px-3 py-3 font-semibold text-center min-w-[90px]">Skor NUMi</th>
@@ -493,11 +484,11 @@ export default function Leaderboard() {
 
                       {/* Mahasiswa */}
                       <td className="px-4 py-2.5 sticky left-14 bg-white group-hover:bg-slate-50 transition-colors z-10 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-slate-800 text-sm">{student.name}</span>
+                        <div className="flex flex-col whitespace-normal max-w-[200px] min-w-[170px]">
+                          <span className="font-bold text-slate-800 text-base leading-tight break-words mb-1">{student.name}</span>
                           <div className="flex items-center gap-1.5 mt-0.5">
-                            <span className="text-xs text-slate-500">{student.nim}</span>
-                            <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                            <span className="text-sm text-slate-500">{student.nim}</span>
+                            <span className="px-1.5 py-0.2 rounded text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
                               {student.angkatan}
                             </span>
                           </div>
@@ -508,8 +499,8 @@ export default function Leaderboard() {
                       <td className="px-3 py-2.5 text-center">
                         <div className="flex flex-col items-center">
                           <span className="text-2xl font-black text-blue-600 drop-shadow-[0_0_10px_rgba(99,102,241,0.25)]">{student.numiScore}</span>
-                          <span className="text-[10px] text-slate-400 mt-0.5">{formatIndonesianDate(student.finishTimestamp)}</span>
-                          <span className="text-[10px] text-slate-400">{student.finishTime}</span>
+                          <span className="text-xs text-slate-400 mt-0.5">{formatIndonesianDate(student.finishTimestamp)}</span>
+                          <span className="text-xs text-slate-400">{student.finishTime}</span>
                         </div>
                       </td>
 
@@ -524,19 +515,19 @@ export default function Leaderboard() {
                             <div className="flex flex-col items-center">
                               {quiz ? (
                                 <>
-                                  <span className="text-sm font-bold text-slate-800">
+                                  <span className="text-base font-bold text-slate-800">
                                     {quiz.correct}/{quiz.total}
                                   </span>
-                                  <span className="text-[11px] text-slate-500 mt-0.5">
+                                  <span className="text-xs text-slate-500 mt-0.5">
                                     Percobaan: {quiz.attempts}x
                                   </span>
                                 </>
                               ) : (
                                 <>
-                                  <span className="text-sm font-semibold text-slate-400">
+                                  <span className="text-base font-semibold text-slate-400">
                                     0/{col.total}
                                   </span>
-                                  <span className="text-[11px] text-slate-400 mt-0.5">
+                                  <span className="text-xs text-slate-400 mt-0.5">
                                     Percobaan: 0x
                                   </span>
                                 </>
