@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useAppStore, DEFAULT_QUIZ_STATE } from "@/src/store/useAppStore";
 import { quizData, type Question } from "@/src/data/quizData";
 import Quiz1Summary from "@/src/components/Quiz1Summary";
@@ -564,7 +564,29 @@ function NUMiScorePanel({
       bestResult,
     } = quizState;
 
-    const questions = quiz.questions;
+    const identity = useAppStore((s) => s.identity);
+    const nim = identity?.nim || "default";
+
+    const questions = useMemo(() => {
+      // Simple PRNG hash based on nim + quizId
+      let h = 0;
+      const seed = nim + "-" + quizId;
+      for (let i = 0; i < seed.length; i++) {
+        h = Math.imul(31, h) + seed.charCodeAt(i) | 0;
+      }
+      const rand = function() {
+        h = Math.imul(h ^ (h >>> 16), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return (h ^= h >>> 16) >>> 0;
+      };
+
+      const shuffled = [...quiz.questions];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = rand() % (i + 1);
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }, [quiz.questions, nim, quizId]);
     const totalQuestions = questions.length;
 
     // Current question
