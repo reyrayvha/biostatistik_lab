@@ -12,7 +12,11 @@ import { Trophy } from "lucide-react";
 // Component
 // ---------------------------------------------------------------------------
 
+import { useState, useEffect } from "react";
+
 export default function AppShell() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const activeTab = useAppStore((s) => s.activeTab);
   const identity = useAppStore((s) => s.identity);
 
@@ -35,6 +39,10 @@ export default function AppShell() {
     }
 
     return null;
+  }
+
+  if (!mounted) {
+    return <div className="app-shell min-h-screen bg-slate-50" />;
   }
 
   return (

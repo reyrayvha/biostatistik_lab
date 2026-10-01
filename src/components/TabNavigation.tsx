@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   useAppStore,
@@ -12,7 +12,11 @@ import { Circle, CircleCheck, Lock, Trophy } from "lucide-react";
 // Component
 // ---------------------------------------------------------------------------
 
+import { useState, useEffect } from "react";
+
 export default function TabNavigation() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const activeTab = useAppStore((s) => s.activeTab);
   const setActiveTab = useAppStore((s) => s.setActiveTab);
   const isTabUnlocked = useAppStore((s) => s.isTabUnlocked);
@@ -29,6 +33,8 @@ export default function TabNavigation() {
     }
     setActiveTab(tabId);
   };
+
+  if (!mounted) return <nav className="tab-navigation flex-shrink-0" />;
 
   return (
     <nav className="tab-navigation" role="tablist" aria-label="Step navigation">

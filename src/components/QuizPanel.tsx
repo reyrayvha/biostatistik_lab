@@ -679,11 +679,9 @@ function NUMiScorePanel({
               });
             if (attemptError) throw attemptError;
           }
-        } catch (err) {
+        } catch (err: any) {
           console.error("Error submitting quiz:", err);
-          if (quizId === 7) {
-            alert("Terjadi kesalahan saat menyimpan kuis ke Papan Skor. Pastikan koneksi internet Anda stabil.");
-          }
+          alert("Gagal memperbarui nilai ke server: " + (err.message || "Pastikan koneksi internet stabil."));
         } finally {
           setIsSubmitting(false);
           setShowResults(true);

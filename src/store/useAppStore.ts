@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -117,7 +118,9 @@ export const DEFAULT_QUIZ_STATE: Readonly<QuizState> = Object.freeze({
 // Store implementation
 // ---------------------------------------------------------------------------
 
-export const useAppStore = create<AppState>((set, get) => ({
+export const useAppStore = create<AppState>()(
+  persist(
+    (set, get) => ({
   // === Identity ===
   identity: null,
   setIdentity: (identity) => {
@@ -294,4 +297,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       });
     }
   },
-}));
+    }),
+    {
+      name: "biostatistik-storage",
+    }
+  )
+);

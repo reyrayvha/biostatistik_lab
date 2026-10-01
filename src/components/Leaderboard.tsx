@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X, Loader2, Lock, Trash2 } from "lucide-react";
+import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X, Loader2, Lock, Trash2, RefreshCw } from "lucide-react";
 import * as XLSX from "xlsx";
 import { supabase } from "@/src/lib/supabaseClient";
 import { useAppStore } from "@/src/store/useAppStore";
@@ -116,6 +116,7 @@ export default function Leaderboard() {
   useEffect(() => {
     fetchLeaderboard();
 
+    // Supabase Realtime (Hanya bekerja jika fitur Realtime diaktifkan di tabel quiz_attempts)
     const channel = supabase
       .channel('public:quiz_attempts')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'quiz_attempts' }, (payload) => {
@@ -245,14 +246,25 @@ export default function Leaderboard() {
               </button>
             </div>
           ) : (
-            <button
-              onClick={() => setShowAdminModal(true)}
-              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-slate-800 hover:bg-slate-100 transition-all font-medium text-sm shadow-sm"
-              title="Akses Mode Dosen"
-            >
-              <Lock size={16} className="text-blue-600" />
-              <span>Mode Dosen</span>
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={fetchLeaderboard}
+                className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all font-medium text-sm shadow-sm"
+                title="Refresh Papan Skor"
+                disabled={loading}
+              >
+                <RefreshCw size={16} className={loading ? "animate-spin text-blue-600" : "text-slate-500 hover:text-blue-600"} />
+                <span className="hidden sm:inline">Refresh</span>
+              </button>
+              <button
+                onClick={() => setShowAdminModal(true)}
+                className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-slate-800 hover:bg-slate-100 transition-all font-medium text-sm shadow-sm"
+                title="Akses Mode Dosen"
+              >
+                <Lock size={16} className="text-blue-600" />
+                <span>Mode Dosen</span>
+              </button>
+            </div>
           )}
         </div>
 
