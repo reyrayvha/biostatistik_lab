@@ -17,6 +17,18 @@ export default function TabNavigation() {
   const setActiveTab = useAppStore((s) => s.setActiveTab);
   const isTabUnlocked = useAppStore((s) => s.isTabUnlocked);
   const unlockedIndex = useAppStore((s) => s.unlockedIndex);
+  const quizStates = useAppStore((s) => s.quizStates);
+
+  const isAnyQuizStarted = Object.values(quizStates).some((q) => q.started);
+
+  const handleTabClick = (tabId: TabId, unlocked: boolean) => {
+    if (!unlocked) return;
+    if (isAnyQuizStarted && tabId !== activeTab) {
+      alert("Harap selesaikan kuis yang sedang berlangsung terlebih dahulu!");
+      return;
+    }
+    setActiveTab(tabId);
+  };
 
   return (
     <nav className="tab-navigation" role="tablist" aria-label="Step navigation">
@@ -39,8 +51,8 @@ export default function TabNavigation() {
               aria-selected={isActive}
               aria-disabled={!unlocked}
               tabIndex={unlocked ? 0 : -1}
-              className={`tab-item ${stateClass}`}
-              onClick={() => unlocked && setActiveTab(tabId)}
+              className={`tab-item ${stateClass} ${isAnyQuizStarted && !isActive ? "opacity-50 cursor-not-allowed" : ""}`}
+              onClick={() => handleTabClick(tabId, unlocked)}
             >
               {/* Icon badge */}
               <span className="tab-icon-badge">

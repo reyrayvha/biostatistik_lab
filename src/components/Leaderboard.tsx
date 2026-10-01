@@ -64,6 +64,7 @@ export default function Leaderboard() {
       let query = supabase
         .from("quiz_attempts")
         .select(`
+          id,
           total_score,
           completion_time,
           details,
@@ -89,7 +90,7 @@ export default function Leaderboard() {
 
       if (attempts) {
         const formattedData: StudentRecord[] = attempts.map((attempt: any) => ({
-          id: attempt.students.id,
+          id: attempt.id,
           name: attempt.students.name,
           nim: attempt.students.nim,
           angkatan: attempt.students.cohort,
@@ -200,6 +201,7 @@ export default function Leaderboard() {
       addQuizData("Uji Hipotesis", "Hipotesis", 3);
       addQuizData("Diagnostik", "Diagnostik", 4);
       addQuizData("Desain Studi", "Desain", 5);
+      addQuizData("Ujian Akhir", "Akhir", 6);
 
       return rowData;
     });
@@ -268,6 +270,7 @@ export default function Leaderboard() {
                   <th className="px-6 py-4 font-semibold text-center">Uji Hipotesis</th>
                   <th className="px-6 py-4 font-semibold text-center">Diagnostik</th>
                   <th className="px-6 py-4 font-semibold text-center">Desain Studi</th>
+                  <th className="px-6 py-4 font-semibold text-center">Ujian Akhir</th>
                   <th className="px-6 py-4 font-semibold text-center sticky right-0 bg-slate-800/90 backdrop-blur-md border-l border-slate-700/50">Aksi</th>
                 </tr>
               </thead>

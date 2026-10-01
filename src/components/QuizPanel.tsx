@@ -647,15 +647,34 @@ function NUMiScorePanel({
 
             const numiScore = totalQuestions > 0 ? Math.round((currentScore / totalQuestions) * 1000) : 0;
 
-            const { error: attemptError } = await supabase
+            const { data: existingAttempt } = await supabase
               .from("quiz_attempts")
-              .insert({
-                student_id: student.id,
-                total_score: numiScore,
-                details: details,
-              });
+              .select("id")
+              .eq("student_id", student.id)
+              .maybeSingle();
 
-            if (attemptError) throw attemptError;
+            if (existingAttempt) {
+              const { error: attemptError } = await supabase
+                .from("quiz_attempts")
+                .update({
+                  total_score: numiScore,
+                  completion_time: new Date().toISOString(),
+                  details: details,
+                })
+                .eq("id", existingAttempt.id);
+              
+              if (attemptError) throw attemptError;
+            } else {
+              const { error: attemptError } = await supabase
+                .from("quiz_attempts")
+                .insert({
+                  student_id: student.id,
+                  total_score: numiScore,
+                  details: details,
+                });
+                
+              if (attemptError) throw attemptError;
+            }
           } catch (err) {
             console.error("Error submitting quiz:", err);
             alert("Terjadi kesalahan saat menyimpan kuis. Pastikan koneksi internet Anda stabil.");
