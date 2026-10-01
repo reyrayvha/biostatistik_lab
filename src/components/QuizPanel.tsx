@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAppStore, DEFAULT_QUIZ_STATE } from "@/src/store/useAppStore";
@@ -125,8 +125,8 @@ function QuizSummaryScreen({
           <button 
             className={`flex-1 py-3.5 rounded-xl font-medium text-base transition-colors tracking-wide ${
               attemptsUsed === 0 
-                ? "bg-[#58a6ff] text-[#0d1117] hover:bg-[#79c0ff] font-semibold"
-                : "border border-[#30363d] bg-[#161b22] text-[#e6edf3] hover:bg-[#30363d]/50"
+                ? "bg-[#2563eb] text-[#f8fafc] hover:bg-[#79c0ff] font-semibold"
+                : "border border-slate-300 bg-slate-50 text-slate-700 hover:bg-[#e2e8f0]/50"
             }`} 
             onClick={onStart}
           >
@@ -135,14 +135,14 @@ function QuizSummaryScreen({
               : (quizId === 7 ? "Mulai Ujian Akhir" : "Mulai Kuis")}
           </button>
         ) : (
-          <div className="flex-1 flex items-center justify-center py-3.5 rounded-xl border border-[#30363d] bg-[#161b22] text-[#8b949e] font-medium text-sm tracking-wide">
+          <div className="flex-1 flex items-center justify-center py-3.5 rounded-xl border border-slate-300 bg-slate-50 text-slate-500 font-medium text-sm tracking-wide">
             Sisa percobaan kuis ini telah habis.
           </div>
         )}
 
         {bestResult && onAdvance && (
           <button 
-            className="flex-1 py-3.5 rounded-xl bg-[#58a6ff] text-[#0d1117] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+            className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
             onClick={onAdvance}
           >
             {quizId === 7 ? "Lihat Papan Skor" : "Lanjut Kuis Berikutnya"}
@@ -153,7 +153,7 @@ function QuizSummaryScreen({
   );
 }
 
-/** Segmented progress bar — each segment shows question status */
+/** Segmented progress bar  —  each segment shows question status */
 function SegmentedProgressBar({
   questions,
   currentAnswers,
@@ -321,54 +321,54 @@ function QuizScorePanel({
   }
 
   return (
-    <div ref={panelRef} className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-[#161b22] border border-[#30363d] rounded-2xl">
+    <div ref={panelRef} className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
       
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
-        <h3 className="text-sm font-semibold tracking-wider uppercase text-[#8b949e] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold tracking-wider uppercase text-slate-500 mb-3 flex items-center gap-2">
           <Target size={18} /> Hasil Kuis
         </h3>
         
-        <div className="text-[6rem] font-medium tracking-tight leading-none text-[#f0f6fc]">
+        <div className="text-[6rem] font-medium tracking-tight leading-none text-slate-900">
           {percentage}
-          <span className="text-2xl font-normal text-[#8b949e] ml-2">%</span>
+          <span className="text-2xl font-normal text-slate-500 ml-2">%</span>
         </div>
 
         <div className="mt-5 flex flex-col items-center justify-center gap-3">
-          <span className="px-5 py-1.5 rounded-full border border-[#30363d] bg-[#0d1117] text-xs uppercase font-bold tracking-widest text-[#e6edf3]">
+          <span className="px-5 py-1.5 rounded-full border border-slate-300 bg-[#f8fafc] text-xs uppercase font-bold tracking-widest text-slate-700">
             {levelText}
           </span>
-          <p className="text-[#8b949e] text-base">Anda menjawab <strong className="text-[#e6edf3]">{score} dari {total}</strong> soal dengan benar</p>
+          <p className="text-slate-500 text-base">Anda menjawab <strong className="text-slate-700">{score} dari {total}</strong> soal dengan benar</p>
         </div>
       </div>
 
-      <hr className="border-[#30363d] my-2" />
+      <hr className="border-slate-300 my-2" />
 
       {/* Stats Row */}
       <div className="flex gap-4">
-        <div className="flex-1 bg-[#0d1117] border border-[#30363d] rounded-xl p-4 text-center">
-          <div className="text-[#8b949e] text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
+          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
             <Target size={14}/> Benar
           </div>
-          <div className="text-[#e6edf3] text-3xl font-semibold">{score}<span className="text-[#8b949e] text-lg font-normal ml-1">/{total}</span></div>
+          <div className="text-slate-700 text-3xl font-semibold">{score}<span className="text-slate-500 text-lg font-normal ml-1">/{total}</span></div>
         </div>
-        <div className="flex-1 bg-[#0d1117] border border-[#30363d] rounded-xl p-4 text-center">
-          <div className="text-[#8b949e] text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
+          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
             <Zap size={14}/> Akurasi
           </div>
-          <div className="text-[#e6edf3] text-3xl font-semibold">{percentage}<span className="text-[#8b949e] text-lg font-normal ml-1">%</span></div>
+          <div className="text-slate-700 text-3xl font-semibold">{percentage}<span className="text-slate-500 text-lg font-normal ml-1">%</span></div>
         </div>
-        <div className="flex-1 bg-[#0d1117] border border-[#30363d] rounded-xl p-4 text-center">
-          <div className="text-[#8b949e] text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
+        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
+          <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2 flex items-center justify-center gap-1.5">
             <RotateCcw size={14}/> Percobaan
           </div>
-          <div className="text-[#e6edf3] text-3xl font-semibold">{attemptsUsed}<span className="text-[#8b949e] text-lg font-normal ml-1">/{MAX_ATTEMPTS}</span></div>
+          <div className="text-slate-700 text-3xl font-semibold">{attemptsUsed}<span className="text-slate-500 text-lg font-normal ml-1">/{MAX_ATTEMPTS}</span></div>
         </div>
       </div>
 
       {/* Quote */}
       <div className="mt-6 mb-2 flex items-center justify-center px-4">
-        <p className="text-[#e6edf3] text-xl font-medium italic text-center leading-relaxed max-w-2xl mx-auto">
+        <p className="text-slate-700 text-xl font-medium italic text-center leading-relaxed max-w-2xl mx-auto">
           &ldquo;{displayQuote}&rdquo;
         </p>
       </div>
@@ -377,13 +377,13 @@ function QuizScorePanel({
       <div className="flex gap-5 mt-4">
         <button 
           onClick={onRetry} 
-          className="flex-1 py-3.5 rounded-xl border border-[#30363d] text-[#e6edf3] font-medium text-base hover:bg-[#30363d]/50 transition-colors tracking-wide"
+          className="flex-1 py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
         >
           Buka Kembali Materi {hasAttemptsLeft ? `(${MAX_ATTEMPTS - attemptsUsed} sisa)` : ""}
         </button>
         <button 
           onClick={onAdvance} 
-          className="flex-1 py-3.5 rounded-xl bg-[#58a6ff] text-[#0d1117] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+          className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
         >
           Lanjut ke Kuis Selanjutnya
         </button>
@@ -431,50 +431,50 @@ function NUMiScorePanel({
     ];
 
     return (
-      <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-[#161b22] border border-[#30363d] rounded-2xl">
+      <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto p-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
         
         {/* Header Section */}
         <div className="text-center flex flex-col items-center">
-          <h3 className="text-sm font-semibold tracking-wider uppercase text-[#8b949e] mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-semibold tracking-wider uppercase text-slate-500 mb-3 flex items-center gap-2">
             <BookOpen size={18} /> Indeks Pemahaman Numerik
           </h3>
           
-          <div className="text-[6rem] font-medium tracking-tight leading-none text-[#f0f6fc]">
+          <div className="text-[6rem] font-medium tracking-tight leading-none text-slate-900">
             {numiScore}
-            <span className="text-2xl font-normal text-[#8b949e] ml-3">/ 1000</span>
+            <span className="text-2xl font-normal text-slate-500 ml-3">/ 1000</span>
           </div>
         </div>
 
         {/* Stats Row */}
         <div className="flex gap-4 mt-2">
-          <div className="flex-1 bg-[#0d1117] border border-[#30363d] rounded-xl p-4 text-center">
-            <div className="text-[#8b949e] text-xs uppercase font-bold tracking-widest mb-2">Benar</div>
-            <div className="text-[#e6edf3] text-3xl font-semibold">{score}<span className="text-[#8b949e] text-lg font-normal ml-1">/{total}</span></div>
+          <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
+            <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2">Benar</div>
+            <div className="text-slate-700 text-3xl font-semibold">{score}<span className="text-slate-500 text-lg font-normal ml-1">/{total}</span></div>
           </div>
-          <div className="flex-1 bg-[#0d1117] border border-[#30363d] rounded-xl p-4 text-center">
-            <div className="text-[#8b949e] text-xs uppercase font-bold tracking-widest mb-2">Akurasi</div>
-            <div className="text-[#e6edf3] text-3xl font-semibold">{accuracy}<span className="text-[#8b949e] text-lg font-normal ml-1">%</span></div>
+          <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-4 text-center">
+            <div className="text-slate-500 text-xs uppercase font-bold tracking-widest mb-2">Akurasi</div>
+            <div className="text-slate-700 text-3xl font-semibold">{accuracy}<span className="text-slate-500 text-lg font-normal ml-1">%</span></div>
           </div>
         </div>
 
-        <hr className="border-[#30363d] my-2" />
+        <hr className="border-slate-300 my-2" />
 
         {/* Domain Breakdown */}
         <div>
-          <h4 className="text-[#f0f6fc] text-base font-semibold mb-4">Rincian per Domain</h4>
+          <h4 className="text-slate-900 text-base font-semibold mb-4">Rincian per Domain</h4>
           <div className="space-y-4">
             {domains.map(d => {
               // Neutral colors: Green for very good, Yellow for okay, Blue for low (avoids aggressive red)
-              const barColor = d.pct >= 80 ? '#3fb950' : d.pct >= 60 ? '#d29922' : '#58a6ff';
+              const barColor = d.pct >= 80 ? '#3fb950' : d.pct >= 60 ? '#d29922' : '#2563eb';
               return (
                 <div key={d.name} className="flex flex-col gap-2">
                   <div className="flex justify-between items-center text-[15px]">
-                    <span className="text-[#c9d1d9]">{d.name}</span>
-                    <span className="font-mono text-[#8b949e] font-medium">
-                      {d.correct}/{d.total} <span className="ml-1.5 text-[#e6edf3]">({d.pct}%)</span>
+                    <span className="text-slate-600">{d.name}</span>
+                    <span className="font-mono text-slate-500 font-medium">
+                      {d.correct}/{d.total} <span className="ml-1.5 text-slate-700">({d.pct}%)</span>
                     </span>
                   </div>
-                  <div className="h-2 w-full bg-[#0d1117] rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-[#f8fafc] rounded-full overflow-hidden">
                     <div 
                       className="h-full rounded-full transition-all duration-700 ease-out" 
                       style={{ width: `${d.pct}%`, backgroundColor: barColor }} 
@@ -487,13 +487,13 @@ function NUMiScorePanel({
         </div>
 
         {/* Interpretasi (Padat) */}
-        <div className="bg-[#0d1117] border border-[#30363d] rounded-xl p-5 mt-2">
-          <h4 className="text-[#f0f6fc] text-base font-semibold mb-4">Interpretasi NUMi</h4>
-          <div className="flex flex-wrap gap-x-12 gap-y-3 text-sm font-mono text-[#8b949e]">
-            <div className="flex items-center gap-2.5"><span className="text-[#e6edf3] font-medium">900-1000:</span> Ahli</div>
-            <div className="flex items-center gap-2.5"><span className="text-[#e6edf3] font-medium">750-899:</span> Mahir</div>
-            <div className="flex items-center gap-2.5"><span className="text-[#e6edf3] font-medium">600-749:</span> Berkembang</div>
-            <div className="flex items-center gap-2.5"><span className="text-[#e6edf3] font-medium">&lt; 600:</span> Dasar</div>
+        <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-5 mt-2">
+          <h4 className="text-slate-900 text-base font-semibold mb-4">Interpretasi NUMi</h4>
+          <div className="flex flex-wrap gap-x-12 gap-y-3 text-sm font-mono text-slate-500">
+            <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">900-1000:</span> Ahli</div>
+            <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">750-899:</span> Mahir</div>
+            <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">600-749:</span> Berkembang</div>
+            <div className="flex items-center gap-2.5"><span className="text-slate-700 font-medium">&lt; 600:</span> Dasar</div>
           </div>
         </div>
 
@@ -501,13 +501,13 @@ function NUMiScorePanel({
         <div className="flex gap-5 mt-4">
           <button 
             onClick={onRetry} 
-            className="flex-1 py-3.5 rounded-xl border border-[#30363d] text-[#e6edf3] font-medium text-base hover:bg-[#30363d]/50 transition-colors tracking-wide"
+            className="flex-1 py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
           >
             Ulangi Ujian Akhir
           </button>
           <button 
             onClick={onAdvance} 
-            className="flex-1 py-3.5 rounded-xl bg-[#58a6ff] text-[#0d1117] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+            className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
           >
             Papan Skor
           </button>
@@ -518,7 +518,7 @@ function NUMiScorePanel({
   }
 
   // ---------------------------------------------------------------------------
-  // Main QuizPanel — paginated, 1 question at a time
+  // Main QuizPanel  —  paginated, 1 question at a time
   // ---------------------------------------------------------------------------
 
   export default function QuizPanel({ quizId }: { quizId: number }) {
@@ -706,7 +706,7 @@ function NUMiScorePanel({
       return (
         <QuizSummaryScreen
           quizId={quizId}
-          title={quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} — ${quiz.title}`}
+          title={quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
           summary={quiz.summary}
           attemptsUsed={attemptsUsed}
           bestResult={bestResult}
@@ -758,7 +758,7 @@ function NUMiScorePanel({
         {/* Header bar */}
         <div className="quiz-header-bar">
           <h2 className="quiz-header-title">
-            {quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} — ${quiz.title}`}
+            {quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
           </h2>
           <span className="quiz-header-meta">
             {currentIndex + 1} / {totalQuestions}

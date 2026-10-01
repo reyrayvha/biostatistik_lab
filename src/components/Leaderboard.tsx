@@ -213,17 +213,17 @@ export default function Leaderboard() {
   };
 
   const renderRankIcon = (rank: number | string) => {
-    return <span className="text-slate-400 font-bold text-lg">{rank}</span>;
+    return <span className="text-slate-500 font-bold text-lg">{rank}</span>;
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-300 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-700 p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative">
-          <h1 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
-            <Trophy className="text-indigo-400" size={32} />
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-3">
+            <Trophy className="text-blue-600" size={32} />
             Papan Skor
           </h1>
 
@@ -231,14 +231,14 @@ export default function Leaderboard() {
             <div className="flex gap-3">
               <button
                 onClick={handleDeleteAll}
-                className="flex items-center gap-2 px-4 py-2 bg-rose-600/20 border border-rose-500 rounded-lg text-rose-400 hover:bg-rose-600/30 transition-colors shadow-[0_0_15px_rgba(225,29,72,0.1)] backdrop-blur-sm font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-lg text-rose-600 hover:bg-rose-600/30 transition-colors shadow-[0_0_15px_rgba(225,29,72,0.1)] backdrop-blur-sm font-medium"
               >
                 <Trash2 size={18} />
                 <span className="hidden sm:inline">Hapus Semua Data</span>
               </button>
               <button
                 onClick={handleExportExcel}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 border border-emerald-500 rounded-lg text-emerald-400 hover:bg-emerald-600/30 transition-colors shadow-[0_0_15px_rgba(16,185,129,0.1)] backdrop-blur-sm font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 border border-emerald-500 rounded-lg text-emerald-700 hover:bg-emerald-600/30 transition-colors shadow-[0_0_15px_rgba(16,185,129,0.1)] backdrop-blur-sm font-medium"
               >
                 <Download size={18} />
                 <span className="hidden sm:inline">Export to Excel</span>
@@ -247,10 +247,10 @@ export default function Leaderboard() {
           ) : (
             <button
               onClick={() => setShowAdminModal(true)}
-              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-all font-medium text-sm shadow-sm"
+              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-slate-800 hover:bg-slate-100 transition-all font-medium text-sm shadow-sm"
               title="Akses Mode Dosen"
             >
-              <Lock size={16} className="text-indigo-400" />
+              <Lock size={16} className="text-blue-600" />
               <span>Mode Dosen</span>
             </button>
           )}
@@ -259,42 +259,42 @@ export default function Leaderboard() {
         {/* Mobile View (Cards) */}
         <div className="md:hidden space-y-4 pb-12">
           {loading ? (
-            <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-slate-400">
-              <Loader2 className="animate-spin text-indigo-500" size={32} />
+            <div className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-slate-500">
+              <Loader2 className="animate-spin text-blue-600" size={32} />
               <p className="font-medium">Memuat data papan skor...</p>
             </div>
           ) : data.length === 0 ? (
-            <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-8 text-center text-slate-400 font-medium">
+            <div className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-8 text-center text-slate-500 font-medium">
               Belum ada data nilai kuis mahasiswa.
             </div>
           ) : (
             data.map((student, idx) => (
-              <div key={student.id} className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden shadow-xl">
+              <div key={student.id} className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden shadow-xl">
                 {/* Rank Badge */}
-                <div className="absolute top-0 right-0 bg-indigo-500/20 text-indigo-300 px-3 py-1.5 rounded-bl-xl font-bold text-sm border-b border-l border-indigo-500/30">
+                <div className="absolute top-0 right-0 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-bl-xl font-bold text-sm border-b border-l border-blue-200">
                   Rank #{idx + 1}
                 </div>
 
                 {/* Student Info */}
                 <div className="flex flex-col pr-20">
-                  <span className="font-bold text-white text-lg leading-tight">{student.name}</span>
+                  <span className="font-bold text-slate-800 text-lg leading-tight">{student.name}</span>
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="text-sm text-slate-400">{student.nim}</span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-slate-300">
+                    <span className="text-sm text-slate-500">{student.nim}</span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
                       {student.angkatan}
                     </span>
                   </div>
                 </div>
 
                 {/* Score Info */}
-                <div className="bg-slate-900/50 rounded-xl p-4 flex justify-between items-center border border-slate-700/50">
+                <div className="bg-slate-50/50 rounded-xl p-4 flex justify-between items-center border border-slate-200">
                   <div className="flex flex-col">
-                    <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Skor NUMi</span>
-                    <span className="text-3xl font-black text-indigo-400">{student.numiScore}</span>
+                    <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Skor NUMi</span>
+                    <span className="text-3xl font-black text-blue-600">{student.numiScore}</span>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <span className="text-xs text-slate-400 text-right">{formatIndonesianDate(student.finishTimestamp)}</span>
-                    <span className="text-xs text-slate-400 text-right">{student.finishTime}</span>
+                    <span className="text-xs text-slate-500 text-right">{formatIndonesianDate(student.finishTimestamp)}</span>
+                    <span className="text-xs text-slate-500 text-right">{student.finishTime}</span>
                   </div>
                 </div>
 
@@ -305,9 +305,9 @@ export default function Leaderboard() {
                       const quizNames = ["Statistik", "Distribusi", "Probabilitas", "Uji Hipotesis", "Diagnostik", "Desain Studi", "Ujian Akhir"];
                       const qName = quizNames[qIdx] || `Q${qIdx + 1}`;
                       return (
-                        <div key={qIdx} className="bg-slate-800 border border-slate-700 rounded-lg p-2 min-w-[100px] flex flex-col items-center justify-center snap-center">
-                          <span className="text-[10px] text-slate-400 truncate w-full text-center">{qName}</span>
-                          <span className="text-sm font-bold text-white mt-1">{quiz.correct}/{quiz.total}</span>
+                        <div key={qIdx} className="bg-white border border-slate-200 rounded-lg p-2 min-w-[100px] flex flex-col items-center justify-center snap-center">
+                          <span className="text-[10px] text-slate-500 truncate w-full text-center">{qName}</span>
+                          <span className="text-sm font-bold text-slate-800 mt-1">{quiz.correct}/{quiz.total}</span>
                         </div>
                       );
                     })}
@@ -315,16 +315,16 @@ export default function Leaderboard() {
                 </div>
 
                 {/* Action */}
-                <div className="pt-2 border-t border-slate-700/50">
+                <div className="pt-2 border-t border-slate-200">
                   {isAdmin || student.nim === identity?.nim ? (
                     <button
                       onClick={() => setSelectedStudent(student)}
-                      className="w-full py-2.5 bg-slate-700/50 border border-slate-600/50 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-600/60 hover:text-white transition-all flex items-center justify-center gap-2"
+                      className="w-full py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-sm font-medium text-slate-800 hover:bg-slate-200 hover:text-slate-800 transition-all flex items-center justify-center gap-2"
                     >
                       Lihat Detail Jawaban
                     </button>
                   ) : (
-                    <div className="w-full py-2.5 bg-slate-800/50 border border-slate-700/30 rounded-lg text-sm text-slate-500 italic text-center">
+                    <div className="w-full py-2.5 bg-white shadow-sm border border-slate-200 rounded-lg text-sm text-slate-500 italic text-center">
                       Privasi Terjaga
                     </div>
                   )}
@@ -335,11 +335,11 @@ export default function Leaderboard() {
         </div>
 
         {/* Desktop Table View (Hidden on Mobile) */}
-        <div className="hidden md:block bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="hidden md:block bg-white shadow-sm  border border-slate-200 rounded-2xl overflow-hidden shadow-md">
           <div className="overflow-x-auto">
             <table className="w-full text-left whitespace-nowrap">
               <thead>
-                <tr className="bg-slate-800/80 border-b border-slate-700/50 text-slate-400 text-sm uppercase tracking-wider">
+                <tr className="bg-slate-100 border-b border-slate-200 text-slate-500 text-sm uppercase tracking-wider">
                   <th className="px-6 py-4 font-semibold text-center w-20">Rank</th>
                   <th className="px-6 py-4 font-semibold min-w-[200px]">Mahasiswa</th>
                   <th className="px-6 py-4 font-semibold text-center">Skor NUMi</th>
@@ -350,28 +350,28 @@ export default function Leaderboard() {
                   <th className="px-6 py-4 font-semibold text-center">Diagnostik</th>
                   <th className="px-6 py-4 font-semibold text-center">Desain Studi</th>
                   <th className="px-6 py-4 font-semibold text-center">Ujian Akhir</th>
-                  <th className="px-6 py-4 font-semibold text-center sticky right-0 bg-slate-800/90 backdrop-blur-md border-l border-slate-700/50">Aksi</th>
+                  <th className="px-6 py-4 font-semibold text-center sticky right-0 bg-slate-50  border-l border-slate-200">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-700/50">
+              <tbody className="divide-y divide-slate-200">
                 {loading ? (
                   <tr>
                     <td colSpan={10} className="px-6 py-12 text-center">
-                      <div className="flex flex-col items-center justify-center gap-3 text-slate-400">
-                        <Loader2 className="animate-spin text-indigo-500" size={32} />
+                      <div className="flex flex-col items-center justify-center gap-3 text-slate-500">
+                        <Loader2 className="animate-spin text-blue-600" size={32} />
                         <p className="font-medium">Memuat data papan skor...</p>
                       </div>
                     </td>
                   </tr>
                 ) : data.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="px-6 py-12 text-center text-slate-400 font-medium">
+                    <td colSpan={10} className="px-6 py-12 text-center text-slate-500 font-medium">
                       Belum ada data nilai kuis mahasiswa.
                     </td>
                   </tr>
                 ) : (
                   data.map((student, idx) => (
-                    <tr key={student.id} className="hover:bg-slate-700/30 transition-colors">
+                    <tr key={student.id} className="hover:bg-slate-50 transition-colors">
                       {/* Rank */}
                       <td className="px-6 py-4 text-center">
                         <div className="flex justify-center items-center">
@@ -382,10 +382,10 @@ export default function Leaderboard() {
                       {/* Mahasiswa */}
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
-                          <span className="font-bold text-white text-base">{student.name}</span>
+                          <span className="font-bold text-slate-800 text-base">{student.name}</span>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className="text-sm text-slate-400">{student.nim}</span>
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            <span className="text-sm text-slate-500">{student.nim}</span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                               {student.angkatan}
                             </span>
                           </div>
@@ -395,9 +395,9 @@ export default function Leaderboard() {
                       {/* Skor NUMi */}
                       <td className="px-6 py-4 text-center">
                         <div className="flex flex-col items-center">
-                          <span className="text-3xl font-black text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.3)]">{student.numiScore}</span>
-                          <span className="text-[10px] text-slate-400 mt-1">{formatIndonesianDate(student.finishTimestamp)}</span>
-                          <span className="text-[10px] text-slate-400">{student.finishTime}</span>
+                          <span className="text-3xl font-black text-blue-600 drop-shadow-[0_0_10px_rgba(99,102,241,0.3)]">{student.numiScore}</span>
+                          <span className="text-[10px] text-slate-500 mt-1">{formatIndonesianDate(student.finishTimestamp)}</span>
+                          <span className="text-[10px] text-slate-500">{student.finishTime}</span>
                         </div>
                       </td>
 
@@ -405,23 +405,23 @@ export default function Leaderboard() {
                       {student.quizzes.map((quiz, qIdx) => (
                         <td key={qIdx} className="px-6 py-4 text-center">
                           <div className="flex flex-col items-center">
-                            <span className="text-base font-semibold text-white">{quiz.correct}/{quiz.total}</span>
+                            <span className="text-base font-semibold text-slate-800">{quiz.correct}/{quiz.total}</span>
                             <span className="text-xs text-slate-500 mt-1">Percobaan: {quiz.attempts}x</span>
                           </div>
                         </td>
                       ))}
 
                       {/* Aksi */}
-                      <td className="px-6 py-4 text-center sticky right-0 bg-slate-800/90 backdrop-blur-md border-l border-slate-700/50">
+                      <td className="px-6 py-4 text-center sticky right-0 bg-slate-50  border-l border-slate-200">
                         {isAdmin || student.nim === identity?.nim ? (
                           <button
                             onClick={() => setSelectedStudent(student)}
-                            className="px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-sm text-slate-200 hover:bg-slate-600/60 hover:text-white transition-all backdrop-blur-sm"
+                            className="px-4 py-2 bg-blue-600 border border-blue-600 rounded-lg text-sm text-white hover:bg-blue-700 transition-all shadow-sm"
                           >
                             Detail Jawaban
                           </button>
                         ) : (
-                          <span className="text-xs text-slate-500 italic px-2 py-1 bg-slate-800/50 rounded-md border border-slate-700/30">
+                          <span className="text-xs text-slate-500 italic px-2 py-1 bg-white shadow-sm rounded-md border border-slate-200">
                             Privasi Terjaga
                           </span>
                         )}
@@ -443,17 +443,17 @@ export default function Leaderboard() {
             onClick={() => setSelectedStudent(null)}
           ></div>
 
-          <div className="relative w-full max-w-2xl bg-slate-800 border border-slate-600/50 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+          <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-md flex flex-col max-h-[90vh]">
 
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-slate-700/50">
+            <div className="flex items-center justify-between p-6 border-b border-slate-200">
               <div>
-                <h3 className="text-xl font-bold text-white">Detail Jawaban</h3>
-                <p className="text-sm text-slate-400 mt-1">{selectedStudent.name} • {selectedStudent.nim}</p>
+                <h3 className="text-xl font-bold text-slate-800">Detail Jawaban</h3>
+                <p className="text-sm text-slate-500 mt-1">{selectedStudent.name} • {selectedStudent.nim}</p>
               </div>
               <button
                 onClick={() => setSelectedStudent(null)}
-                className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
               >
                 <X size={24} />
               </button>
@@ -467,10 +467,10 @@ export default function Leaderboard() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-6 border-t border-slate-700/50 flex justify-end">
+            <div className="p-6 border-t border-slate-200 flex justify-end">
               <button
                 onClick={() => setSelectedStudent(null)}
-                className="px-6 py-2.5 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors font-medium"
+                className="px-6 py-2.5 bg-slate-100 text-slate-800 rounded-lg hover:bg-slate-600 transition-colors font-medium"
               >
                 Tutup
               </button>
@@ -484,23 +484,23 @@ export default function Leaderboard() {
       {showAdminModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAdminModal(false)}></div>
-          <div className="relative w-full max-w-sm bg-slate-800 border border-slate-600/50 rounded-2xl shadow-2xl p-6">
-            <h3 className="text-xl font-bold text-white mb-4">Mode Dosen</h3>
+          <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-2xl shadow-md p-6">
+            <h3 className="text-xl font-bold text-slate-800 mb-4">Mode Dosen</h3>
             <form onSubmit={handleAdminSubmit}>
               <div className="mb-4">
-                <label className="block text-sm text-slate-400 mb-2">Masukkan PIN / Password</label>
+                <label className="block text-sm text-slate-500 mb-2">Masukkan PIN / Password</label>
                 <input
                   type="password"
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-slate-800 focus:outline-none focus:border-indigo-500"
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}
                   autoFocus
                 />
-                {adminError && <p className="text-rose-400 text-sm mt-2">{adminError}</p>}
+                {adminError && <p className="text-rose-600 text-sm mt-2">{adminError}</p>}
               </div>
               <div className="flex justify-end gap-3">
-                <button type="button" onClick={() => setShowAdminModal(false)} className="px-4 py-2 text-slate-400 hover:text-white">Batal</button>
-                <button type="submit" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-colors">Masuk</button>
+                <button type="button" onClick={() => setShowAdminModal(false)} className="px-4 py-2 text-slate-500 hover:text-slate-800">Batal</button>
+                <button type="submit" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-slate-800 rounded-lg transition-colors">Masuk</button>
               </div>
             </form>
           </div>
@@ -516,34 +516,34 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-slate-700/50 rounded-xl overflow-hidden bg-slate-900/50">
+    <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 hover:bg-slate-800/50 transition-colors"
+        className="w-full flex items-center justify-between p-4 hover:bg-white shadow-sm transition-colors"
       >
         <div className="flex items-center gap-4">
-          <span className="font-semibold text-slate-200">{quiz.title}</span>
+          <span className="font-semibold text-slate-800">{quiz.title}</span>
           <span className={`text-xs px-2 py-1 rounded-md font-medium ${quiz.correct === quiz.total
-            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-            : "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30"
+            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+            : "bg-blue-50 text-blue-600 border border-blue-200"
             }`}>
             Skor: {quiz.correct}/{quiz.total}
           </span>
         </div>
-        {isOpen ? <ChevronUp size={20} className="text-slate-400" /> : <ChevronDown size={20} className="text-slate-400" />}
+        {isOpen ? <ChevronUp size={20} className="text-slate-500" /> : <ChevronDown size={20} className="text-slate-500" />}
       </button>
 
       {isOpen && (
-        <div className="p-4 border-t border-slate-700/50 bg-slate-800/30">
+        <div className="p-4 border-t border-slate-200 bg-white/30">
           <div className="flex flex-col gap-3 mt-2">
             {quiz.answers.map((ans, idx) => (
-              <div key={idx} className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-4">
+              <div key={idx} className="bg-slate-50/50 border border-slate-200 rounded-lg p-4">
                 {/* Header Soal */}
                 <div className="flex items-start gap-3">
-                  <span className="shrink-0 px-2.5 py-1 rounded-md bg-slate-800 text-xs font-bold text-slate-400 border border-slate-700">
+                  <span className="shrink-0 px-2.5 py-1 rounded-md bg-white text-xs font-bold text-slate-500 border border-slate-200">
                     {ans.id}
                   </span>
-                  <p className="text-slate-200 text-sm leading-relaxed mt-0.5">
+                  <p className="text-slate-800 text-sm leading-relaxed mt-0.5">
                     {ans.question}
                   </p>
                 </div>
@@ -551,8 +551,8 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
                 {/* Jawaban Mahasiswa */}
                 <div className="mt-4 pl-12 flex flex-col items-start gap-2">
                   <div className={`inline-flex items-start gap-2.5 px-3 py-2 text-sm font-medium border rounded-md ${ans.isCorrect
-                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                    : 'bg-rose-500/10 border-rose-500/30 text-rose-400'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                    : 'bg-rose-50 border-rose-200 text-rose-600'
                     }`}>
                     <div className="shrink-0 mt-0.5">
                       {ans.isCorrect ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
@@ -562,7 +562,7 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
 
                   {/* Kunci Jawaban */}
                   {!ans.isCorrect && (
-                    <div className="text-slate-400 text-xs italic ml-1">
+                    <div className="text-slate-500 text-xs italic ml-1">
                       Kunci Benar: {ans.correctOption}. {ans.correctText}
                     </div>
                   )}

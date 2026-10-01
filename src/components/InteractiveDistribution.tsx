@@ -122,24 +122,24 @@ export default function InteractiveDistribution() {
   const upperBound = mu + z * sigma;
 
   return (
-    <div className="mt-8 bg-[#0d1117]/80 backdrop-blur-md border border-[#21262d] rounded-2xl overflow-hidden shadow-xl">
+    <div className="mt-8 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
       {/* Header */}
-      <div className="bg-[#161b22]/80 border-b border-[#21262d] p-4 flex items-center gap-3">
+      <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex items-center gap-3">
         <span className="text-lg">🧪</span>
-        <span className="text-sm font-bold tracking-wider text-[#58a6ff] uppercase font-mono">
+        <span className="text-sm font-bold tracking-wider text-blue-600 uppercase font-mono">
           Eksplorasi Interaktif
         </span>
       </div>
 
       <div className="p-6 space-y-6">
         {/* Instruction box */}
-        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-4 flex items-center gap-3">
-          <span className="shrink-0 px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase font-mono bg-[#388bfd]/15 text-[#58a6ff] border border-[#388bfd]/30 rounded-md">
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center gap-3">
+          <span className="shrink-0 px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase font-mono bg-[#3b82f6]/15 text-blue-600 border border-[#3b82f6]/30 rounded-md">
             Coba Sendiri
           </span>
-          <p className="text-sm text-[#e6edf3]">
-            Atur <strong className="text-[#e6edf3]">μ</strong> (mean) dan{" "}
-            <strong className="text-[#e6edf3]">σ</strong> (SD) untuk mengubah bentuk kurva.
+          <p className="text-sm text-slate-700">
+            Atur <strong className="text-slate-700">μ</strong> (mean) dan{" "}
+            <strong className="text-slate-700">σ</strong> (SD) untuk mengubah bentuk kurva.
             Pilih rentang ±1/2/3σ untuk melihat persentase populasi.
           </p>
         </div>
@@ -149,8 +149,8 @@ export default function InteractiveDistribution() {
           {/* μ slider */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-[#e6edf3]">μ (Mean)</span>
-              <span className="text-sm font-mono font-bold text-[#58a6ff]">{mu}</span>
+              <span className="text-sm font-medium text-slate-700">μ (Mean)</span>
+              <span className="text-sm font-mono font-bold text-blue-600">{mu}</span>
             </div>
             <input
               type="range"
@@ -158,9 +158,9 @@ export default function InteractiveDistribution() {
               max={200}
               value={mu}
               onChange={e => setMu(Number(e.target.value))}
-              className="w-full accent-[#58a6ff]"
+              className="w-full accent-[#2563eb]"
             />
-            <div className="flex justify-between text-[10px] font-mono text-[#484f58] mt-1">
+            <div className="flex justify-between text-[10px] font-mono text-[#94a3b8] mt-1">
               <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span>
             </div>
           </div>
@@ -168,8 +168,8 @@ export default function InteractiveDistribution() {
           {/* σ slider */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-[#e6edf3]">σ (Standar Deviasi)</span>
-              <span className="text-sm font-mono font-bold text-[#58a6ff]">{sigma}</span>
+              <span className="text-sm font-medium text-slate-700">σ (Standar Deviasi)</span>
+              <span className="text-sm font-mono font-bold text-blue-600">{sigma}</span>
             </div>
             <input
               type="range"
@@ -177,16 +177,16 @@ export default function InteractiveDistribution() {
               max={50}
               value={sigma}
               onChange={e => setSigma(Number(e.target.value))}
-              className="w-full accent-[#58a6ff]"
+              className="w-full accent-[#2563eb]"
             />
-            <div className="flex justify-between text-[10px] font-mono text-[#484f58] mt-1">
+            <div className="flex justify-between text-[10px] font-mono text-[#94a3b8] mt-1">
               <span>1</span><span>13</span><span>25</span><span>38</span><span>50</span>
             </div>
           </div>
         </div>
 
         {/* Bell Curve SVG */}
-        <div className="bg-[#0d1117]/60 border border-[#21262d] rounded-xl p-4 flex justify-center">
+        <div className="bg-[#f8fafc]/60 border border-[#f1f5f9] rounded-xl p-4 flex justify-center">
           <svg
             viewBox={`0 0 ${SVG_W} ${SVG_H}`}
             className="w-full max-w-[560px]"
@@ -194,21 +194,21 @@ export default function InteractiveDistribution() {
           >
             <defs>
               <linearGradient id="shade-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#388bfd" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#388bfd" stopOpacity="0.08" />
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.08" />
               </linearGradient>
               <linearGradient id="curve-stroke" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#388bfd" stopOpacity="0.3" />
-                <stop offset="20%" stopColor="#58a6ff" stopOpacity="1" />
-                <stop offset="80%" stopColor="#58a6ff" stopOpacity="1" />
-                <stop offset="100%" stopColor="#388bfd" stopOpacity="0.3" />
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+                <stop offset="20%" stopColor="#2563eb" stopOpacity="1" />
+                <stop offset="80%" stopColor="#2563eb" stopOpacity="1" />
+                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.3" />
               </linearGradient>
             </defs>
 
             {/* Baseline */}
             <line
               x1={PAD} y1={SVG_H - PAD} x2={SVG_W - PAD} y2={SVG_H - PAD}
-              stroke="#30363d" strokeWidth="1"
+              stroke="#e2e8f0" strokeWidth="1"
             />
 
             {/* Shaded area */}
@@ -237,7 +237,7 @@ export default function InteractiveDistribution() {
                 <line
                   key={zVal}
                   x1={sx} y1={PAD} x2={sx} y2={SVG_H - PAD}
-                  stroke="#58a6ff"
+                  stroke="#2563eb"
                   strokeWidth="1"
                   strokeDasharray="4 3"
                   opacity="0.5"
@@ -249,7 +249,7 @@ export default function InteractiveDistribution() {
             <line
               x1={zToSvgX(0, SVG_W, PAD)} y1={PAD}
               x2={zToSvgX(0, SVG_W, PAD)} y2={SVG_H - PAD}
-              stroke="#58a6ff"
+              stroke="#2563eb"
               strokeWidth="1.5"
               strokeDasharray="6 4"
               opacity="0.7"
@@ -263,14 +263,14 @@ export default function InteractiveDistribution() {
                 <line
                   x1={tick.x} y1={SVG_H - PAD}
                   x2={tick.x} y2={SVG_H - PAD + 6}
-                  stroke={tick.isInRange ? '#58a6ff' : '#484f58'}
+                  stroke={tick.isInRange ? '#2563eb' : '#94a3b8'}
                   strokeWidth="1"
                 />
                 <text
                   x={tick.x}
                   y={SVG_H - PAD + 20}
                   textAnchor="middle"
-                  fill={tick.isInRange ? '#c9d1d9' : '#484f58'}
+                  fill={tick.isInRange ? '#475569' : '#94a3b8'}
                   fontSize="10"
                   fontFamily="var(--font-mono), monospace"
                   fontWeight={tick.z === 0 ? '700' : '400'}
@@ -292,8 +292,8 @@ export default function InteractiveDistribution() {
                 onClick={() => setHighlight(key)}
                 className={`px-5 py-2 text-sm font-mono font-semibold rounded-full transition-all duration-200 border ${
                   isActive
-                    ? 'bg-[#388bfd]/20 text-[#58a6ff] border-[#388bfd]/40 shadow-[0_0_14px_rgba(56,139,253,0.25)]'
-                    : 'bg-[#21262d] text-[#e6edf3] border-[#30363d] hover:bg-[#30363d] hover:text-[#e6edf3]'
+                    ? 'bg-[#3b82f6]/20 text-blue-600 border-[#3b82f6]/40 shadow-[0_0_14px_rgba(56,139,253,0.25)]'
+                    : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-[#e2e8f0] hover:text-slate-700'
                 }`}
               >
                 {SIGMA_CONFIG[key].label}
@@ -303,16 +303,16 @@ export default function InteractiveDistribution() {
         </div>
 
         {/* Insight box */}
-        <div className="bg-[#388bfd]/8 border border-[#388bfd]/20 rounded-xl p-4 flex items-start gap-3">
-          <span className="shrink-0 mt-0.5 text-[#58a6ff]">
+        <div className="bg-[#3b82f6]/8 border border-[#3b82f6]/20 rounded-xl p-4 flex items-start gap-3">
+          <span className="shrink-0 mt-0.5 text-blue-600">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           </span>
-          <p className="text-sm text-[#e6edf3] leading-relaxed">
-            <strong className="text-[#58a6ff]">{pct}</strong> nilai berada di antara{" "}
+          <p className="text-sm text-slate-700 leading-relaxed">
+            <strong className="text-blue-600">{pct}</strong> nilai berada di antara{" "}
             <strong className="font-mono">{lowerBound}</strong> dan{" "}
             <strong className="font-mono">{upperBound}</strong>.
             {highlight === '1sigma' && (
-              <> Melampaui ±2σ = <span className="text-[#58a6ff] font-semibold">&apos;abnormal&apos;</span> di banyak tes lab.</>
+              <> Melampaui ±2σ = <span className="text-blue-600 font-semibold">&apos;abnormal&apos;</span> di banyak tes lab.</>
             )}
             {highlight === '2sigma' && (
               <> Dasar untuk CI 95%.</>

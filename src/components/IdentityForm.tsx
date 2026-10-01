@@ -50,21 +50,21 @@ export default function IdentityForm() {
     return (
       <div className="identity-panel">
         <div className="identity-form" style={{ textAlign: "center", padding: "3rem 2rem" }}>
-          <div className="mx-auto bg-indigo-500/20 text-indigo-400 w-20 h-20 rounded-full flex items-center justify-center mb-4 border border-indigo-500/30">
+          <div className="mx-auto bg-blue-50 text-blue-600 w-20 h-20 rounded-full flex items-center justify-center mb-4 border border-blue-200">
             <User size={40} />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Sesi Aktif</h2>
-          <p className="text-slate-400 mb-6">
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Sesi Aktif</h2>
+          <p className="text-slate-500 mb-6">
             Anda sedang mengerjakan kuis sebagai:
           </p>
-          <div className="bg-slate-800/50 rounded-xl p-4 inline-block text-left mb-8 border border-slate-700/50">
-            <p className="font-semibold text-slate-200 text-lg mb-1">{identity.nama}</p>
-            <div className="flex gap-4 text-sm text-slate-400">
+          <div className="bg-white shadow-sm border-slate-200 rounded-xl p-4 inline-block text-left mb-8 border border-slate-200">
+            <p className="font-semibold text-slate-800 text-lg mb-1">{identity.nama}</p>
+            <div className="flex gap-4 text-sm text-slate-500">
               <span className="flex items-center gap-1"><Hash size={14} /> {identity.nim}</span>
               <span className="flex items-center gap-1"><CalendarDays size={14} /> Angkatan {identity.angkatan}</span>
             </div>
           </div>
-          <p className="text-sm text-rose-400 mb-4 px-4">
+          <p className="text-sm text-red-600 mb-4 px-4">
             Mengganti akun akan mereset dan menghapus seluruh progres kuis Anda saat ini yang belum tersimpan!
           </p>
           <button
@@ -76,7 +76,7 @@ export default function IdentityForm() {
                 setAngkatan("");
               }
             }}
-            className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition-colors mx-auto inline-flex items-center justify-center gap-2 font-medium"
+            className="px-6 py-3 bg-white hover:bg-slate-100 text-slate-700 rounded-xl border border-slate-200 transition-colors mx-auto inline-flex items-center justify-center gap-2 font-medium"
           >
             <ArrowRight size={18} className="rotate-180" />
             Ganti Akun & Mulai Ulang

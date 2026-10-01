@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { Bookmark, Plus, Minus } from "lucide-react";
@@ -67,16 +67,16 @@ export default function Quiz6Summary() {
     },
     {
       name: "Confounding",
-      desc: "Kopi → kanker? Tidak — perokok minum lebih banyak kopi."
+      desc: "Kopi → kanker? Tidak  —  perokok minum lebih banyak kopi."
     }
   ];
 
   return (
-    <div className="flex flex-col gap-10 text-[#e6edf3] font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
+    <div className="flex flex-col gap-10 text-slate-700 font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
       
       {/* 1. Kontroversi Kopi */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-4">
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
           Kontroversi Kopi yang Menipu Satu Generasi
         </h4>
         <p className="mb-4">
@@ -95,27 +95,27 @@ export default function Quiz6Summary() {
 
       {/* 2. Tangga Bukti */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-3">Tangga Bukti</h4>
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">Tangga Bukti</h4>
         <p className="mb-4">
           Bayangkan desain studi sebagai tangga kepercayaan:
         </p>
         <p className="mb-4">
-          <strong>Puncak — RCT:</strong> Kamu secara acak menempatkan pasien ke pengobatan atau plasebo. Randomisasi menyeimbangkan segalanya — perancu yang diketahui dan tidak diketahui. SATU-SATUNYA cara mengatakan &quot;obat ini MENYEBABKAN outcome itu.&quot; Ukuran: Risiko Relatif.
+          <strong>Puncak  —  RCT:</strong> Kamu secara acak menempatkan pasien ke pengobatan atau plasebo. Randomisasi menyeimbangkan segalanya  —  perancu yang diketahui dan tidak diketahui. SATU-SATUNYA cara mengatakan &quot;obat ini MENYEBABKAN outcome itu.&quot; Ukuran: Risiko Relatif.
         </p>
         <p className="mb-4">
-          <strong>Tengah — Kohort:</strong> Identifikasi yang terpapar (perokok) dan tidak terpapar (bukan perokok), ikuti ke depan. Kamu mendapat insidensi dan RR, tapi perancu mengintai di mana-mana.
+          <strong>Tengah  —  Kohort:</strong> Identifikasi yang terpapar (perokok) dan tidak terpapar (bukan perokok), ikuti ke depan. Kamu mendapat insidensi dan RR, tapi perancu mengintai di mana-mana.
         </p>
         <p className="mb-4">
-          <strong>Bawah — Kasus-Kontrol:</strong> Mulai dari orang yang sudah punya penyakit (kasus) vs. yang tidak (kontrol), lihat ke belakang pada paparan. Cepat, murah, penting untuk penyakit langka. Tapi hanya menghasilkan odds ratio, dan recall bias selalu mengancam.
+          <strong>Bawah  —  Kasus-Kontrol:</strong> Mulai dari orang yang sudah punya penyakit (kasus) vs. yang tidak (kontrol), lihat ke belakang pada paparan. Cepat, murah, penting untuk penyakit langka. Tapi hanya menghasilkan odds ratio, dan recall bias selalu mengancam.
         </p>
         <p>
-          <strong>Dasar — Potong Lintang:</strong> Potret dalam satu waktu. Mengukur prevalensi. Tidak bisa menentukan mana duluan, jadi kausalitas tidak mungkin.
+          <strong>Dasar  —  Potong Lintang:</strong> Potret dalam satu waktu. Mengukur prevalensi. Tidak bisa menentukan mana duluan, jadi kausalitas tidak mungkin.
         </p>
       </div>
 
       {/* 3. NNT */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-3">NNT: Angka yang Benar-Benar Membantu Pasienmu</h4>
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">NNT: Angka yang Benar-Benar Membantu Pasienmu</h4>
         <p className="mb-4">
           Medical rep berkata: &quot;Statin kami mengurangi serangan jantung 36%!&quot; Kedengarannya luar biasa.
         </p>
@@ -129,7 +129,7 @@ export default function Quiz6Summary() {
 
       {/* 4. Paradoks Skrining */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-3">Paradoks Skrining: Ketika Deteksi Dini Berbohong</h4>
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">Paradoks Skrining: Ketika Deteksi Dini Berbohong</h4>
         <p className="mb-4">
           Pusat kanker mengumumkan: &quot;Ketahanan hidup 5 tahun meningkat dari 40% menjadi 65% sejak kita mulai skrining!&quot; Dewan merayakan. Lalu seorang epidemiolog yang tajam bertanya: &quot;Apakah lebih sedikit orang yang benar-benar meninggal?&quot;
         </p>
@@ -137,10 +137,10 @@ export default function Quiz6Summary() {
           Hening. Karena mungkin tidak. Dua bias licik:
         </p>
         <p className="mb-4">
-          <strong>Lead-time bias:</strong> Deteksi kanker 3 tahun lebih awal &rarr; pasien &quot;bertahan&quot; 3 tahun lebih lama dari diagnosis. Tapi mereka meninggal di usia yang sama persis. Kamu tidak memperpanjang hidup — kamu memperpanjang waktu mereka tahu mereka sakit.
+          <strong>Lead-time bias:</strong> Deteksi kanker 3 tahun lebih awal &rarr; pasien &quot;bertahan&quot; 3 tahun lebih lama dari diagnosis. Tapi mereka meninggal di usia yang sama persis. Kamu tidak memperpanjang hidup  —  kamu memperpanjang waktu mereka tahu mereka sakit.
         </p>
         <p className="mb-4">
-          <strong>Length-time bias:</strong> Skrining menangkap tumor tumbuh lambat (jendela deteksi lebih lama). Tumor agresif membunuh cepat dan lolos dari skrining. Populasi yang diskrining terlihat lebih sehat — tapi kamu menangkap kanker yang kurang berbahaya.
+          <strong>Length-time bias:</strong> Skrining menangkap tumor tumbuh lambat (jendela deteksi lebih lama). Tumor agresif membunuh cepat dan lolos dari skrining. Populasi yang diskrining terlihat lebih sehat  —  tapi kamu menangkap kanker yang kurang berbahaya.
         </p>
         <p>
           Ukuran jujurnya: apakah angka kematian keseluruhan benar-benar turun?
@@ -149,7 +149,7 @@ export default function Quiz6Summary() {
 
       {/* 5. Bias & Confounding */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-3">Bias: Penyabotase Tak Terlihat</h4>
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">Bias: Penyabotase Tak Terlihat</h4>
         <p className="mb-4">
           Setiap studi punya musuh:
         </p>
@@ -157,48 +157,48 @@ export default function Quiz6Summary() {
           <strong>Recall bias:</strong> Ibu dari bayi dengan cacat lahir mengingat setiap obat yang diminum selama kehamilan. Ibu dari bayi sehat lupa. Sekarang studi kasus-kontrolmu secara palsu menghubungkan obat yang tidak berbahaya dengan cacat.
         </p>
         <p className="mb-4">
-          <strong>Selection bias:</strong> Kamu mempelajari penyakit jantung di RS besar — tapi pasien di sana lebih sakit dan lebih kaya dari populasi umum. Hasilmu tidak bisa digeneralisasi.
+          <strong>Selection bias:</strong> Kamu mempelajari penyakit jantung di RS besar  —  tapi pasien di sana lebih sakit dan lebih kaya dari populasi umum. Hasilmu tidak bisa digeneralisasi.
         </p>
         <p className="mb-4">
-          <strong>Confounding:</strong> Kopi dan penyakit jantung. Merokok terasosiasi dengan KEDUANYA — minum kopi dan penyakit jantung — perancu yang bersembunyi dalam data. Penangkal: randomisasi atau penyesuaian statistik.
+          <strong>Confounding:</strong> Kopi dan penyakit jantung. Merokok terasosiasi dengan KEDUANYA  —  minum kopi dan penyakit jantung  —  perancu yang bersembunyi dalam data. Penangkal: randomisasi atau penyesuaian statistik.
         </p>
         <p>
-          <strong>Efek Hawthorne:</strong> Orang mengubah perilaku karena tahu sedang diteliti. Kedua kelompok membaik — bukan karena obat, tapi karena mereka mulai makan lebih sehat saat bergabung dalam uji coba.
+          <strong>Efek Hawthorne:</strong> Orang mengubah perilaku karena tahu sedang diteliti. Kedua kelompok membaik  —  bukan karena obat, tapi karena mereka mulai makan lebih sehat saat bergabung dalam uji coba.
         </p>
       </div>
 
       {/* Rangkuman */}
-      <div className="bg-[#161b22]/80 border border-[#30363d] p-6 rounded-xl">
+      <div className="bg-slate-50/80 border border-slate-300 p-6 rounded-xl">
         <div className="flex items-center gap-2 mb-4">
-          <Bookmark size={20} className="text-[#58a6ff]" />
-          <h4 className="text-lg font-semibold text-[#f0f6fc]">Rangkuman untuk Ujian</h4>
+          <Bookmark size={20} className="text-blue-600" />
+          <h4 className="text-lg font-semibold text-slate-900">Rangkuman untuk Ujian</h4>
         </div>
-        <ul className="space-y-2.5 text-[#e6edf3]">
-          <li>• RCT = kausalitas. Lainnya = asosiasi.</li>
-          <li>• Kohort &rarr; RR. Kasus-Kontrol &rarr; OR. Potong Lintang &rarr; Prevalensi.</li>
-          <li>• NNT = 1/ARR. Bandingkan dengan NNH untuk keputusan manfaat-risiko.</li>
-          <li>• OR &approx; RR ketika penyakit jarang.</li>
-          <li>• Lead-time bias: deteksi dini &ne; hidup lebih lama. Ukur mortalitas.</li>
-          <li>• Perancu = terasosiasi dengan paparan DAN outcome.</li>
-          <li>• ITT menganalisis semua sesuai penempatan — mempertahankan randomisasi.</li>
+        <ul className="space-y-2.5 text-slate-700">
+          <li>—¢ RCT = kausalitas. Lainnya = asosiasi.</li>
+          <li>—¢ Kohort &rarr; RR. Kasus-Kontrol &rarr; OR. Potong Lintang &rarr; Prevalensi.</li>
+          <li>—¢ NNT = 1/ARR. Bandingkan dengan NNH untuk keputusan manfaat-risiko.</li>
+          <li>—¢ OR &approx; RR ketika penyakit jarang.</li>
+          <li>—¢ Lead-time bias: deteksi dini &ne; hidup lebih lama. Ukur mortalitas.</li>
+          <li>—¢ Perancu = terasosiasi dengan paparan DAN outcome.</li>
+          <li>—¢ ITT menganalisis semua sesuai penempatan  —  mempertahankan randomisasi.</li>
         </ul>
       </div>
 
       {/* Eksplorasi Interaktif */}
-      <div className="mt-8 bg-[#0d1117]/80 backdrop-blur-md border border-[#21262d] rounded-2xl overflow-hidden shadow-xl">
-        <div className="bg-[#161b22]/80 border-b border-[#21262d] p-4 flex items-center gap-3">
-          <span className="text-lg">🧪</span>
-          <span className="text-sm font-bold tracking-wider text-[#58a6ff] uppercase font-mono">
+      <div className="mt-8 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex items-center gap-3">
+          <span className="text-lg">ðŸ§ª</span>
+          <span className="text-sm font-bold tracking-wider text-blue-600 uppercase font-mono">
             Eksplorasi Interaktif
           </span>
         </div>
 
         <div className="p-6 space-y-6">
-          <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-4 flex items-center gap-3">
-            <span className="shrink-0 px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase font-mono bg-[#388bfd]/15 text-[#58a6ff] border border-[#388bfd]/30 rounded-md">
+          <div className="bg-slate-50 border border-slate-300 rounded-xl p-4 flex items-center gap-3">
+            <span className="shrink-0 px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase font-mono bg-[#3b82f6]/15 text-blue-600 border border-[#3b82f6]/30 rounded-md">
               COBA SENDIRI
             </span>
-            <p className="text-sm text-[#e6edf3]">
+            <p className="text-sm text-slate-700">
               Ketuk setiap desain studi untuk menjelajahi karakteristiknya.
             </p>
           </div>
@@ -207,25 +207,25 @@ export default function Quiz6Summary() {
             
             {/* Hierarki Bukti Section */}
             <div>
-              <h5 className="text-[#8b949e] text-xs font-bold uppercase tracking-widest mb-3 font-mono">HIERARKI BUKTI</h5>
+              <h5 className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-3 font-mono">HIERARKI BUKTI</h5>
               <div className="space-y-2">
                 {studyDesigns.map((design) => (
-                  <div key={design.id} className="border border-[#30363d] rounded-lg overflow-hidden bg-[#161b22]">
+                  <div key={design.id} className="border border-slate-300 rounded-lg overflow-hidden bg-slate-50">
                     <button
                       onClick={() => toggleAccordion(design.id)}
-                      className="w-full flex items-center justify-between p-4 bg-[#161b22] hover:bg-[#21262d] transition-colors"
+                      className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-mono font-bold text-[#58a6ff]">{design.level}</span>
-                        <span className="text-[1.05rem] font-bold text-[#f0f6fc]">{design.title}</span>
+                        <span className="text-sm font-mono font-bold text-blue-600">{design.level}</span>
+                        <span className="text-[1.05rem] font-bold text-slate-900">{design.title}</span>
                       </div>
-                      <div className="text-[#8b949e]">
+                      <div className="text-slate-500">
                         {openAccordion === design.id ? <Minus size={18} /> : <Plus size={18} />}
                       </div>
                     </button>
                     {openAccordion === design.id && (
-                      <div className="p-4 pt-0 border-t border-[#30363d] bg-[#0d1117]/50 text-[#e6edf3] text-sm leading-relaxed">
-                        <div className="mt-3 font-semibold text-[#58a6ff] mb-1">{design.desc}</div>
+                      <div className="p-4 pt-0 border-t border-slate-300 bg-[#f8fafc]/50 text-slate-700 text-sm leading-relaxed">
+                        <div className="mt-3 font-semibold text-blue-600 mb-1">{design.desc}</div>
                         {design.content}
                       </div>
                     )}
@@ -236,14 +236,14 @@ export default function Quiz6Summary() {
 
             {/* Bias Umum Section */}
             <div>
-              <h5 className="text-[#8b949e] text-xs font-bold uppercase tracking-widest mb-3 mt-8 font-mono">BIAS UMUM</h5>
+              <h5 className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-3 mt-8 font-mono">BIAS UMUM</h5>
               <div className="space-y-2">
                 {biases.map((bias, idx) => (
-                  <div key={idx} className="flex border border-[#30363d] rounded-lg overflow-hidden bg-[#161b22]">
+                  <div key={idx} className="flex border border-slate-300 rounded-lg overflow-hidden bg-slate-50">
                     <div className="w-1.5 bg-[#f85149] shrink-0"></div>
                     <div className="p-3.5 w-full">
-                      <div className="font-bold text-[#f0f6fc] text-[0.95rem] mb-1">{bias.name}</div>
-                      <div className="text-[#8b949e] text-sm">{bias.desc}</div>
+                      <div className="font-bold text-slate-900 text-[0.95rem] mb-1">{bias.name}</div>
+                      <div className="text-slate-500 text-sm">{bias.desc}</div>
                     </div>
                   </div>
                 ))}

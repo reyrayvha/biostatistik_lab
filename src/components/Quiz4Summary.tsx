@@ -49,8 +49,8 @@ export default function Quiz4Summary() {
   const presetBtn = (active: boolean) =>
     `px-4 py-1.5 text-sm rounded-full transition-colors border ${
       active
-        ? "bg-[#388bfd]/15 text-[#58a6ff] border-[#388bfd]/30 shadow-[0_0_10px_rgba(56,139,253,0.1)]"
-        : "bg-[#21262d]/60 text-[#e6edf3] border-[#30363d] hover:bg-[#30363d] hover:text-[#e6edf3]"
+        ? "bg-[#3b82f6]/15 text-blue-600 border-[#3b82f6]/30 shadow-[0_0_10px_rgba(56,139,253,0.1)]"
+        : "bg-slate-100/60 text-slate-700 border-slate-300 hover:bg-[#e2e8f0] hover:text-slate-700"
     }`;
 
   // SVG Bell Curve Path
@@ -85,11 +85,11 @@ export default function Quiz4Summary() {
   }, [zVal, alpha]);
 
   return (
-    <div className="flex flex-col gap-10 text-[#e6edf3] font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
+    <div className="flex flex-col gap-10 text-slate-700 font-sans" style={{ fontSize: '1.05rem', lineHeight: '1.85' }}>
       
       {/* 1. Obat yang Berhasil */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-4">
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
           Obat yang "Berhasil" (tapi Tidak Berarti)
         </h4>
         <p className="mb-4">
@@ -97,7 +97,7 @@ export default function Quiz4Summary() {
         </p>
         <p className="mb-4">
           Kamu melihat datanya. Obat tekanan darah baru menurunkan sistolik... 0,4 mmHg vs. plasebo. Pada 48.000 pasien.
-          Efeknya nyata — p-value mengonfirmasi itu — tapi 0,4 mmHg tidak membuat perbedaan apapun. Pasienmu tidak akan
+          Efeknya nyata  —  p-value mengonfirmasi itu  —  tapi 0,4 mmHg tidak membuat perbedaan apapun. Pasienmu tidak akan
           merasa lebih baik, hidup lebih lama, atau terhindar dari stroke.
         </p>
         <p>
@@ -108,7 +108,7 @@ export default function Quiz4Summary() {
 
       {/* 2. Apa Arti P-Value Sebenarnya */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-4">
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
           Apa Arti P-Value Sebenarnya (Semua Orang Salah Memahami Ini)
         </h4>
         <p className="mb-4">
@@ -124,24 +124,24 @@ export default function Quiz4Summary() {
           <li>&quot;Efeknya besar karena p kecil.&quot; SALAH. Dengan n besar, efek kecil tak bermakna bisa punya p-value kecil.</li>
         </ul>
         <p>
-          Anggap p-value seperti detektor logam berbunyi. Ia mengatakan &quot;ada sesuatu di sini&quot; — bukan apakah itu koin emas
+          Anggap p-value seperti detektor logam berbunyi. Ia mengatakan &quot;ada sesuatu di sini&quot;  —  bukan apakah itu koin emas
           atau tutup botol.
         </p>
       </div>
 
       {/* 3. Dua Cara untuk Salah */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-4">
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
           Dua Cara untuk Salah (Analogi UGD)
         </h4>
         <p className="mb-4">Kamu di UGD. Dua jenis kesalahan yang merusak malammu:</p>
         <ul className="space-y-4 mb-4">
           <li>
-            <strong className="text-[#f78166]">Kesalahan Tipe I (Alarm Palsu):</strong> Kamu mendiagnosis usus buntu, bergegas ke operasi — usus buntunya normal. Kamu
+            <strong className="text-[#f78166]">Kesalahan Tipe I (Alarm Palsu):</strong> Kamu mendiagnosis usus buntu, bergegas ke operasi  —  usus buntunya normal. Kamu
             &quot;menolak&quot; null padahal benar. Konsekuensi: operasi yang tidak perlu.
           </li>
           <li>
-            <strong className="text-[#d29922]">Kesalahan Tipe II (Diagnosis Terlewat):</strong> Kamu memulangkan pasien dengan &quot;flu perut&quot; — mereka kembali keesokan
+            <strong className="text-[#d29922]">Kesalahan Tipe II (Diagnosis Terlewat):</strong> Kamu memulangkan pasien dengan &quot;flu perut&quot;  —  mereka kembali keesokan
             harinya dengan usus buntu pecah. Kamu &quot;gagal menolak&quot; null padahal usus buntu memang ada.
           </li>
         </ul>
@@ -153,7 +153,7 @@ export default function Quiz4Summary() {
 
       {/* 4. Power */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-4">
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
           Power: Mengapa Studi Kecil Berbahaya
         </h4>
         <p className="mb-4">
@@ -161,7 +161,7 @@ export default function Quiz4Summary() {
           keduanya setara,&quot; katanya.
         </p>
         <p className="mb-4">
-          Tunggu dulu. Dengan 15 pasien, studi itu mungkin hanya punya power 30% — peluang 70% melewatkan perbedaan
+          Tunggu dulu. Dengan 15 pasien, studi itu mungkin hanya punya power 30%  —  peluang 70% melewatkan perbedaan
           nyata. Studi itu tidak dirancang untuk menemukan apapun.
         </p>
         <p>
@@ -172,16 +172,16 @@ export default function Quiz4Summary() {
 
       {/* 5. Confidence Interval */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-4">
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
           Confidence Interval: Yang Disembunyikan P-Value
         </h4>
         <p className="mb-4">
-          Paper A: &quot;Obat menurunkan LDL 15 mg/dL (95% CI: 8–22, p &lt; 0,001).&quot; CI menunjukkan efek sebenarnya antara 8 dan 22 —
+          Paper A: &quot;Obat menurunkan LDL 15 mg/dL (95% CI: 8 – 22, p &lt; 0,001).&quot; CI menunjukkan efek sebenarnya antara 8 dan 22  — 
           semua bermakna secara klinis. Temuan berguna.
         </p>
         <p className="mb-4">
-          Paper B: &quot;Obat menurunkan LDL 2 mg/dL (95% CI: 0,5–3,5, p = 0,01).&quot; Tetap signifikan! Tapi CI menunjukkan efek
-          sebenarnya antara 0,5 dan 3,5 — tidak ada yang bermakna secara klinis. CI mengungkap apa yang disembunyikan p-value.
+          Paper B: &quot;Obat menurunkan LDL 2 mg/dL (95% CI: 0,5 – 3,5, p = 0,01).&quot; Tetap signifikan! Tapi CI menunjukkan efek
+          sebenarnya antara 0,5 dan 3,5  —  tidak ada yang bermakna secara klinis. CI mengungkap apa yang disembunyikan p-value.
         </p>
         <p>
           Jika 95% CI melewati nol (misalnya, −3 sampai +8), kamu bahkan tidak bisa yakin obatnya melakukan apapun.
@@ -190,7 +190,7 @@ export default function Quiz4Summary() {
 
       {/* 6. Jebakan Perbandingan Ganda */}
       <div>
-        <h4 className="text-2xl font-bold tracking-tight text-[#f0f6fc] mb-4">
+        <h4 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
           Jebakan Perbandingan Ganda
         </h4>
         <p className="mb-4">
@@ -208,29 +208,29 @@ export default function Quiz4Summary() {
       </div>
 
       {/* 7. Rangkuman */}
-      <div className="bg-[#161b22]/80 border border-[#30363d] p-6 rounded-xl">
+      <div className="bg-slate-50/80 border border-slate-300 p-6 rounded-xl">
         <div className="flex items-center gap-2 mb-4">
-          <Bookmark size={20} className="text-[#58a6ff]" />
-          <h4 className="text-lg font-semibold text-[#f0f6fc]">Rangkuman untuk Ujian</h4>
+          <Bookmark size={20} className="text-blue-600" />
+          <h4 className="text-lg font-semibold text-slate-900">Rangkuman untuk Ujian</h4>
         </div>
-        <ul className="space-y-2.5 text-[#e6edf3]">
-          <li>• P-value = probabilitas data jika Ho benar. BUKAN probabilitas Ho benar.</li>
-          <li>• Tipe I = positif palsu (α). Tipe II = negatif palsu (β). Power = 1 − β.</li>
-          <li>• ↑ n &rarr; ↑ power. Target ≥ 80%.</li>
-          <li>• Selalu lihat ukuran efek + CI — bukan hanya p-value.</li>
-          <li>• Signifikansi statistik ≠ signifikansi klinis.</li>
-          <li>• 20 tes pada α=0,05 &rarr; ekspektasi 1 positif palsu.</li>
+        <ul className="space-y-2.5 text-slate-700">
+          <li>—¢ P-value = probabilitas data jika Ho benar. BUKAN probabilitas Ho benar.</li>
+          <li>—¢ Tipe I = positif palsu (α). Tipe II = negatif palsu (β). Power = 1 − β.</li>
+          <li>—¢ ←‘ n &rarr; ←‘ power. Target ≥ 80%.</li>
+          <li>—¢ Selalu lihat ukuran efek + CI  —  bukan hanya p-value.</li>
+          <li>—¢ Signifikansi statistik ≠ signifikansi klinis.</li>
+          <li>—¢ 20 tes pada α=0,05 &rarr; ekspektasi 1 positif palsu.</li>
         </ul>
       </div>
 
       {/* Eksplorasi Interaktif */}
-      <div className="mt-4 bg-[#0d1117]/80 backdrop-blur-md border border-[#21262d] rounded-2xl overflow-hidden shadow-xl">
-        <div className="bg-[#161b22]/80 border-b border-[#21262d] p-4 flex items-center gap-3">
-          <div className="p-2 bg-[#388bfd]/15 text-[#58a6ff] rounded-lg">
+      <div className="mt-4 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex items-center gap-3">
+          <div className="p-2 bg-[#3b82f6]/15 text-blue-600 rounded-lg">
             <FlaskConical size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-[#f0f6fc] uppercase tracking-wider text-sm">Eksplorasi Interaktif</h3>
+            <h3 className="text-lg font-semibold text-slate-900 uppercase tracking-wider text-sm">Eksplorasi Interaktif</h3>
           </div>
         </div>
 
@@ -238,32 +238,32 @@ export default function Quiz4Summary() {
           {/* Controls */}
           <div className="space-y-6">
             <div>
-              <label className="block text-sm text-[#8b949e] mb-3 font-mono">
+              <label className="block text-sm text-slate-500 mb-3 font-mono">
                 n: {n}
               </label>
               <input type="range" min={10} max={200} step={5} value={n}
                 onChange={(e) => setN(parseInt(e.target.value))}
-                className="w-full accent-[#58a6ff]" />
+                className="w-full accent-[#2563eb]" />
             </div>
             
             <div>
-              <label className="block text-sm text-[#8b949e] mb-3 font-mono">
+              <label className="block text-sm text-slate-500 mb-3 font-mono">
                 Efek (mmHg): {effect}
               </label>
               <input type="range" min={1} max={15} step={1} value={effect}
                 onChange={(e) => setEffect(parseInt(e.target.value))}
-                className="w-full accent-[#58a6ff]" />
+                className="w-full accent-[#2563eb]" />
             </div>
             
             <div>
-              <label className="block text-sm text-[#8b949e] mb-2 font-mono">α:</label>
+              <label className="block text-sm text-slate-500 mb-2 font-mono">α:</label>
               <div className="flex gap-2">
                 {[0.01, 0.05, 0.1].map((a) => (
                   <button key={a} onClick={() => setAlpha(a as any)}
                     className={`px-4 py-1.5 text-sm font-mono rounded-full transition-colors border ${
                       alpha === a
-                        ? "bg-transparent text-[#58a6ff] border-[#388bfd]"
-                        : "bg-transparent text-[#8b949e] border-[#30363d] hover:border-[#8b949e]"
+                        ? "bg-transparent text-blue-600 border-[#3b82f6]"
+                        : "bg-transparent text-slate-500 border-slate-300 hover:border-[#64748b]"
                     }`}>
                     {a}
                   </button>
@@ -277,7 +277,7 @@ export default function Quiz4Summary() {
             <div className={`bg-transparent border p-4 rounded-xl flex flex-col items-center justify-center text-center transition-colors ${
               isSignificant ? "border-[#3fb950]" : "border-[#f85149]"
             }`}>
-              <span className="text-[#8b949e] text-xs font-medium uppercase tracking-wider mb-2">P-Value</span>
+              <span className="text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">P-Value</span>
               <span className="text-3xl font-mono font-bold transition-colors"
                 style={{ color: isSignificant ? "#3fb950" : "#f85149" }}>
                 {pValue < 0.001 ? "<0.001" : pValue.toFixed(4)}
@@ -287,7 +287,7 @@ export default function Quiz4Summary() {
             <div className={`bg-transparent border p-4 rounded-xl flex flex-col items-center justify-center text-center transition-colors ${
               power >= 80 ? "border-[#3fb950]" : "border-[#d29922]"
             }`}>
-              <span className="text-[#8b949e] text-xs font-medium uppercase tracking-wider mb-2">Power</span>
+              <span className="text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">Power</span>
               <span className="text-3xl font-mono font-bold transition-colors"
                 style={{ color: power >= 80 ? "#3fb950" : "#d29922" }}>
                 {power >= 99.9 ? "99.9" : power.toFixed(1)}%
@@ -295,10 +295,10 @@ export default function Quiz4Summary() {
             </div>
 
             <div className={`bg-transparent border p-4 rounded-xl flex flex-col items-center justify-center text-center transition-colors ${
-              isSignificant ? "border-[#3fb950]" : "border-[#30363d]"
+              isSignificant ? "border-[#3fb950]" : "border-slate-300"
             }`}>
-              <span className="text-[#8b949e] text-xs font-medium uppercase tracking-wider mb-2">Hasil</span>
-              <span className={`text-xl font-bold ${isSignificant ? "text-[#3fb950]" : "text-[#8b949e]"}`}>
+              <span className="text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">Hasil</span>
+              <span className={`text-xl font-bold ${isSignificant ? "text-[#3fb950]" : "text-slate-500"}`}>
                 {isSignificant ? "Tolak H₀" : "Gagal menolak"}
               </span>
             </div>
@@ -306,24 +306,24 @@ export default function Quiz4Summary() {
 
           {/* Visualization & Interpretation */}
           <div className="flex flex-col items-center mt-8 mb-6">
-            <div className="w-full max-w-[560px] pointer-events-none relative bg-[#0d1117]/60 border border-[#21262d] rounded-xl p-4 flex justify-center">
+            <div className="w-full max-w-[560px] pointer-events-none relative bg-[#f8fafc]/60 border border-[#f1f5f9] rounded-xl p-4 flex justify-center">
               {/* Kurva Distribusi Normal */}
               <svg viewBox="0 0 600 240" className="w-full h-auto overflow-visible" preserveAspectRatio="xMidYMid meet">
                 <defs>
                   <linearGradient id="shade-grad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#388bfd" stopOpacity="0.35" />
-                    <stop offset="100%" stopColor="#388bfd" stopOpacity="0.08" />
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.08" />
                   </linearGradient>
                   <linearGradient id="curve-stroke" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#388bfd" stopOpacity="0.3" />
-                    <stop offset="20%" stopColor="#58a6ff" stopOpacity="1" />
-                    <stop offset="80%" stopColor="#58a6ff" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#388bfd" stopOpacity="0.3" />
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+                    <stop offset="20%" stopColor="#2563eb" stopOpacity="1" />
+                    <stop offset="80%" stopColor="#2563eb" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.3" />
                   </linearGradient>
                 </defs>
                 
                 {/* Baseline */}
-                <line x1="0" y1="210" x2="600" y2="210" stroke="#30363d" strokeWidth="2" />
+                <line x1="0" y1="210" x2="600" y2="210" stroke="#e2e8f0" strokeWidth="2" />
                 
                 {/* P-Value Shaded Areas (mengikuti kurva) - Left tail only to match reference */}
                 <path d={shadeLeft} fill="url(#shade-grad)" />
@@ -339,7 +339,7 @@ export default function Quiz4Summary() {
                     const by = 210 - (normalPDF(betaBound)/normalPDF(0))*190;
                     return (
                       <line x1={bx} y1="210" x2={bx} y2={by} 
-                        stroke="#58a6ff" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.6" />
+                        stroke="#2563eb" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.6" />
                     );
                   }
                   return null;
@@ -353,8 +353,8 @@ export default function Quiz4Summary() {
                   const tx = ((tick.z + 3.5) / 7) * 600;
                   return (
                     <g key={tick.z}>
-                      <line x1={tx} y1="210" x2={tx} y2="216" stroke="#30363d" strokeWidth="2" />
-                      <text x={tx} y="234" textAnchor="middle" fill="#8b949e" fontSize="13" fontFamily="monospace">
+                      <line x1={tx} y1="210" x2={tx} y2="216" stroke="#e2e8f0" strokeWidth="2" />
+                      <text x={tx} y="234" textAnchor="middle" fill="#64748b" fontSize="13" fontFamily="monospace">
                         {tick.label}
                       </text>
                     </g>
@@ -364,14 +364,14 @@ export default function Quiz4Summary() {
             </div>
           </div>
 
-          <div className="bg-[#161b22]/50 border border-[#30363d] rounded-lg p-3 text-sm flex gap-3 items-start">
+          <div className="bg-slate-50/50 border border-slate-300 rounded-lg p-3 text-sm flex gap-3 items-start">
             <Lightbulb size={18} className="text-[#d29922] shrink-0 mt-0.5" />
-            <p className="text-[#c9d1d9]">
+            <p className="text-slate-600">
               {isSignificant 
                 ? (power >= 80 
                     ? `Signifikan dengan power baik (${power >= 99.9 ? "100" : power.toFixed(0)}%).` 
-                    : `Signifikan tapi power hanya ${power.toFixed(0)}% — kurang power.`)
-                : `p = ${pValue.toFixed(3)} > α. Tidak signifikan. ↑ n atau ukuran efek.`}
+                    : `Signifikan tapi power hanya ${power.toFixed(0)}%  —  kurang power.`)
+                : `p = ${pValue.toFixed(3)} > α. Tidak signifikan. ←‘ n atau ukuran efek.`}
             </p>
           </div>
 
