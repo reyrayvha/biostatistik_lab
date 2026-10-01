@@ -337,7 +337,7 @@ export default function Leaderboard() {
         )}
 
         {/* Mobile View (Cards) */}
-        <div className="md:hidden w-full min-w-0 space-y-4 pb-24">
+        <div className="md:hidden w-full min-w-0 space-y-4 pb-32">
           {loading ? (
             <div className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-slate-500">
               <Loader2 className="animate-spin text-blue-600" size={32} />
@@ -349,16 +349,16 @@ export default function Leaderboard() {
             </div>
           ) : (
             data.map((student, idx) => (
-              <div key={student.id} className="w-full min-w-0 bg-white shadow-sm border border-slate-200 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden shadow-xl">
+              <div key={student.id} className="bg-white shadow-sm border border-slate-200 rounded-xl p-4 flex flex-col gap-4 relative overflow-hidden mb-4 w-full min-w-0">
                 {/* Rank Badge */}
                 <div className="absolute top-0 right-0 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-bl-xl font-bold text-sm border-b border-l border-blue-200">
                   Rank #{idx + 1}
                 </div>
 
-                {/* Student Info */}
-                <div className="flex flex-col pr-20">
-                  <span className="font-bold text-slate-800 text-lg leading-tight">{student.name}</span>
-                  <div className="flex items-center gap-2 mt-2">
+                {/* Header Card: Student Info */}
+                <div className="flex flex-col pr-24">
+                  <span className="font-bold text-slate-800 text-lg leading-tight break-words">{student.name}</span>
+                  <div className="flex flex-wrap items-center gap-2 mt-2">
                     <span className="text-sm text-slate-500">{student.nim}</span>
                     <span className="px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700">
                       {student.angkatan}
@@ -366,39 +366,37 @@ export default function Leaderboard() {
                   </div>
                 </div>
 
-                {/* Score Info */}
-                <div className="bg-slate-50/50 rounded-xl p-4 flex justify-between items-center border border-slate-200">
+                {/* Sub-header Card: Score Info */}
+                <div className="bg-blue-50/50 rounded-xl p-3 flex justify-between items-center border border-blue-100">
                   <div className="flex flex-col">
-                    <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Skor NUMi</span>
-                    <span className="text-3xl font-black text-blue-600">{student.numiScore}</span>
+                    <span className="text-xs text-blue-600 uppercase tracking-wider font-bold">Skor Total</span>
+                    <span className="text-3xl font-black text-blue-700 leading-none mt-1">{student.numiScore}</span>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <span className="text-xs text-slate-500 text-right">{formatIndonesianDate(student.finishTimestamp)}</span>
+                    <span className="text-xs text-slate-600 font-medium text-right">{formatIndonesianDate(student.finishTimestamp)}</span>
                     <span className="text-xs text-slate-500 text-right">{student.finishTime}</span>
                   </div>
                 </div>
 
-                {/* Quizzes Summary (Horizontal Scroll) */}
-                <div className="overflow-x-auto pb-2 -mx-4 px-4 snap-x">
-                  <div className="flex gap-2 w-max">
-                    {QUIZ_COLUMNS.map((col) => {
-                      const quiz = student.quizzes.find((q) =>
-                        q.title.toLowerCase().includes(col.keyword.toLowerCase())
-                      );
-                      return (
-                        <div key={col.id} className="bg-white border border-slate-200 rounded-lg p-2 min-w-[100px] flex flex-col items-center justify-center snap-center">
-                          <span className="text-xs text-slate-500 truncate w-full text-center">{col.name}</span>
-                          <span className={`text-base font-bold mt-1 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
-                            {quiz ? `${quiz.correct}/${quiz.total}` : `0/${col.total}`}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                {/* Body Card: Quizzes Summary (Grid) */}
+                <div className="grid grid-cols-3 gap-2">
+                  {QUIZ_COLUMNS.map((col) => {
+                    const quiz = student.quizzes.find((q) =>
+                      q.title.toLowerCase().includes(col.keyword.toLowerCase())
+                    );
+                    return (
+                      <div key={col.id} className="bg-slate-50 border border-slate-200 rounded-lg p-2 flex flex-col items-center justify-center text-center">
+                        <span className="text-[10px] sm:text-[11px] text-slate-500 font-medium truncate w-full">{col.name}</span>
+                        <span className={`text-sm sm:text-base font-bold mt-1 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
+                          {quiz ? `${quiz.correct}/${quiz.total}` : `0/${col.total}`}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
 
-                {/* Action */}
-                <div className="pt-2 border-t border-slate-200">
+                {/* Footer Card: Action */}
+                <div className="pt-3 border-t border-slate-200 mt-1">
                   {isAdmin || student.nim === identity?.nim ? (
                     <button
                       onClick={() => setSelectedStudent(student)}
@@ -407,7 +405,7 @@ export default function Leaderboard() {
                       Lihat Detail Jawaban
                     </button>
                   ) : (
-                    <div className="w-full py-2.5 bg-white shadow-sm border border-slate-200 rounded-lg text-sm text-slate-500 italic text-center">
+                    <div className="w-full py-2 bg-white shadow-sm border border-slate-200 rounded-lg text-sm text-slate-500 italic text-center">
                       Privasi Terjaga
                     </div>
                   )}
