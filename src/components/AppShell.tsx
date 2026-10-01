@@ -76,7 +76,7 @@ export default function AppShell() {
 
           {identity && (
             <div className="app-user-badge">
-              <span className="app-user-avatar">
+              <span className="app-user-avatar w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center shrink-0">
                 {identity.nama.charAt(0).toUpperCase()}
               </span>
               <div className="app-user-info">

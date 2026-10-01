@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from 'react';
 import { Bookmark } from 'lucide-react';
@@ -71,7 +71,7 @@ export default function MateriDistribusi() {
             { pct: "99,7%", sigma: "±3σ" },
           ].map((s) => (
             <div key={s.pct} className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center shadow-xl">
-              <span className="block text-3xl font-extrabold text-blue-600 mb-1">{s.pct}</span>
+              <span className="block text-xl md:text-3xl font-extrabold text-blue-600 mb-1">{s.pct}</span>
               <p className="text-slate-700 text-sm">nilai dalam <strong>{s.sigma}</strong> dari mean</p>
             </div>
           ))}

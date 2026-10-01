@@ -569,7 +569,7 @@ export default function Leaderboard() {
             onClick={() => setSelectedStudent(null)}
           ></div>
 
-          <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-md flex flex-col max-h-[90vh]">
+          <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-md flex flex-col max-h-[85vh] overflow-hidden">
 
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-slate-200">
@@ -586,17 +586,17 @@ export default function Leaderboard() {
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 overflow-y-auto flex-1 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
               {selectedStudent.quizzes.map((quiz, qIdx) => (
                 <DetailAccordion key={qIdx} quiz={quiz} />
               ))}
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 pb-28 md:p-6 md:pb-6 border-t border-slate-200 flex justify-end bg-white">
+            <div className="p-4 border-t border-slate-100 bg-white flex justify-end">
               <button
                 onClick={() => setSelectedStudent(null)}
-                className="px-6 py-2.5 bg-slate-100 text-slate-800 rounded-lg hover:bg-slate-600 transition-colors font-medium"
+                className="w-full md:w-auto px-6 py-2.5 bg-slate-100 text-slate-800 rounded-lg hover:bg-slate-200 transition-colors font-medium"
               >
                 Tutup
               </button>
@@ -664,7 +664,7 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
     <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex flex-row items-center justify-between py-2.5 px-3 md:p-4 hover:bg-white shadow-sm transition-colors gap-2"
+        className="w-full flex flex-row items-center justify-between px-3 py-2 md:p-4 hover:bg-white shadow-sm transition-colors gap-2"
       >
         <span className="font-semibold text-slate-800 text-sm md:text-base text-left leading-tight flex-1">
           {quiz.title}

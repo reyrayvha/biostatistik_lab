@@ -67,7 +67,7 @@ export default function Quiz5Summary() {
       
       {/* 1. Skenario */}
       <div>
-        <h4 className="text-xl md:text-3xl font-bold tracking-tight text-slate-900 mb-2 md:mb-4 leading-tight">
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
           Tes Rapid Strep yang Mengubah Diagnosis
         </h4>
         <p className="mb-4">
@@ -89,7 +89,7 @@ export default function Quiz5Summary() {
 
       {/* 2. Sensitivitas */}
       <div>
-        <h4 className="text-xl md:text-3xl font-bold tracking-tight text-slate-900 mb-2 md:mb-3 leading-tight">Sensitivitas: Penjaga yang Memasukkan Semua Orang</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Sensitivitas: Penjaga yang Memasukkan Semua Orang</h4>
         <p className="mb-4">
           Bayangkan penjaga pintu yang tugasnya menangkap setiap VIP (pasien sakit). Sensitivitas tinggi = menangkap hampir semua VIP, tapi tidak sengaja memasukkan beberapa orang biasa juga (positif palsu). Dia lebih memilih memasukkan berlebihan daripada melewatkan orang penting.
         </p>
@@ -110,7 +110,7 @@ export default function Quiz5Summary() {
 
       {/* 3. Spesifisitas */}
       <div>
-        <h4 className="text-xl md:text-3xl font-bold tracking-tight text-slate-900 mb-2 md:mb-3 leading-tight">Spesifisitas: Penjaga yang Menghalangi Penipu</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Spesifisitas: Penjaga yang Menghalangi Penipu</h4>
         <p className="mb-4">
           Penjaga berbeda. Prioritasnya: mencegah non-VIP masuk. Dia tidak pernah membiarkan orang biasa lewat  —  tapi kadang tanpa sengaja memblokir VIP asli (negatif palsu).
         </p>
@@ -131,7 +131,7 @@ export default function Quiz5Summary() {
 
       {/* 4. Prevalensi */}
       <div>
-        <h4 className="text-xl md:text-3xl font-bold tracking-tight text-slate-900 mb-2 md:mb-3 leading-tight">Jebakan Prevalensi</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Jebakan Prevalensi</h4>
         <p className="mb-4">
           Tes rapid strep punya sensitivitas dan spesifisitas yang sama di mana-mana  —  angka itu melekat pada tesnya. Tapi NPP dan NPN berubah tergantung DI MANA kamu menggunakannya.
         </p>
@@ -146,7 +146,7 @@ export default function Quiz5Summary() {
 
       {/* 5. Likelihood Ratio */}
       <div>
-        <h4 className="text-xl md:text-3xl font-bold tracking-tight text-slate-900 mb-2 md:mb-3 leading-tight">Rasio Kemungkinan: Berpikir Seperti Dokter Senior</h4>
+        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-3 leading-snug">Rasio Kemungkinan: Berpikir Seperti Dokter Senior</h4>
         <p className="mb-4">
           LR menangkap seberapa besar tes mengubah pikiranmu:
         </p>

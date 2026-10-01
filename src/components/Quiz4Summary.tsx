@@ -278,7 +278,7 @@ export default function Quiz4Summary() {
               isSignificant ? "border-[#3fb950]" : "border-[#f85149]"
             }`}>
               <span className="text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">P-Value</span>
-              <span className="text-3xl font-mono font-bold transition-colors"
+              <span className="text-xl md:text-3xl font-mono font-bold transition-colors"
                 style={{ color: isSignificant ? "#3fb950" : "#f85149" }}>
                 {pValue < 0.001 ? "<0.001" : pValue.toFixed(4)}
               </span>
@@ -288,7 +288,7 @@ export default function Quiz4Summary() {
               power >= 80 ? "border-[#3fb950]" : "border-[#d29922]"
             }`}>
               <span className="text-slate-500 text-xs font-medium uppercase tracking-wider mb-2">Power</span>
-              <span className="text-3xl font-mono font-bold transition-colors"
+              <span className="text-xl md:text-3xl font-mono font-bold transition-colors"
                 style={{ color: power >= 80 ? "#3fb950" : "#d29922" }}>
                 {power >= 99.9 ? "99.9" : power.toFixed(1)}%
               </span>
