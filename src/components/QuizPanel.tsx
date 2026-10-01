@@ -320,7 +320,6 @@ function QuizScorePanel({
   }
 
   return (
-  return (
     <div ref={panelRef} className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-32 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
 
       {/* Header Section */}
