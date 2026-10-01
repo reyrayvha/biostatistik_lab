@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X, Loader2, Lock, Trash2, RefreshCw, LogOut, ShieldCheck, Eye, EyeOff } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X, Loader2, Lock, Trash2, RefreshCw, LogOut, ShieldCheck, Eye, EyeOff, ChevronLeft, ChevronRight } from "lucide-react";
 import * as XLSX from "xlsx";
 import { supabase } from "@/src/lib/supabaseClient";
 import { useAppStore } from "@/src/store/useAppStore";
@@ -61,6 +61,14 @@ export default function Leaderboard() {
   const [selectedStudent, setSelectedStudent] = useState<StudentRecord | null>(null);
   const [data, setData] = useState<StudentRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollTable = (direction: 'left' | 'right') => {
+    if (tableScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -350 : 350;
+      tableScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   // Admin Mode State
   const [isAdmin, setIsAdmin] = useState(false);
@@ -408,22 +416,53 @@ export default function Leaderboard() {
         </div>
 
         {/* Desktop Table View (Hidden on Mobile) */}
-        <div className="hidden md:block bg-white shadow-sm  border border-slate-200 rounded-2xl overflow-hidden shadow-md">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left whitespace-nowrap">
-              <thead>
-                <tr className="bg-slate-100 border-b border-slate-200 text-slate-500 text-sm uppercase tracking-wider">
-                  <th className="px-6 py-4 font-semibold text-center w-20">Rank</th>
-                  <th className="px-6 py-4 font-semibold min-w-[200px]">Mahasiswa</th>
-                  <th className="px-6 py-4 font-semibold text-center">Skor NUMi</th>
-                  <th className="px-6 py-4 font-semibold text-center">Statistik</th>
-                  <th className="px-6 py-4 font-semibold text-center">Distribusi</th>
-                  <th className="px-6 py-4 font-semibold text-center">Probabilitas</th>
-                  <th className="px-6 py-4 font-semibold text-center">Uji Hipotesis</th>
-                  <th className="px-6 py-4 font-semibold text-center">Diagnostik</th>
-                  <th className="px-6 py-4 font-semibold text-center">Desain Studi</th>
-                  <th className="px-6 py-4 font-semibold text-center">Ujian Akhir</th>
-                  <th className="px-6 py-4 font-semibold text-center sticky right-0 bg-slate-50  border-l border-slate-200">Aksi</th>
+        <div className="hidden md:block bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden shadow-md">
+          {/* Quick Scroll Bar & Table Header Info */}
+          <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200 text-xs">
+            <span className="text-slate-600 font-medium">
+              Papan Peringkat Kuis Mahasiswa ({data.length} Mahasiswa)
+            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-slate-400 text-[11px] hidden sm:inline">Geser kolom kuis:</span>
+              <button
+                type="button"
+                onClick={() => scrollTable('left')}
+                className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-medium transition-colors shadow-xs"
+                title="Geser ke Kiri"
+              >
+                <ChevronLeft size={14} />
+                <span>Kiri</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollTable('right')}
+                className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-medium transition-colors shadow-xs"
+                title="Geser ke Kanan"
+              >
+                <span>Kanan</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
+
+          <div
+            ref={tableScrollRef}
+            className="overflow-auto max-h-[calc(100vh-250px)]"
+          >
+            <table className="w-full text-left whitespace-nowrap border-collapse">
+              <thead className="sticky top-0 z-20 bg-slate-100 shadow-xs">
+                <tr className="border-b border-slate-200 text-slate-600 text-xs uppercase tracking-wider">
+                  <th className="px-3 py-3 font-semibold text-center w-14 sticky left-0 bg-slate-100 z-30 shadow-[1px_0_0_0_#e2e8f0]">Rank</th>
+                  <th className="px-4 py-3 font-semibold min-w-[170px] sticky left-14 bg-slate-100 z-30 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">Mahasiswa</th>
+                  <th className="px-3 py-3 font-semibold text-center min-w-[90px]">Skor NUMi</th>
+                  <th className="px-2.5 py-3 font-semibold text-center min-w-[80px]">Statistik</th>
+                  <th className="px-2.5 py-3 font-semibold text-center min-w-[80px]">Distribusi</th>
+                  <th className="px-2.5 py-3 font-semibold text-center min-w-[80px]">Probabilitas</th>
+                  <th className="px-2.5 py-3 font-semibold text-center min-w-[85px]">Uji Hipotesis</th>
+                  <th className="px-2.5 py-3 font-semibold text-center min-w-[80px]">Diagnostik</th>
+                  <th className="px-2.5 py-3 font-semibold text-center min-w-[85px]">Desain Studi</th>
+                  <th className="px-2.5 py-3 font-semibold text-center min-w-[85px]">Ujian Akhir</th>
+                  <th className="px-4 py-3 font-semibold text-center sticky right-0 bg-slate-100 border-l border-slate-200 z-30 shadow-[-1px_0_0_0_#e2e8f0]">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -444,21 +483,21 @@ export default function Leaderboard() {
                   </tr>
                 ) : (
                   data.map((student, idx) => (
-                    <tr key={student.id} className="hover:bg-slate-50 transition-colors">
+                    <tr key={student.id} className="hover:bg-slate-50 transition-colors group">
                       {/* Rank */}
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-3 py-2.5 text-center sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 shadow-[1px_0_0_0_#e2e8f0]">
                         <div className="flex justify-center items-center">
                           {renderRankIcon(idx + 1)}
                         </div>
                       </td>
 
                       {/* Mahasiswa */}
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-2.5 sticky left-14 bg-white group-hover:bg-slate-50 transition-colors z-10 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">
                         <div className="flex flex-col">
-                          <span className="font-bold text-slate-800 text-base">{student.name}</span>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className="text-sm text-slate-500">{student.nim}</span>
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                          <span className="font-bold text-slate-800 text-sm">{student.name}</span>
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            <span className="text-xs text-slate-500">{student.nim}</span>
+                            <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                               {student.angkatan}
                             </span>
                           </div>
@@ -466,11 +505,11 @@ export default function Leaderboard() {
                       </td>
 
                       {/* Skor NUMi */}
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-3 py-2.5 text-center">
                         <div className="flex flex-col items-center">
-                          <span className="text-3xl font-black text-blue-600 drop-shadow-[0_0_10px_rgba(99,102,241,0.3)]">{student.numiScore}</span>
-                          <span className="text-[10px] text-slate-500 mt-1">{formatIndonesianDate(student.finishTimestamp)}</span>
-                          <span className="text-[10px] text-slate-500">{student.finishTime}</span>
+                          <span className="text-2xl font-black text-blue-600 drop-shadow-[0_0_10px_rgba(99,102,241,0.25)]">{student.numiScore}</span>
+                          <span className="text-[10px] text-slate-400 mt-0.5">{formatIndonesianDate(student.finishTimestamp)}</span>
+                          <span className="text-[10px] text-slate-400">{student.finishTime}</span>
                         </div>
                       </td>
 
@@ -481,23 +520,23 @@ export default function Leaderboard() {
                         );
 
                         return (
-                          <td key={col.id} className="px-6 py-4 text-center">
+                          <td key={col.id} className="px-2.5 py-2.5 text-center">
                             <div className="flex flex-col items-center">
                               {quiz ? (
                                 <>
-                                  <span className="text-base font-semibold text-slate-800">
+                                  <span className="text-sm font-bold text-slate-800">
                                     {quiz.correct}/{quiz.total}
                                   </span>
-                                  <span className="text-xs text-slate-500 mt-1">
+                                  <span className="text-[11px] text-slate-500 mt-0.5">
                                     Percobaan: {quiz.attempts}x
                                   </span>
                                 </>
                               ) : (
                                 <>
-                                  <span className="text-base font-semibold text-slate-400">
+                                  <span className="text-sm font-semibold text-slate-400">
                                     0/{col.total}
                                   </span>
-                                  <span className="text-xs text-slate-400 mt-1">
+                                  <span className="text-[11px] text-slate-400 mt-0.5">
                                     Percobaan: 0x
                                   </span>
                                 </>
@@ -508,16 +547,16 @@ export default function Leaderboard() {
                       })}
 
                       {/* Aksi */}
-                      <td className="px-6 py-4 text-center sticky right-0 bg-slate-50  border-l border-slate-200">
+                      <td className="px-4 py-2.5 text-center sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10 shadow-[-1px_0_0_0_#e2e8f0]">
                         {isAdmin || student.nim === identity?.nim ? (
                           <button
                             onClick={() => setSelectedStudent(student)}
-                            className="px-4 py-2 bg-blue-600 border border-blue-600 rounded-lg text-sm text-white hover:bg-blue-700 transition-all shadow-sm"
+                            className="px-3.5 py-1.5 bg-blue-600 border border-blue-600 rounded-lg text-xs font-medium text-white hover:bg-blue-700 transition-all shadow-xs"
                           >
                             Detail Jawaban
                           </button>
                         ) : (
-                          <span className="text-xs text-slate-500 italic px-2 py-1 bg-white shadow-sm rounded-md border border-slate-200">
+                          <span className="text-xs text-slate-500 italic px-2 py-1 bg-slate-50 shadow-xs rounded-md border border-slate-200">
                             Privasi Terjaga
                           </span>
                         )}
