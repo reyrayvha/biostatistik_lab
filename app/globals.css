@@ -320,6 +320,7 @@ body {
 
 .tab-navigation {
   width: 280px;
+  height: 100%;
   flex-shrink: 0;
   border-right: 1px solid var(--border-light);
   background: #ffffff;
@@ -330,6 +331,72 @@ body {
 
 .tab-navigation::-webkit-scrollbar {
   display: none;
+}
+
+/* --- Mobile Navigation Drawer --- */
+.mobile-nav-toggle {
+  display: none;
+}
+.mobile-nav-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .app-body {
+    position: relative;
+  }
+  
+  .app-nav-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -280px;
+    z-index: 40;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #fff;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.15);
+    height: 100%;
+  }
+  
+  .app-nav-wrapper.open {
+    transform: translateX(280px);
+  }
+  
+  .mobile-nav-overlay {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 30;
+    backdrop-filter: blur(2px);
+  }
+  
+  .mobile-nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+    color: white;
+    border: none;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+    z-index: 50;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+  }
+  
+  .mobile-nav-toggle:active {
+    transform: scale(0.95);
+  }
+
+  .app-main {
+    padding: 16px 12px;
+  }
 }
 
 .tab-nav-inner {
@@ -1130,6 +1197,9 @@ body {
     box-shadow var(--duration-fast) var(--ease-smooth),
     opacity var(--duration-fast);
   animation: fadeSlideUp var(--duration-normal) var(--ease-spring);
+  position: sticky;
+  bottom: 24px;
+  z-index: 20;
 }
 
 .quiz-next-btn:hover:not(:disabled) {

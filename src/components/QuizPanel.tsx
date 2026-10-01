@@ -596,6 +596,14 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
   const isCurrentAnswered = currentAnswer !== undefined;
   const isLastQuestion = currentIndex === totalQuestions - 1;
 
+  // Auto-scroll ke atas saat ganti soal
+  useEffect(() => {
+    const mainEl = document.querySelector('.app-main');
+    if (mainEl) {
+      mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentIndex]);
+
   // Score calculation
   const currentScore = questions.reduce((acc, q) => {
     if (currentAnswers[q.id] === q.correctAnswer) return acc + 1;

@@ -13,12 +13,25 @@ import { Trophy } from "lucide-react";
 // ---------------------------------------------------------------------------
 
 import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 
 export default function AppShell() {
   const [mounted, setMounted] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  
   useEffect(() => setMounted(true), []);
+  
   const activeTab = useAppStore((s) => s.activeTab);
   const identity = useAppStore((s) => s.identity);
+
+  // Auto-close nav when tab changes on mobile & scroll to top
+  useEffect(() => {
+    setIsNavOpen(false);
+    const mainEl = document.querySelector('.app-main');
+    if (mainEl) {
+      mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [activeTab]);
 
   function renderContent() {
     if (activeTab === "identitas") {
@@ -77,7 +90,28 @@ export default function AppShell() {
 
       <div className="app-body">
         {/* Navigation Sidebar */}
-        <TabNavigation />
+        <div className={`app-nav-wrapper ${isNavOpen ? "open" : ""}`}>
+          <TabNavigation />
+        </div>
+
+        {/* Mobile Nav Overlay */}
+        {isNavOpen && (
+          <div 
+            className="mobile-nav-overlay" 
+            onClick={() => setIsNavOpen(false)}
+          />
+        )}
+
+        {/* Mobile Floating Button */}
+        {identity && (
+          <button 
+            className="mobile-nav-toggle"
+            onClick={() => setIsNavOpen(!isNavOpen)}
+            aria-label="Toggle Navigation"
+          >
+            {isNavOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        )}
 
         {/* Main content */}
         <main className="app-main">

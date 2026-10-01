@@ -337,7 +337,7 @@ export default function Leaderboard() {
         )}
 
         {/* Mobile View (Cards) */}
-        <div className="md:hidden space-y-4 pb-12">
+        <div className="md:hidden space-y-4 pb-24">
           {loading ? (
             <div className="bg-white shadow-sm  border border-slate-200 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-slate-500">
               <Loader2 className="animate-spin text-blue-600" size={32} />
@@ -360,7 +360,7 @@ export default function Leaderboard() {
                   <span className="font-bold text-slate-800 text-lg leading-tight">{student.name}</span>
                   <div className="flex items-center gap-2 mt-2">
                     <span className="text-sm text-slate-500">{student.nim}</span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
+                    <span className="px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700">
                       {student.angkatan}
                     </span>
                   </div>
@@ -387,8 +387,8 @@ export default function Leaderboard() {
                       );
                       return (
                         <div key={col.id} className="bg-white border border-slate-200 rounded-lg p-2 min-w-[100px] flex flex-col items-center justify-center snap-center">
-                          <span className="text-[10px] text-slate-500 truncate w-full text-center">{col.name}</span>
-                          <span className={`text-sm font-bold mt-1 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
+                          <span className="text-xs text-slate-500 truncate w-full text-center">{col.name}</span>
+                          <span className={`text-base font-bold mt-1 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
                             {quiz ? `${quiz.correct}/${quiz.total}` : `0/${col.total}`}
                           </span>
                         </div>
