@@ -320,7 +320,7 @@ function QuizScorePanel({
   }
 
   return (
-    <div ref={panelRef} className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-32 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
+    <div ref={panelRef} className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-8 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
 
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
@@ -373,7 +373,7 @@ function QuizScorePanel({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-3 md:gap-5 mt-2 md:mt-4 mb-24 md:mb-0">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-5 mt-2 md:mt-4">
         <button
           onClick={onRetry}
           className="flex-1 py-3 md:py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-sm md:text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
@@ -430,7 +430,7 @@ function NUMiScorePanel({
   ];
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-32 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
+    <div className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-8 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
 
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
@@ -501,7 +501,7 @@ function NUMiScorePanel({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-3 md:gap-5 mt-4 md:mt-6 mb-24 md:mb-0">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-5 mt-4 md:mt-6">
         <button
           onClick={onRetry}
           className="flex-1 py-3 md:py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-sm md:text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"

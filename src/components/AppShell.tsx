@@ -63,7 +63,7 @@ export default function AppShell() {
       {/* Header */}
       <header className="app-header">
         <div className="app-header-inner">
-          <div className="app-brand pl-14 md:pl-4">
+          <div className="app-brand pl-4">
             <div className="flex flex-row items-center gap-1 md:gap-1.5 whitespace-nowrap text-lg md:text-xl font-black">
               <span className="brand-text-white">SMART-MATH</span>
               <span className="brand-text-blue">MEDICS</span>
@@ -75,8 +75,8 @@ export default function AppShell() {
           </div>
 
           {identity && (
-            <div className="app-user-badge hidden md:flex">
-              <span className="app-user-avatar w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center shrink-0">
+            <div className="app-user-badge">
+              <span className="app-user-avatar w-7 h-7 text-xs md:w-10 md:h-10 md:text-base rounded-full flex items-center justify-center shrink-0">
                 {identity.nama.charAt(0).toUpperCase()}
               </span>
               <div className="app-user-info">

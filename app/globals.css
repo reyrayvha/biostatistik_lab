@@ -375,7 +375,7 @@ body {
     align-items: center;
     justify-content: center;
     position: fixed;
-    top: 12px;
+    top: 80px;
     left: 16px;
     width: 44px;
     height: 44px;
@@ -394,7 +394,7 @@ body {
   }
 
   .app-main {
-    padding: 16px 12px;
+    padding: 80px 12px 32px 12px;
   }
 }
 

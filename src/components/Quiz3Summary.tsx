@@ -338,7 +338,7 @@ export default function Quiz3Summary() {
               </div>
 
               {/* Metric cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-4 gap-1 md:gap-3">
                 {[
                   { label: "NPP (PPV)", value: `${tbl.ppv.toFixed(1)}%`, sub: "Prob. penyakit jika tes +", color: ppvColor(tbl.ppv) },
                   { label: "NPN (NPV)", value: `${tbl.npv.toFixed(1)}%`, sub: "Prob. sehat jika tes -",   color: "#3fb950" },
@@ -350,7 +350,7 @@ export default function Quiz3Summary() {
                   <div key={c.label}
                     className="bg-[#f8fafc]/70 border border-[#f1f5f9] p-4 rounded-xl flex flex-col items-center text-center">
                     <span className="text-slate-700 text-xs font-medium uppercase tracking-wider mb-1">{c.label}</span>
-                    <span className="text-2xl font-mono font-bold" style={{ color: c.color }}>{c.value}</span>
+                    <span className="text-sm md:text-xl font-mono font-bold" style={{ color: c.color }}>{c.value}</span>
                     <span className="text-slate-600 text-xs mt-1">{c.sub}</span>
                   </div>
                 ))}
