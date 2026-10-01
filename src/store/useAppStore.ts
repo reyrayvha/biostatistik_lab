@@ -80,7 +80,7 @@ export type QuizState = {
 type AppState = {
   // Identity
   identity: UserIdentity | null;
-  setIdentity: (identity: UserIdentity) => void;
+  setIdentity: (identity: UserIdentity | null) => void;
 
   // Navigation
   activeTab: TabId;
@@ -121,6 +121,15 @@ export const useAppStore = create<AppState>((set, get) => ({
   // === Identity ===
   identity: null,
   setIdentity: (identity) => {
+    if (!identity) {
+      set({
+        identity: null,
+        unlockedIndex: 0,
+        activeTab: "identitas",
+        quizStates: {},
+      });
+      return;
+    }
     const current = get().unlockedIndex;
     set({
       identity,

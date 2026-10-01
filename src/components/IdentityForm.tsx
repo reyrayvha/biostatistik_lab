@@ -5,6 +5,7 @@ import { useAppStore } from "@/src/store/useAppStore";
 import { User, Hash, CalendarDays, ArrowRight, Sparkles } from "lucide-react";
 
 export default function IdentityForm() {
+  const identity = useAppStore((s) => s.identity);
   const setIdentity = useAppStore((s) => s.setIdentity);
 
   const [nama, setNama] = useState("");
@@ -44,6 +45,46 @@ export default function IdentityForm() {
 
   // Opsi angkatan manual (2022 - 2025)
   const angkatanOptions = ["2022", "2023", "2024", "2025"];
+
+  if (identity) {
+    return (
+      <div className="identity-panel">
+        <div className="identity-form" style={{ textAlign: "center", padding: "3rem 2rem" }}>
+          <div className="mx-auto bg-indigo-500/20 text-indigo-400 w-20 h-20 rounded-full flex items-center justify-center mb-4 border border-indigo-500/30">
+            <User size={40} />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">Sesi Aktif</h2>
+          <p className="text-slate-400 mb-6">
+            Anda sedang mengerjakan kuis sebagai:
+          </p>
+          <div className="bg-slate-800/50 rounded-xl p-4 inline-block text-left mb-8 border border-slate-700/50">
+            <p className="font-semibold text-slate-200 text-lg mb-1">{identity.nama}</p>
+            <div className="flex gap-4 text-sm text-slate-400">
+              <span className="flex items-center gap-1"><Hash size={14} /> {identity.nim}</span>
+              <span className="flex items-center gap-1"><CalendarDays size={14} /> Angkatan {identity.angkatan}</span>
+            </div>
+          </div>
+          <p className="text-sm text-rose-400 mb-4 px-4">
+            Mengganti akun akan mereset dan menghapus seluruh progres kuis Anda saat ini yang belum tersimpan!
+          </p>
+          <button
+            onClick={() => {
+              if (confirm("Apakah Anda yakin ingin mengganti akun? Seluruh progres kuis yang belum disubmit di ujian akhir akan hilang!")) {
+                setIdentity(null);
+                setNama("");
+                setNim("");
+                setAngkatan("");
+              }
+            }}
+            className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition-colors mx-auto inline-flex items-center justify-center gap-2 font-medium"
+          >
+            <ArrowRight size={18} className="rotate-180" />
+            Ganti Akun & Mulai Ulang
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="identity-panel">
