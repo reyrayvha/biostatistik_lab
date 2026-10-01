@@ -62,8 +62,17 @@ export default function AppShell() {
     <div className="app-shell">
       {/* Header */}
       <header className="app-header">
-        <div className="app-header-inner">
-          <div className="app-brand pl-4">
+        <div className="app-header-inner gap-2 md:gap-4 px-3 md:px-6">
+          {identity && (
+            <button 
+              className="md:hidden p-1.5 -ml-1 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0"
+              onClick={() => setIsNavOpen(!isNavOpen)}
+              aria-label="Toggle Navigation"
+            >
+              {isNavOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          )}
+          <div className="app-brand flex-1">
             <div className="flex flex-row items-center gap-1 md:gap-1.5 whitespace-nowrap text-lg md:text-xl font-black">
               <span className="brand-text-white">SMART-MATH</span>
               <span className="brand-text-blue">MEDICS</span>
@@ -100,17 +109,6 @@ export default function AppShell() {
             className="mobile-nav-overlay" 
             onClick={() => setIsNavOpen(false)}
           />
-        )}
-
-        {/* Mobile Floating Button */}
-        {identity && (
-          <button 
-            className="mobile-nav-toggle"
-            onClick={() => setIsNavOpen(!isNavOpen)}
-            aria-label="Toggle Navigation"
-          >
-            {isNavOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
         )}
 
         {/* Main content */}

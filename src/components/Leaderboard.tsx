@@ -564,15 +564,17 @@ export default function Leaderboard() {
       {/* Modal Detail Jawaban */}
       {selectedStudent && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Layer Overlay */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setSelectedStudent(null)}
           ></div>
 
-          <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-md flex flex-col max-h-[85vh] overflow-hidden">
-
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-slate-200">
+          {/* Layer Kotak Putih */}
+          <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-md flex flex-col max-h-[85vh] overflow-hidden">
+            
+            {/* Layer Header */}
+            <div className="flex items-center justify-between p-4 border-b border-slate-100 shrink-0">
               <div>
                 <h3 className="text-xl font-bold text-slate-800">Detail Jawaban</h3>
                 <p className="text-sm text-slate-500 mt-1">{selectedStudent.name} • {selectedStudent.nim}</p>
@@ -585,15 +587,15 @@ export default function Leaderboard() {
               </button>
             </div>
 
-            {/* Modal Body */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            {/* Layer Body */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {selectedStudent.quizzes.map((quiz, qIdx) => (
                 <DetailAccordion key={qIdx} quiz={quiz} />
               ))}
             </div>
 
-            {/* Modal Footer */}
-            <div className="p-4 border-t border-slate-100 bg-white flex justify-end">
+            {/* Layer Footer */}
+            <div className="flex justify-end p-4 border-t border-slate-100 shrink-0 bg-white">
               <button
                 onClick={() => setSelectedStudent(null)}
                 className="w-full md:w-auto px-6 py-2.5 bg-slate-100 text-slate-800 rounded-lg hover:bg-slate-200 transition-colors font-medium"

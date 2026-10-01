@@ -184,7 +184,7 @@ export default function Quiz5Summary() {
       {/* Eksplorasi Interaktif */}
       <div className="mt-8 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
         <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex items-center gap-3">
-          <span className="text-lg">ðŸ§ª</span>
+          <span className="text-lg">🧪</span>
           <span className="text-sm font-bold tracking-wider text-blue-600 uppercase font-mono">
             Eksplorasi Interaktif
           </span>
@@ -250,31 +250,31 @@ export default function Quiz5Summary() {
           </div>
 
           {/* Metrics */}
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-4 gap-2">
             <div className="bg-slate-50 border border-slate-300 p-3 rounded-lg flex flex-col items-center justify-center text-center">
               <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">PPV</span>
-              <span className="text-xl font-mono font-bold text-blue-600">
+              <span className="text-xs sm:text-sm md:text-lg font-mono font-bold text-blue-600 truncate w-full text-center">
                 {ppv.toFixed(1)}%
               </span>
             </div>
             
             <div className="bg-slate-50 border border-slate-300 p-3 rounded-lg flex flex-col items-center justify-center text-center">
               <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">NPV</span>
-              <span className="text-xl font-mono font-bold text-[#3fb950]">
+              <span className="text-xs sm:text-sm md:text-lg font-mono font-bold text-[#3fb950] truncate w-full text-center">
                 {npv.toFixed(1)}%
               </span>
             </div>
 
             <div className="bg-slate-50 border border-slate-300 p-3 rounded-lg flex flex-col items-center justify-center text-center">
               <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">LR+</span>
-              <span className="text-xl font-mono font-bold text-[#d29922]">
+              <span className="text-xs sm:text-sm md:text-lg font-mono font-bold text-[#d29922] truncate w-full text-center">
                 {lrPlus === Infinity ? "∞" : lrPlus.toFixed(1)}
               </span>
             </div>
 
             <div className="bg-slate-50 border border-slate-300 p-3 rounded-lg flex flex-col items-center justify-center text-center">
               <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">LR-</span>
-              <span className="text-xl font-mono font-bold text-[#f85149]">
+              <span className="text-xs sm:text-sm md:text-lg font-mono font-bold text-[#f85149] truncate w-full text-center">
                 {lrMinus.toFixed(3)}
               </span>
             </div>

@@ -370,29 +370,6 @@ body {
     backdrop-filter: blur(2px);
   }
 
-  .mobile-nav-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 80px;
-    left: 16px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
-    color: white;
-    border: none;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-    z-index: 100;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
-  }
-
-  .mobile-nav-toggle:active {
-    transform: scale(0.95);
-  }
-
   .app-main {
     padding: 80px 12px 32px 12px;
   }

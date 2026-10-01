@@ -187,7 +187,7 @@ export default function Quiz6Summary() {
       {/* Eksplorasi Interaktif */}
       <div className="mt-8 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
         <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex items-center gap-3">
-          <span className="text-lg">ðŸ§ª</span>
+          <span className="text-lg">🧪</span>
           <span className="text-sm font-bold tracking-wider text-blue-600 uppercase font-mono">
             Eksplorasi Interaktif
           </span>
