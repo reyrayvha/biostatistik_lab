@@ -10,7 +10,6 @@ export type Question = {
 export type Quiz = {
     quizId: number;
     title: string;
-    summary: string;
     quote?: string; // Tempat quote/pesan refleksi setelah kuis selesai
     questions: Question[];
 };
@@ -20,7 +19,6 @@ export const quizData: Quiz[] = [
     {
         quizId: 1,
         title: "Statistik Deskriptif",
-        summary: "[DUMMY] Ini adalah area rangkuman materi Statistik Deskriptif. Mahasiswa akan membaca bagian ini untuk recall pengetahuan sebelum menekan tombol mulai kuis.",
         quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
         questions: [
             {
@@ -58,7 +56,6 @@ export const quizData: Quiz[] = [
     {
         quizId: 2,
         title: "Distribusi",
-        summary: "[DUMMY] Area rangkuman materi Distribusi...",
         quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
         questions: [
             {
@@ -96,7 +93,6 @@ export const quizData: Quiz[] = [
     {
         quizId: 3,
         title: "Probabilitas dan Bayes",
-        summary: "[DUMMY] Area rangkuman materi Probabilitas...",
         quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
         questions: [
             {
@@ -134,7 +130,6 @@ export const quizData: Quiz[] = [
     {
         quizId: 4,
         title: "Uji Hipotesis",
-        summary: "[DUMMY] Area rangkuman materi Uji Hipotesis...",
         quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
         questions: [
             {
@@ -172,7 +167,6 @@ export const quizData: Quiz[] = [
     {
         quizId: 5,
         title: "Tes Diagnostik",
-        summary: "[DUMMY] Area rangkuman materi Tes Diagnostik...",
         quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
         questions: [
             {
@@ -210,7 +204,6 @@ export const quizData: Quiz[] = [
     {
         quizId: 6,
         title: "Desain Studi",
-        summary: "[DUMMY] Area rangkuman materi Desain Studi...",
         quote: "Angka yang Anda hitung barusan menyelamatkan satu nyawa. Itulah sebaik-baiknya amal (Itqan).",
         questions: [
             {
@@ -248,7 +241,6 @@ export const quizData: Quiz[] = [
     {
         quizId: 7,
         title: "Ujian Akhir - NUMi",
-        summary: "[DUMMY] Area rangkuman materi persiapan Ujian Akhir (NUMi). Ujian ini mencakup keseluruhan materi dari Kuis 1 hingga 6.",
         quote: "Selamat telah menyelesaikan perjalanan belajar. Jadilah tenaga medis yang berilmu dan berdedikasi tinggi!",
         questions: [
             {

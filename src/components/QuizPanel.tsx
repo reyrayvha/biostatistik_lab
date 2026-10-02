@@ -41,7 +41,6 @@ const MAX_ATTEMPTS = 2;
 function QuizSummaryScreen({
   quizId,
   title,
-  summary,
   attemptsUsed,
   bestResult,
   onStart,
@@ -49,7 +48,6 @@ function QuizSummaryScreen({
 }: {
   quizId: number;
   title: string;
-  summary: string;
   attemptsUsed: number;
   bestResult: { score: number; total: number } | null;
   onStart: () => void;
@@ -112,9 +110,7 @@ function QuizSummaryScreen({
                 <Quiz5Summary />
               ) : quizId === 6 ? (
                 <Quiz6Summary />
-              ) : (
-                <p className="quiz-summary-text">{summary}</p>
-              )}
+              ) : null}
             </div>
           )}
         </div>
@@ -745,7 +741,6 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
       <QuizSummaryScreen
         quizId={quizId}
         title={quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
-        summary={quiz.summary}
         attemptsUsed={attemptsUsed}
         bestResult={bestResult}
         onStart={() => {
