@@ -113,7 +113,7 @@ export default function IdentityForm() {
             id="input-nama"
             type="text"
             className={`form-input ${errors.nama ? "form-input--error" : ""}`}
-            placeholder="Contoh: Dr. Ahmad Ridho"
+            placeholder="Contoh: Yedi Tiar Maulana"
             value={nama}
             onChange={(e) => {
               setNama(e.target.value);
