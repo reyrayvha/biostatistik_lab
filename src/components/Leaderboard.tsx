@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, X, Loader2, Lock, Trash2, RefreshCw, LogOut, ShieldCheck, Eye, EyeOff, ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Trophy, Download, ChevronDown, ChevronUp, CheckCircle2, XCircle, Loader2, Lock, Trash2, RefreshCw, LogOut, ShieldCheck, Eye, EyeOff, PencilLine } from "lucide-react";
 import * as XLSX from "xlsx";
 import { supabase } from "@/src/lib/supabaseClient";
 import { useAppStore } from "@/src/store/useAppStore";
+import { useToastStore } from "@/src/store/useToastStore";
+import { isIdentityFormValid, validateIdentity } from "@/src/lib/validators";
 
 // --- Types ---
 type AnswerDetail = {
@@ -46,6 +48,12 @@ const formatIndonesianDate = (timestamp: number) => {
   }).format(new Date(timestamp));
 };
 
+const formatCompactTimestamp = (timestamp: number) => {
+  const date = new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short' }).format(new Date(timestamp));
+  const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(timestamp));
+  return `${date}, ${time}`;
+};
+
 const QUIZ_COLUMNS = [
   { id: 1, name: "Statistik", keyword: "statistik", total: 5 },
   { id: 2, name: "Distribusi", keyword: "distribusi", total: 5 },
@@ -59,27 +67,95 @@ const QUIZ_COLUMNS = [
 export default function Leaderboard() {
   const identity = useAppStore((s) => s.identity);
   const [selectedStudent, setSelectedStudent] = useState<StudentRecord | null>(null);
+  const [editingStudent, setEditingStudent] = useState<StudentRecord | null>(null);
+  const [deletingStudentId, setDeletingStudentId] = useState<string | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [data, setData] = useState<StudentRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const tableScrollRef = useRef<HTMLDivElement>(null);
+  const isAdminMode = useAppStore((s) => s.isAdminMode);
+  const clearAdminMode = useAppStore((s) => s.clearAdminMode);
+  const addToast = useToastStore((s) => s.addToast);
 
-  const scrollTable = (direction: 'left' | 'right') => {
-    if (tableScrollRef.current) {
-      const scrollAmount = direction === 'left' ? -350 : 350;
-      tableScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  const handleViewStudent = (student: StudentRecord) => setSelectedStudent(student);
+
+  const handleEditStudent = (student: StudentRecord) => setEditingStudent(student);
+
+  const handleDeleteStudent = async () => {
+    if (!deletingStudentId) return;
+
+    const client = supabase;
+    if (!client) {
+      addToast("Konfigurasi Supabase belum tersedia.", "error");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { error } = await client.from("students").delete().eq("id", deletingStudentId);
+      if (error) throw error;
+
+      addToast("Data mahasiswa berhasil dihapus.", "success");
+      setDeletingStudentId(null);
+      setIsConfirmOpen(false);
+      await fetchLeaderboard();
+    } catch (error) {
+      console.error("Error deleting student:", error);
+      addToast("Gagal menghapus data mahasiswa.", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Admin Mode State
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [showAdminModal, setShowAdminModal] = useState(false);
-  const [adminPassword, setAdminPassword] = useState("");
-  const [adminError, setAdminError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const handleSaveEditedStudent = async (
+    studentId: string,
+    name: string,
+    nim: string,
+    angkatan: string,
+  ) => {
+    const validationErrors = validateIdentity(name, nim, angkatan);
+    if (validationErrors.length > 0) {
+      const errorMap = Object.fromEntries(
+        validationErrors.map((error) => [error.field, error.message]),
+      );
+      addToast(Object.values(errorMap)[0] || "Mohon periksa kembali data mahasiswa.", "warning");
+      return;
+    }
+
+    const client = supabase;
+    if (!client) {
+      addToast("Konfigurasi Supabase belum tersedia.", "error");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { error } = await client
+        .from("students")
+        .update({ name: name.trim(), nim: nim.trim(), cohort: angkatan.trim() })
+        .eq("id", studentId);
+
+      if (error) throw error;
+
+      addToast("Data mahasiswa berhasil diperbarui.", "success");
+      setEditingStudent(null);
+      await fetchLeaderboard();
+    } catch (error) {
+      console.error("Error updating student:", error);
+      addToast("Gagal memperbarui data mahasiswa.", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchLeaderboard = async () => {
     try {
       setLoading(true);
+
+      if (!supabase) {
+        setData([]);
+        return;
+      }
+
       let query = supabase
         .from("quiz_attempts")
         .select(`
@@ -96,10 +172,6 @@ export default function Leaderboard() {
         `)
         .order("total_score", { ascending: false })
         .order("completion_time", { ascending: true });
-
-      // Fetch all students for the public global leaderboard
-      // No filter by nim here
-
 
       const { data: attempts, error } = await query;
 
@@ -127,6 +199,7 @@ export default function Leaderboard() {
       }
     } catch (error: any) {
       console.error("Error fetching leaderboard:", error.message || error);
+      setData([]);
     } finally {
       setLoading(false);
     }
@@ -135,67 +208,47 @@ export default function Leaderboard() {
   useEffect(() => {
     fetchLeaderboard();
 
-    // Supabase Realtime (Hanya bekerja jika fitur Realtime diaktifkan di tabel quiz_attempts)
-    const channel = supabase
+    const client = supabase;
+    if (!client) {
+      return;
+    }
+
+    const channel = client
       .channel('public:quiz_attempts')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'quiz_attempts' }, (payload) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'quiz_attempts' }, () => {
         fetchLeaderboard();
       })
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      client.removeChannel(channel);
     };
-  }, [isAdmin]);
-
-  const handleAdminSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('/api/admin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: adminPassword }),
-      });
-      const data = await response.json();
-      
-      if (data.success) {
-        setIsAdmin(true);
-        setShowAdminModal(false);
-        setAdminPassword("");
-        setAdminError("");
-        setShowPassword(false);
-      } else {
-        setAdminError("PIN salah!");
-      }
-    } catch (err) {
-      setAdminError("Gagal menghubungi server");
-    }
-  };
-
-  const handleAdminLogout = () => {
-    setIsAdmin(false);
-    setAdminPassword("");
-    setAdminError("");
-  };
+  }, [isAdminMode]);
 
   const handleDeleteAll = async () => {
     if (!confirm("Apakah Anda yakin ingin menghapus SEMUA data mahasiswa dan nilai kuis? Tindakan ini tidak dapat dibatalkan!")) {
       return;
     }
 
+    const client = supabase;
+    if (!client) {
+      addToast("Konfigurasi Supabase belum tersedia. Tambahkan NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY untuk mengaktifkan operasi admin.", "error");
+      return;
+    }
+
     try {
       setLoading(true);
-      const { error } = await supabase
+      const { error } = await client
         .from('students')
         .delete()
         .neq('id', '00000000-0000-0000-0000-000000000000');
 
       if (error) throw error;
-      alert("Semua data berhasil dihapus.");
+      addToast("Semua data berhasil dihapus.", "success");
       fetchLeaderboard();
     } catch (error) {
       console.error("Error deleting data:", error);
-      alert("Gagal menghapus data.");
+      addToast("Gagal menghapus data.", "error");
     } finally {
       setLoading(false);
     }
@@ -261,14 +314,14 @@ export default function Leaderboard() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-3">
-            <Trophy className="text-blue-600" size={32} />
+            <Trophy className="text-blue-600 dark:text-blue-400" size={32} />
             Papan Skor
           </h1>
 
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <button
               onClick={fetchLeaderboard}
-              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition-all font-medium text-sm shadow-sm"
+              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-medium text-sm shadow-sm"
               title="Refresh Papan Skor"
               disabled={loading}
             >
@@ -276,55 +329,46 @@ export default function Leaderboard() {
               <span className="hidden sm:inline">Refresh</span>
             </button>
 
-            {isAdmin ? (
+            {isAdminMode ? (
               <>
                 <button
                   onClick={handleDeleteAll}
-                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-red-50 border border-red-200 rounded-lg text-rose-600 hover:bg-red-100 transition-colors font-medium text-sm shadow-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-rose-600 dark:text-rose-300 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors font-medium text-sm shadow-sm"
                 >
                   <Trash2 size={16} />
                   <span className="hidden sm:inline">Hapus Semua Data</span>
                 </button>
                 <button
                   onClick={handleExportExcel}
-                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 hover:bg-emerald-100 transition-colors font-medium text-sm shadow-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 rounded-lg text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors font-medium text-sm shadow-sm"
                 >
                   <Download size={16} />
                   <span className="hidden sm:inline">Export to Excel</span>
                 </button>
                 <button
-                  onClick={handleAdminLogout}
-                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-700 hover:text-rose-600 hover:bg-rose-50 transition-all font-medium text-sm shadow-sm"
+                  onClick={clearAdminMode}
+                  className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all font-medium text-sm shadow-sm"
                   title="Keluar Mode Dosen"
                 >
                   <LogOut size={16} className="text-slate-500" />
                   <span>Logout Dosen</span>
                 </button>
               </>
-            ) : (
-              <button
-                onClick={() => setShowAdminModal(true)}
-                className="p-2 sm:px-2.5 sm:py-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center"
-                title="Akses Dosen"
-                aria-label="Akses Dosen"
-              >
-                <Lock size={16} />
-              </button>
-            )}
+            ) : null}
           </div>
         </div>
 
         {/* Admin Card */}
-        {isAdmin && (
-          <div className="bg-white border border-indigo-100 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 shadow-sm bg-gradient-to-r from-indigo-50/80 via-white to-blue-50/60">
+        {isAdminMode && (
+          <div className="bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 shadow-sm bg-gradient-to-r from-indigo-50/80 via-white to-blue-50/60 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200 shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200 dark:shadow-none shrink-0">
                 <ShieldCheck size={24} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-base font-bold text-slate-800">Admin</h2>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 border border-indigo-200">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-800">
                     Akses Penuh
                   </span>
                 </div>
@@ -339,37 +383,36 @@ export default function Leaderboard() {
         {/* Mobile View (Cards) */}
         <div className="block md:hidden flex flex-col gap-4 w-full">
           {loading ? (
-            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-3 text-slate-500">
+              <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col items-center justify-center gap-3 text-slate-500">
               <Loader2 className="animate-spin text-blue-600" size={32} />
               <p className="font-medium">Memuat data papan skor...</p>
             </div>
           ) : data.length === 0 ? (
-            <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm text-center text-slate-500 font-medium">
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center text-slate-500 font-medium">
               Belum ada data nilai kuis mahasiswa.
             </div>
           ) : (
             data.map((student, idx) => (
-              <div key={student.id} className="bg-white p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+              <div key={student.id} className="bg-white dark:bg-slate-900 p-3 md:p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
                 
                 {/* Header Card */}
                 <div className="flex flex-col pr-16 border-b border-slate-100 pb-2 mb-2">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-[10px] md:text-xs">Rank #{idx + 1}</span>
-                    <span className="text-[10px] md:text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">{student.angkatan}</span>
+                    <span className="bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-200 font-bold px-2 py-0.5 rounded text-[10px] md:text-xs">Rank #{idx + 1}</span>
+                    <span className="text-[10px] md:text-xs font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">{student.angkatan}</span>
                   </div>
                   <span className="font-bold text-slate-800 text-base md:text-lg leading-tight break-words">{student.name}</span>
                   <span className="text-xs md:text-sm text-slate-500">{student.nim}</span>
                 </div>
 
                 {/* Highlight Card */}
-                <div className="flex justify-between items-center bg-blue-50/40 p-2 md:p-3 rounded-lg border border-blue-50/50">
+                <div className="flex justify-between items-center bg-blue-50/40 dark:bg-blue-950/30 p-2 md:p-3 rounded-lg border border-blue-50/50 dark:border-blue-900/60">
                   <div className="flex flex-col">
                     <span className="text-[10px] md:text-xs text-blue-600 font-semibold uppercase tracking-wider mb-0.5">Skor NUMi</span>
                     <span className="text-xl md:text-2xl font-bold text-blue-600 leading-none">{student.numiScore}</span>
                   </div>
-                  <div className="flex flex-col items-end text-[10px] md:text-xs text-slate-500">
-                    <span className="font-medium">{formatIndonesianDate(student.finishTimestamp)}</span>
-                    <span>{student.finishTime}</span>
+                  <div className="flex flex-col items-end text-xs text-slate-500 dark:text-slate-400">
+                    <span className="mt-1 whitespace-nowrap">{formatCompactTimestamp(student.finishTimestamp)}</span>
                   </div>
                 </div>
 
@@ -391,14 +434,40 @@ export default function Leaderboard() {
                 </div>
 
                 {/* Footer Card: Action */}
-                {(isAdmin || student.nim === identity?.nim) && (
+                {(isAdminMode || student.nim === identity?.nim) && (
                   <div className="pt-3 mt-3 border-t border-slate-100">
-                    <button
-                      onClick={() => setSelectedStudent(student)}
-                      className="w-full py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-100 rounded-lg text-[13px] md:text-sm font-semibold transition-colors"
-                    >
-                      Lihat Detail Jawaban
-                    </button>
+                    {isAdminMode ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleViewStudent(student)}
+                          className="flex-1 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/40 px-2 py-2 text-[12px] font-semibold text-blue-700 dark:text-blue-200 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/50"
+                        >
+                          Lihat
+                        </button>
+                        <button
+                          onClick={() => handleEditStudent(student)}
+                          className="flex-1 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 px-2 py-2 text-[12px] font-semibold text-amber-700 dark:text-amber-200 transition-colors hover:bg-amber-100 dark:hover:bg-amber-900/50"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => {
+                            setDeletingStudentId(student.id);
+                            setIsConfirmOpen(true);
+                          }}
+                          className="flex-1 rounded-lg border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 px-2 py-2 text-[12px] font-semibold text-rose-700 dark:text-rose-200 transition-colors hover:bg-rose-100 dark:hover:bg-rose-900/50"
+                        >
+                          Hapus
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleViewStudent(student)}
+                        className="w-full py-2 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-200 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-100 dark:border-blue-800 rounded-lg text-[13px] md:text-sm font-semibold transition-colors"
+                      >
+                        Lihat Detail Jawaban
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -407,56 +476,32 @@ export default function Leaderboard() {
         </div>
 
         {/* Desktop Table View (Hidden on Mobile) */}
-        <div className="hidden md:block bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden shadow-md">
-          {/* Quick Scroll Bar & Table Header Info */}
-          <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200 text-xs">
-            <span className="text-slate-600 font-medium">
-              Papan Peringkat Kuis Mahasiswa ({data.length} Mahasiswa)
-            </span>
-            <div className="flex items-center gap-2">
-              <span className="text-slate-400 text-[11px] hidden sm:inline">Geser kolom kuis:</span>
-              <button
-                type="button"
-                onClick={() => scrollTable('left')}
-                className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-medium transition-colors shadow-xs"
-                title="Geser ke Kiri"
-              >
-                <ChevronLeft size={14} />
-                <span>Kiri</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollTable('right')}
-                className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-medium transition-colors shadow-xs"
-                title="Geser ke Kanan"
-              >
-                <span>Kanan</span>
-                <ChevronRight size={14} />
-              </button>
-            </div>
-          </div>
-
-          <div
-            ref={tableScrollRef}
-            className="overflow-auto max-h-[calc(100vh-250px)]"
-          >
-            <table className="w-full text-left whitespace-nowrap border-collapse">
-              <thead className="sticky top-0 z-20 bg-slate-100 shadow-xs">
-                <tr className="border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
-                  <th className="px-3 py-3 font-semibold text-center w-14 sticky left-0 bg-slate-100 z-30 shadow-[1px_0_0_0_#e2e8f0]">Rank</th>
-                  <th className="px-4 py-3 font-semibold min-w-[170px] sticky left-14 bg-slate-100 z-30 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">Mahasiswa</th>
-                  <th className="px-3 py-3 font-semibold text-center min-w-[90px]">Skor NUMi</th>
-                  <th className="px-2.5 py-3 font-semibold text-center min-w-[80px]">Statistik</th>
-                  <th className="px-2.5 py-3 font-semibold text-center min-w-[80px]">Distribusi</th>
-                  <th className="px-2.5 py-3 font-semibold text-center min-w-[80px]">Probabilitas</th>
-                  <th className="px-2.5 py-3 font-semibold text-center min-w-[85px]">Uji Hipotesis</th>
-                  <th className="px-2.5 py-3 font-semibold text-center min-w-[80px]">Diagnostik</th>
-                  <th className="px-2.5 py-3 font-semibold text-center min-w-[85px]">Desain Studi</th>
-                  <th className="px-2.5 py-3 font-semibold text-center min-w-[85px]">Ujian Akhir</th>
-                  <th className="px-4 py-3 font-semibold text-center sticky right-0 bg-slate-100 border-l border-slate-200 z-30 shadow-[-1px_0_0_0_#e2e8f0]">Aksi</th>
+        <div className="hidden md:block w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
+          <div className="max-h-[calc(100vh-250px)] w-full overflow-x-hidden overflow-y-auto">
+            <table className="w-full table-fixed border-collapse text-left text-xs">
+              <colgroup>
+                <col className="w-[5%]" />
+                <col className="w-[17%]" />
+                <col className="w-[8%]" />
+                {QUIZ_COLUMNS.map((col) => <col key={col.id} className="w-[8%]" />)}
+                <col className="w-[14%]" />
+              </colgroup>
+              <thead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-800 shadow-xs">
+                <tr className="border-b border-slate-200/50 text-slate-600 text-[10px] uppercase tracking-wide dark:border-white/10 sm:text-xs">
+                  <th className="break-words px-1 py-2 text-center font-semibold">Rank</th>
+                  <th className="break-words border-r border-slate-200 px-2 py-2 font-semibold dark:border-slate-700">Mahasiswa</th>
+                  <th className="break-words px-1 py-2 text-center font-semibold">Skor NUMi</th>
+                  <th className="break-words px-1 py-2 text-center font-semibold">Statistik</th>
+                  <th className="break-words px-1 py-2 text-center font-semibold">Distribusi</th>
+                  <th className="break-words px-1 py-2 text-center font-semibold">Probabilitas</th>
+                  <th className="break-words px-1 py-2 text-center font-semibold">Uji Hipotesis</th>
+                  <th className="break-words px-1 py-2 text-center font-semibold">Diagnostik</th>
+                  <th className="break-words px-1 py-2 text-center font-semibold">Desain Studi</th>
+                  <th className="break-words px-1 py-2 text-center font-semibold">Ujian Akhir</th>
+                  <th className="break-words border-l border-slate-200 px-1 py-2 text-center font-semibold dark:border-slate-700">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-slate-200/50 dark:divide-white/10">
                 {loading ? (
                   <tr>
                     <td colSpan={11} className="px-6 py-12 text-center">
@@ -474,21 +519,21 @@ export default function Leaderboard() {
                   </tr>
                 ) : (
                   data.map((student, idx) => (
-                    <tr key={student.id} className="hover:bg-slate-50 transition-colors group">
+                    <tr key={student.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors group">
                       {/* Rank */}
-                      <td className="px-3 py-2.5 text-center sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 shadow-[1px_0_0_0_#e2e8f0]">
+                      <td className="px-1 py-2 text-center">
                         <div className="flex justify-center items-center">
                           {renderRankIcon(idx + 1)}
                         </div>
                       </td>
 
                       {/* Mahasiswa */}
-                      <td className="px-4 py-2.5 sticky left-14 bg-white group-hover:bg-slate-50 transition-colors z-10 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">
-                        <div className="flex flex-col whitespace-normal max-w-[200px] min-w-[170px]">
-                          <span className="font-bold text-slate-800 text-base leading-tight break-words mb-1">{student.name}</span>
+                      <td className="break-words border-r border-slate-200 px-2 py-2 dark:border-slate-700">
+                        <div className="flex min-w-0 flex-col">
+                          <span className="mb-1 break-words text-sm font-bold leading-tight text-slate-800">{student.name}</span>
                           <div className="flex items-center gap-1.5 mt-0.5">
                             <span className="text-sm text-slate-500">{student.nim}</span>
-                            <span className="px-1.5 py-0.2 rounded text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                            <span className="px-1.5 py-0.2 rounded text-xs font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-200 border border-blue-200 dark:border-blue-800">
                               {student.angkatan}
                             </span>
                           </div>
@@ -496,11 +541,10 @@ export default function Leaderboard() {
                       </td>
 
                       {/* Skor NUMi */}
-                      <td className="px-3 py-2.5 text-center">
+                      <td className="px-1 py-2 text-center">
                         <div className="flex flex-col items-center">
-                          <span className="text-2xl font-black text-blue-600 drop-shadow-[0_0_10px_rgba(99,102,241,0.25)]">{student.numiScore}</span>
-                          <span className="text-xs text-slate-400 mt-0.5">{formatIndonesianDate(student.finishTimestamp)}</span>
-                          <span className="text-xs text-slate-400">{student.finishTime}</span>
+                          <span className="text-lg font-black text-blue-600">{student.numiScore}</span>
+                          <span className="mt-1 whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">{formatCompactTimestamp(student.finishTimestamp)}</span>
                         </div>
                       </td>
 
@@ -511,23 +555,23 @@ export default function Leaderboard() {
                         );
 
                         return (
-                          <td key={col.id} className="px-2.5 py-2.5 text-center">
+                          <td key={col.id} className="px-1 py-2 text-center">
                             <div className="flex flex-col items-center">
                               {quiz ? (
                                 <>
-                                  <span className="text-base font-bold text-slate-800">
+                                  <span className="text-sm font-bold text-slate-800">
                                     {quiz.correct}/{quiz.total}
                                   </span>
-                                  <span className="text-xs text-slate-500 mt-0.5">
+                                  <span className="mt-0.5 text-[10px] leading-tight text-slate-500">
                                     Percobaan: {quiz.attempts}x
                                   </span>
                                 </>
                               ) : (
                                 <>
-                                  <span className="text-base font-semibold text-slate-400">
+                                  <span className="text-sm font-semibold text-slate-400">
                                     0/{col.total}
                                   </span>
-                                  <span className="text-xs text-slate-400 mt-0.5">
+                                  <span className="mt-0.5 text-[10px] leading-tight text-slate-400">
                                     Percobaan: 0x
                                   </span>
                                 </>
@@ -538,16 +582,46 @@ export default function Leaderboard() {
                       })}
 
                       {/* Aksi */}
-                      <td className="px-4 py-2.5 text-center sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10 shadow-[-1px_0_0_0_#e2e8f0]">
-                        {isAdmin || student.nim === identity?.nim ? (
+                      <td className="border-l border-slate-200 px-1 py-2 text-center dark:border-slate-700">
+                        {isAdminMode ? (
+                          <div className="flex flex-wrap items-center justify-center gap-1">
+                            <button
+                              onClick={() => handleViewStudent(student)}
+                              className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/40 p-2 text-blue-700 dark:text-blue-200 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/50"
+                              title="Lihat detail"
+                              aria-label="Lihat detail"
+                            >
+                              <Eye size={14} />
+                            </button>
+                            <button
+                              onClick={() => handleEditStudent(student)}
+                              className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 p-2 text-amber-700 dark:text-amber-200 transition-colors hover:bg-amber-100 dark:hover:bg-amber-900/50"
+                              title="Edit data"
+                              aria-label="Edit data"
+                            >
+                              <PencilLine size={14} />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setDeletingStudentId(student.id);
+                                setIsConfirmOpen(true);
+                              }}
+                              className="rounded-lg border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 p-2 text-rose-700 dark:text-rose-200 transition-colors hover:bg-rose-100 dark:hover:bg-rose-900/50"
+                              title="Hapus data"
+                              aria-label="Hapus data"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        ) : student.nim === identity?.nim ? (
                           <button
-                            onClick={() => setSelectedStudent(student)}
+                            onClick={() => handleViewStudent(student)}
                             className="px-3.5 py-1.5 bg-blue-600 border border-blue-600 rounded-lg text-xs font-medium text-white hover:bg-blue-700 transition-all shadow-xs"
                           >
                             Detail Jawaban
                           </button>
                         ) : (
-                          <span className="text-xs text-slate-500 italic px-2 py-1 bg-slate-50 shadow-xs rounded-md border border-slate-200">
+                            <span className="text-xs text-slate-500 italic px-2 py-1 bg-slate-50 dark:bg-slate-800 shadow-xs rounded-md border border-slate-200 dark:border-slate-700">
                             Privasi Terjaga
                           </span>
                         )}
@@ -571,7 +645,7 @@ export default function Leaderboard() {
           ></div>
 
           {/* Layer Kotak Putih */}
-          <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-md flex flex-col max-h-[85vh] overflow-hidden">
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-md flex flex-col max-h-[85vh] overflow-hidden">
             
             {/* Layer Header */}
             <div className="flex items-center justify-between p-4 border-b border-slate-100 shrink-0">
@@ -579,12 +653,6 @@ export default function Leaderboard() {
                 <h3 className="text-xl font-bold text-slate-800">Detail Jawaban</h3>
                 <p className="text-sm text-slate-500 mt-1">{selectedStudent.name} • {selectedStudent.nim}</p>
               </div>
-              <button
-                onClick={() => setSelectedStudent(null)}
-                className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
-              >
-                <X size={24} />
-              </button>
             </div>
 
             {/* Layer Body */}
@@ -595,10 +663,10 @@ export default function Leaderboard() {
             </div>
 
             {/* Layer Footer */}
-            <div className="flex justify-end p-4 border-t border-slate-100 shrink-0 bg-white">
+            <div className="flex justify-end p-4 border-t border-slate-100 dark:border-slate-700 shrink-0 bg-white dark:bg-slate-900">
               <button
                 onClick={() => setSelectedStudent(null)}
-                className="w-full md:w-auto px-6 py-2.5 bg-slate-100 text-slate-800 rounded-lg hover:bg-slate-200 transition-colors font-medium"
+                className="w-full md:w-auto px-6 py-2.5 rounded-lg border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors font-medium dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
               >
                 Tutup
               </button>
@@ -608,52 +676,244 @@ export default function Leaderboard() {
         </div>
       )}
 
-      {/* Admin Login Modal */}
-      {showAdminModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAdminModal(false)}></div>
-          <div className="relative w-full max-w-sm bg-white border border-slate-200 rounded-2xl shadow-md p-6">
-            <h3 className="text-xl font-bold text-slate-800 mb-4">Mode Dosen</h3>
-            <form onSubmit={handleAdminSubmit}>
-              <div className="mb-4">
-                <label className="block text-sm text-slate-500 mb-2">Masukkan PIN / Password</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-4 pr-11 py-2 text-slate-800 focus:outline-none focus:border-indigo-500"
-                    value={adminPassword}
-                    onChange={(e) => setAdminPassword(e.target.value)}
-                    autoFocus
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 transition-colors"
-                    title={showPassword ? "Sembunyikan password" : "Lihat password"}
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                {adminError && <p className="text-rose-600 text-sm mt-2">{adminError}</p>}
-              </div>
-              <div className="flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowAdminModal(false);
-                    setShowPassword(false);
-                  }}
-                  className="px-4 py-2 text-slate-500 hover:text-slate-800"
-                >
-                  Batal
-                </button>
-                <button type="submit" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition-colors">Masuk</button>
-              </div>
-            </form>
-          </div>
-        </div>
+      {editingStudent && (
+        <EditStudentModal
+          isOpen={Boolean(editingStudent)}
+          student={editingStudent}
+          onClose={() => setEditingStudent(null)}
+          onSave={handleSaveEditedStudent}
+        />
       )}
 
+      {isConfirmOpen && deletingStudentId && (
+        <ConfirmDeleteStudentDialog
+          isOpen={isConfirmOpen}
+          studentName={data.find((student) => student.id === deletingStudentId)?.name || "mahasiswa"}
+          onClose={() => {
+            setIsConfirmOpen(false);
+            setDeletingStudentId(null);
+          }}
+          onConfirm={async () => {
+            setIsConfirmOpen(false);
+            await handleDeleteStudent();
+          }}
+        />
+      )}
+
+    </div>
+  );
+}
+
+function EditStudentModal({
+  isOpen,
+  student,
+  onClose,
+  onSave,
+}: {
+  isOpen: boolean;
+  student: StudentRecord;
+  onClose: () => void;
+  onSave: (studentId: string, name: string, nim: string, angkatan: string) => Promise<void>;
+}) {
+  const [name, setName] = useState(student.name);
+  const [nim, setNim] = useState(student.nim);
+  const [angkatan, setAngkatan] = useState(student.angkatan);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const applyFieldError = (field: "nama" | "nim" | "angkatan", value: string) => {
+    const validationErrors = validateIdentity(
+      field === "nama" ? value : name,
+      field === "nim" ? value : nim,
+      field === "angkatan" ? value : angkatan,
+    );
+
+    const error = validationErrors.find((item) => item.field === field);
+    setErrors((previous) => {
+      const next = { ...previous };
+      if (error) {
+        next[field] = error.message;
+      } else {
+        delete next[field];
+      }
+      return next;
+    });
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const validationErrors = validateIdentity(name, nim, angkatan);
+    if (validationErrors.length > 0) {
+      const nextErrors = Object.fromEntries(
+        validationErrors.map((error) => [error.field, error.message]),
+      );
+      setErrors(nextErrors);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await onSave(student.id, name, nim, angkatan);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/40 p-4">
+      <div className="w-full max-w-lg rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 shadow-2xl">
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">Edit Mahasiswa</p>
+            <h2 className="text-xl font-bold text-slate-800">Edit Data Mahasiswa</h2>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="student-edit-name" className="mb-1.5 block text-sm font-medium text-slate-700">Nama Lengkap</label>
+            <input
+              id="student-edit-name"
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value);
+                if (errors.nama) {
+                  const next = { ...errors };
+                  delete next.nama;
+                  setErrors(next);
+                }
+              }}
+              onBlur={(event) => applyFieldError("nama", event.target.value)}
+              className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-700 dark:text-slate-100 outline-none transition focus:ring-2 ${errors.nama ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30 focus:ring-red-200" : "border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-100"}`}
+              disabled={isLoading}
+            />
+            {errors.nama && <p className="mt-1 text-sm text-red-600 dark:text-red-400">⚠ {errors.nama}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="student-edit-nim" className="mb-1.5 block text-sm font-medium text-slate-700">NIM</label>
+            <input
+              id="student-edit-nim"
+              value={nim}
+              maxLength={10}
+              inputMode="numeric"
+              onChange={(event) => {
+                const nextValue = event.target.value.replace(/\D/g, "");
+                setNim(nextValue);
+                if (errors.nim) {
+                  const next = { ...errors };
+                  delete next.nim;
+                  setErrors(next);
+                }
+              }}
+              onBlur={(event) => applyFieldError("nim", event.target.value)}
+              className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-700 dark:text-slate-100 outline-none transition focus:ring-2 ${errors.nim ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30 focus:ring-red-200" : "border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-100"}`}
+              disabled={isLoading}
+            />
+            {errors.nim && <p className="mt-1 text-sm text-red-600 dark:text-red-400">⚠ {errors.nim}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="student-edit-angkatan" className="mb-1.5 block text-sm font-medium text-slate-700">Angkatan</label>
+            <select
+              id="student-edit-angkatan"
+              value={angkatan}
+              onChange={(event) => {
+                setAngkatan(event.target.value);
+                if (errors.angkatan) {
+                  const next = { ...errors };
+                  delete next.angkatan;
+                  setErrors(next);
+                }
+              }}
+              onBlur={(event) => applyFieldError("angkatan", event.target.value)}
+              className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-700 dark:text-slate-100 outline-none transition focus:ring-2 ${errors.angkatan ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30 focus:ring-red-200" : "border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-100"}`}
+              disabled={isLoading}
+            >
+              {[
+                "2022",
+                "2023",
+                "2024",
+                "2025",
+              ].map((year) => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+            {errors.angkatan && <p className="mt-1 text-sm text-red-600 dark:text-red-400">⚠ {errors.angkatan}</p>}
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-xl border border-slate-200 bg-slate-100 px-4 py-2.5 font-medium text-slate-700 transition-colors hover:bg-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
+              disabled={isLoading}
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              className="flex-1 rounded-xl bg-blue-600 px-4 py-2.5 font-medium text-white transition-colors hover:bg-blue-700"
+              disabled={isLoading || !isIdentityFormValid(name, nim, angkatan)}
+            >
+              {isLoading ? "Menyimpan..." : "Simpan"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function ConfirmDeleteStudentDialog({
+  isOpen,
+  studentName,
+  onClose,
+  onConfirm,
+}: {
+  isOpen: boolean;
+  studentName: string;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/40 p-4">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 shadow-2xl">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-100 dark:bg-rose-950/50 text-rose-600 dark:text-rose-200">
+            <Trash2 size={20} />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-slate-800">Hapus Data Mahasiswa?</h2>
+            <p className="text-sm text-slate-500">Tindakan ini tidak dapat dibatalkan.</p>
+          </div>
+        </div>
+
+        <p className="mb-5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/60 px-3 py-2 text-sm text-rose-700 dark:text-rose-200">
+          Anda akan menghapus data <strong>{studentName}</strong> beserta semua riwayat kuisnya.
+        </p>
+
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 rounded-xl border border-slate-200 bg-slate-100 px-4 py-2.5 font-medium text-slate-700 transition-colors hover:bg-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="flex-1 rounded-xl bg-rose-600 px-4 py-2.5 font-medium text-white transition-colors hover:bg-rose-700"
+          >
+            Hapus
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -663,18 +923,18 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+    <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-slate-50/50 dark:bg-slate-900/50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex flex-row items-center justify-between px-3 py-2 md:p-4 hover:bg-white shadow-sm transition-colors gap-2"
+        className="w-full flex flex-row items-center justify-between px-3 py-2 md:p-4 hover:bg-white dark:hover:bg-slate-800 shadow-sm transition-colors gap-2"
       >
         <span className="font-semibold text-slate-800 text-sm md:text-base text-left leading-tight flex-1">
           {quiz.title}
         </span>
         <div className="flex flex-row items-center gap-2 shrink-0">
           <span className={`text-[10px] md:text-xs px-2 py-0.5 rounded-md font-medium whitespace-nowrap ${quiz.correct === quiz.total
-            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-            : "bg-blue-50 text-blue-600 border border-blue-200"
+            ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800"
+            : "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-200 border border-blue-200 dark:border-blue-800"
             }`}>
             Skor: {quiz.correct}/{quiz.total}
           </span>
@@ -683,13 +943,13 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
       </button>
 
       {isOpen && (
-        <div className="p-3 md:p-4 border-t border-slate-200 bg-white/30">
+        <div className="p-3 md:p-4 border-t border-slate-200 dark:border-slate-700 bg-white/30 dark:bg-slate-900/30">
           <div className="flex flex-col gap-2 mt-1">
             {quiz.answers.map((ans, idx) => (
-              <div key={idx} className="bg-slate-50/50 border border-slate-200 rounded-lg p-3 md:p-4">
+              <div key={idx} className="bg-slate-50/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg p-3 md:p-4">
                 {/* Header Soal */}
                 <div className="flex items-start gap-2 md:gap-3">
-                  <span className="shrink-0 px-2 md:px-2.5 py-0.5 md:py-1 rounded-md bg-white text-[10px] md:text-xs font-bold text-slate-500 border border-slate-200">
+                  <span className="shrink-0 px-2 md:px-2.5 py-0.5 md:py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] md:text-xs font-bold text-slate-500 border border-slate-200 dark:border-slate-700">
                     {ans.id}
                   </span>
                   <p className="text-slate-800 text-[13px] md:text-sm leading-relaxed mt-0.5">
@@ -700,8 +960,8 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
                 {/* Jawaban Mahasiswa */}
                 <div className="mt-4 pl-12 flex flex-col items-start gap-2">
                   <div className={`inline-flex items-start gap-2.5 px-3 py-2 text-sm font-medium border rounded-md ${ans.isCorrect
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                    : 'bg-rose-50 border-rose-200 text-rose-600'
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-200'
+                    : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-200'
                     }`}>
                     <div className="shrink-0 mt-0.5">
                       {ans.isCorrect ? <CheckCircle2 size={16} /> : <XCircle size={16} />}

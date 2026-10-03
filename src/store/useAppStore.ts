@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -79,9 +79,16 @@ export type QuizState = {
 // ---------------------------------------------------------------------------
 
 type AppState = {
+  // Theme
+  theme: "light" | "dark";
+  setTheme: (theme: "light" | "dark") => void;
+  initializeTheme: () => void;
+
   // Identity
   identity: UserIdentity | null;
   setIdentity: (identity: UserIdentity | null) => void;
+  updateIdentity: (identity: Partial<UserIdentity>) => void;
+  resetAllState: () => void;
 
   // Navigation
   activeTab: TabId;
@@ -89,6 +96,18 @@ type AppState = {
   unlockedIndex: number;
   unlockNext: () => void;
   isTabUnlocked: (tab: TabId) => boolean;
+  isSidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
+  initializeSidebarState: () => void;
+
+  // Admin
+  isAdminMode: boolean;
+  adminName: string | null;
+  adminAuthTimestamp: number | null;
+  setAdminMode: (name: string) => void;
+  clearAdminMode: () => void;
+  isAdmin: () => boolean;
 
   // Quiz
   quizStates: Record<number, QuizState>;
@@ -96,6 +115,7 @@ type AppState = {
   answerQuestion: (quizId: number, questionId: number, answer: string) => void;
   finishQuiz: (quizId: number, score: number, total: number) => void;
   retryQuiz: (quizId: number) => void;
+  hasUnsavedQuizAnswers: (quizId?: number) => boolean;
 
   /** Advance to the next tab and navigate there */
   advanceToNextQuiz: () => void;
@@ -121,6 +141,32 @@ export const DEFAULT_QUIZ_STATE: Readonly<QuizState> = Object.freeze({
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
+  // === Theme ===
+  theme: "light",
+  setTheme: (theme) => {
+    set({ theme });
+
+    if (typeof document !== "undefined") {
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      document.documentElement.style.colorScheme = theme === "dark" ? "dark" : "light";
+    }
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("app_theme", theme);
+    }
+  },
+  initializeTheme: () => {
+    if (typeof window === "undefined") return;
+
+    const savedTheme = window.localStorage.getItem("app_theme");
+    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const nextTheme = savedTheme === "dark" || savedTheme === "light" ? savedTheme : systemPrefersDark ? "dark" : "light";
+
+    set({ theme: nextTheme });
+    document.documentElement.classList.toggle("dark", nextTheme === "dark");
+    document.documentElement.style.colorScheme = nextTheme === "dark" ? "dark" : "light";
+  },
+
   // === Identity ===
   identity: null,
   setIdentity: (identity) => {
@@ -130,7 +176,13 @@ export const useAppStore = create<AppState>()(
         unlockedIndex: 0,
         activeTab: "identitas",
         quizStates: {},
+        isAdminMode: false,
+        adminName: null,
+        adminAuthTimestamp: null,
       });
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem("biostatistik-storage");
+      }
       return;
     }
     const current = get().unlockedIndex;
@@ -139,6 +191,33 @@ export const useAppStore = create<AppState>()(
       unlockedIndex: Math.max(current, 1),
       activeTab: "quiz-1",
     });
+  },
+  updateIdentity: (identity) => {
+    const current = get().identity;
+    if (!current) return;
+
+    set({
+      identity: {
+        ...current,
+        ...identity,
+      },
+    });
+  },
+  resetAllState: () => {
+    set({
+      identity: null,
+      activeTab: "identitas",
+      unlockedIndex: 0,
+      isAdminMode: false,
+      adminName: null,
+      adminAuthTimestamp: null,
+      quizStates: {},
+    });
+
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("biostatistik-storage");
+      window.localStorage.removeItem("sidebar_state");
+    }
   },
 
   // === Navigation ===
@@ -183,6 +262,48 @@ export const useAppStore = create<AppState>()(
     const idx = TAB_ORDER.indexOf(tab);
     return idx <= get().unlockedIndex;
   },
+
+  isSidebarOpen: true,
+  setSidebarOpen: (open) => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("sidebar_state", String(open));
+    }
+    set({ isSidebarOpen: open });
+  },
+  toggleSidebar: () => {
+    set((state) => {
+      const next = !state.isSidebarOpen;
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("sidebar_state", String(next));
+      }
+      return { isSidebarOpen: next };
+    });
+  },
+  initializeSidebarState: () => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem("sidebar_state");
+    const next = stored === null ? window.innerWidth >= 768 : stored === "true";
+    set({ isSidebarOpen: next });
+  },
+
+  isAdminMode: false,
+  adminName: null,
+  adminAuthTimestamp: null,
+  setAdminMode: (name) => {
+    set({
+      isAdminMode: true,
+      adminName: name,
+      adminAuthTimestamp: Date.now(),
+    });
+  },
+  clearAdminMode: () => {
+    set({
+      isAdminMode: false,
+      adminName: null,
+      adminAuthTimestamp: null,
+    });
+  },
+  isAdmin: () => get().isAdminMode,
 
   // === Quiz ===
   quizStates: {},
@@ -259,6 +380,15 @@ export const useAppStore = create<AppState>()(
       },
     });
   },
+  hasUnsavedQuizAnswers: (quizId) => {
+    const states = get().quizStates;
+    if (!quizId) {
+      return Object.values(states).some((state) => state.started && Object.keys(state.currentAnswers).length > 0);
+    }
+
+    const state = states[quizId];
+    return Boolean(state && state.started && Object.keys(state.currentAnswers).length > 0);
+  },
 
   advanceToNextQuiz: () => {
     const { activeTab, unlockedIndex, quizStates } = get();
@@ -300,6 +430,18 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "biostatistik-storage",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        theme: state.theme,
+        identity: state.identity,
+        activeTab: state.activeTab,
+        unlockedIndex: state.unlockedIndex,
+        quizStates: state.quizStates,
+        isSidebarOpen: state.isSidebarOpen,
+        isAdminMode: state.isAdminMode,
+        adminName: state.adminName,
+        adminAuthTimestamp: state.adminAuthTimestamp,
+      }),
     }
   )
 );

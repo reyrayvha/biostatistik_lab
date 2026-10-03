@@ -206,7 +206,7 @@ export default function Quiz1Summary() {
       </div>
 
       {/* 7. Eksplorasi Interaktif */}
-      <div className="bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
+      <div className="interactive-exploration bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
         <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex items-center gap-3">
           <div className="p-2 bg-[#3b82f6]/15 text-blue-600 rounded-lg">
             <BarChart3 size={20} />

@@ -7,6 +7,7 @@ import {
   type TabId,
 } from "@/src/store/useAppStore";
 import { Circle, CircleCheck, Lock, Trophy } from "lucide-react";
+import { useToastStore } from "@/src/store/useToastStore";
 
 // ---------------------------------------------------------------------------
 // Component
@@ -22,13 +23,14 @@ export default function TabNavigation() {
   const isTabUnlocked = useAppStore((s) => s.isTabUnlocked);
   const unlockedIndex = useAppStore((s) => s.unlockedIndex);
   const quizStates = useAppStore((s) => s.quizStates);
+  const addToast = useToastStore((s) => s.addToast);
 
   const isAnyQuizStarted = Object.values(quizStates).some((q) => q.started);
 
   const handleTabClick = (tabId: TabId, unlocked: boolean) => {
     if (!unlocked) return;
     if (isAnyQuizStarted && tabId !== activeTab) {
-      alert("Harap selesaikan kuis yang sedang berlangsung terlebih dahulu!");
+      addToast("Harap selesaikan kuis yang sedang berlangsung terlebih dahulu!", "warning");
       return;
     }
     setActiveTab(tabId);
@@ -40,6 +42,8 @@ export default function TabNavigation() {
     <nav className="tab-navigation" role="tablist" aria-label="Step navigation">
       <div className="tab-nav-inner">
         {TAB_ORDER.map((tabId, idx) => {
+          if (tabId === "identitas") return null;
+
           const unlocked = isTabUnlocked(tabId);
           const isActive = activeTab === tabId;
           const isCompleted = idx < unlockedIndex;

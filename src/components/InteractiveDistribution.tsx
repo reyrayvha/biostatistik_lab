@@ -122,7 +122,7 @@ export default function InteractiveDistribution() {
   const upperBound = mu + z * sigma;
 
   return (
-    <div className="mt-8 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
+    <div className="interactive-exploration mt-8 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
       {/* Header */}
       <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex items-center gap-3">
         <span className="text-lg">🧪</span>
@@ -208,7 +208,7 @@ export default function InteractiveDistribution() {
             {/* Baseline */}
             <line
               x1={PAD} y1={SVG_H - PAD} x2={SVG_W - PAD} y2={SVG_H - PAD}
-              stroke="#e2e8f0" strokeWidth="1"
+              stroke="var(--border-medium)" strokeWidth="1"
             />
 
             {/* Shaded area */}

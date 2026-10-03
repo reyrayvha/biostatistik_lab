@@ -26,6 +26,8 @@ import {
   ChevronUp,
   Loader2,
 } from "lucide-react";
+import { useToastStore } from "@/src/store/useToastStore";
+import { FlashcardButton } from "@/src/components/Flashcard";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -116,33 +118,37 @@ function QuizSummaryScreen({
         </div>
       )}
 
-      <div className="flex gap-5 w-full mt-6">
-        {hasAttemptsLeft ? (
-          <button
-            className={`flex-1 py-3.5 rounded-xl font-medium text-base transition-colors tracking-wide ${attemptsUsed === 0
-              ? "bg-[#2563eb] text-[#f8fafc] hover:bg-[#79c0ff] font-semibold"
-              : "border border-slate-300 bg-slate-50 text-slate-700 hover:bg-[#e2e8f0]/50"
-              }`}
-            onClick={onStart}
-          >
-            {attemptsUsed > 0
-              ? (quizId === 7 ? `Ulangi Ujian Akhir (${MAX_ATTEMPTS - attemptsUsed} sisa)` : `Ulangi Quiz (${MAX_ATTEMPTS - attemptsUsed} sisa)`)
-              : (quizId === 7 ? "Mulai Ujian Akhir" : "Mulai Quiz")}
-          </button>
-        ) : (
-          <div className="flex-1 flex items-center justify-center py-3.5 rounded-xl border border-slate-300 bg-slate-50 text-slate-500 font-medium text-sm tracking-wide">
-            Sisa percobaan quiz ini telah habis.
-          </div>
-        )}
+      <div className="mt-6 flex w-full flex-col gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          {hasAttemptsLeft ? (
+            <button
+              className={`flex-1 py-3.5 rounded-xl font-medium text-base transition-colors tracking-wide ${attemptsUsed === 0
+                ? "bg-[#2563eb] text-[#f8fafc] hover:bg-[#79c0ff] font-semibold"
+                : "border border-slate-300 bg-slate-50 text-slate-700 hover:bg-[#e2e8f0]/50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                }`}
+              onClick={onStart}
+            >
+              {attemptsUsed > 0
+                ? (quizId === 7 ? `Ulangi Ujian Akhir (${MAX_ATTEMPTS - attemptsUsed} sisa)` : `Ulangi Quiz (${MAX_ATTEMPTS - attemptsUsed} sisa)`)
+                : (quizId === 7 ? "Mulai Ujian Akhir" : "Mulai Quiz")}
+            </button>
+          ) : (
+            <div className="flex-1 flex items-center justify-center py-3.5 rounded-xl border border-slate-300 bg-slate-50 text-slate-500 font-medium text-sm tracking-wide dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+              Sisa percobaan quiz ini telah habis.
+            </div>
+          )}
 
-        {bestResult && onAdvance && (
-          <button
-            className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
-            onClick={onAdvance}
-          >
-            {quizId === 7 ? "Lihat Papan Skor" : "Lanjut Quiz Berikutnya"}
-          </button>
-        )}
+          {bestResult && onAdvance && (
+            <button
+              className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+              onClick={onAdvance}
+            >
+              {quizId === 7 ? "Lihat Papan Skor" : "Lanjut Quiz Berikutnya"}
+            </button>
+          )}
+        </div>
+
+        <FlashcardButton quizId={`quiz_${quizId}`} quizTitle={title} />
       </div>
     </div>
   );
@@ -531,6 +537,7 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
   const finishQuiz = useAppStore((s) => s.finishQuiz);
   const retryQuiz = useAppStore((s) => s.retryQuiz);
   const advanceToNextQuiz = useAppStore((s) => s.advanceToNextQuiz);
+  const addToast = useToastStore((s) => s.addToast);
 
   // Local pagination state
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -628,9 +635,12 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
         const identity = useAppStore.getState().identity;
         if (!identity) throw new Error("Identity not found");
 
-        const { supabase } = await import("@/src/lib/supabaseClient");
+        const { supabase: supabaseClient } = await import("@/src/lib/supabaseClient");
+        if (!supabaseClient) {
+          throw new Error("Supabase belum dikonfigurasi. Tambahkan NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY.");
+        }
 
-        const { data: student, error: studentError } = await supabase
+        const { data: student, error: studentError } = await supabaseClient
           .from("students")
           .upsert(
             { nim: identity.nim, name: identity.nama, cohort: identity.angkatan },
@@ -683,14 +693,14 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
           numiScore = Math.round((quiz7Detail.correct / quiz7Detail.total) * 1000);
         }
 
-        const { data: existingAttempt } = await supabase
+        const { data: existingAttempt } = await supabaseClient
           .from("quiz_attempts")
           .select("id")
           .eq("student_id", student.id)
           .maybeSingle();
 
         if (existingAttempt) {
-          const { error: attemptError } = await supabase
+          const { error: attemptError } = await supabaseClient
             .from("quiz_attempts")
             .update({
               total_score: numiScore,
@@ -700,7 +710,7 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
             .eq("id", existingAttempt.id);
           if (attemptError) throw attemptError;
         } else {
-          const { error: attemptError } = await supabase
+          const { error: attemptError } = await supabaseClient
             .from("quiz_attempts")
             .insert({
               student_id: student.id,
@@ -711,7 +721,7 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
         }
       } catch (err: any) {
         console.error("Error submitting quiz:", err);
-        alert("Gagal memperbarui nilai ke server: " + (err.message || "Pastikan koneksi internet stabil."));
+        addToast("Gagal memperbarui nilai ke server: " + (err.message || "Pastikan koneksi internet stabil."), "error");
       } finally {
         setIsSubmitting(false);
         setShowResults(true);

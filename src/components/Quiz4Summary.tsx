@@ -224,7 +224,7 @@ export default function Quiz4Summary() {
       </div>
 
       {/* Eksplorasi Interaktif */}
-      <div className="mt-4 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
+      <div className="interactive-exploration mt-4 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
         <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex items-center gap-3">
           <div className="p-2 bg-[#3b82f6]/15 text-blue-600 rounded-lg">
             <FlaskConical size={20} />
@@ -323,7 +323,7 @@ export default function Quiz4Summary() {
                 </defs>
                 
                 {/* Baseline */}
-                <line x1="0" y1="210" x2="600" y2="210" stroke="#e2e8f0" strokeWidth="2" />
+                <line x1="0" y1="210" x2="600" y2="210" stroke="var(--border-medium)" strokeWidth="2" />
                 
                 {/* P-Value Shaded Areas (mengikuti kurva) - Left tail only to match reference */}
                 <path d={shadeLeft} fill="url(#shade-grad)" />

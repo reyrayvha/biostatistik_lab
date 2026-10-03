@@ -220,7 +220,7 @@ export default function Quiz3Summary() {
       </div>
 
       {/* 7. Eksplorasi Interaktif */}
-      <div className="mt-4 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
+      <div className="interactive-exploration mt-4 bg-[#f8fafc]/80 backdrop-blur-md border border-[#f1f5f9] rounded-2xl overflow-hidden shadow-xl">
         {/* Header + tab */}
         <div className="bg-slate-50/80 border-b border-[#f1f5f9] p-4 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center gap-3 flex-1">

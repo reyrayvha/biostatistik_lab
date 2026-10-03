@@ -1,19 +1,18 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { password } = body;
+    const password = typeof body.password === "string" ? body.password : "";
+    const pin = typeof body.pin === "string" ? body.pin : password;
+    const correctPassword = process.env.ADMIN_PIN ?? process.env.NEXT_PUBLIC_ADMIN_PIN ?? "admin123";
 
-    // Baca password rahasia murni dari Server (tanpa NEXT_PUBLIC_)
-    const correctPassword = process.env.ADMIN_PASSWORD || 'admin123';
-
-    if (password === correctPassword) {
-      return NextResponse.json({ success: true });
-    } else {
-      return NextResponse.json({ success: false }, { status: 401 });
+    if (pin === correctPassword) {
+      return NextResponse.json({ success: true, name: "Dosen" });
     }
+
+    return NextResponse.json({ success: false, error: "PIN salah." }, { status: 401 });
   } catch (error) {
-    return NextResponse.json({ success: false }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Gagal memvalidasi PIN." }, { status: 500 });
   }
 }

@@ -1,12 +1,19 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { User, Hash, CalendarDays, ArrowRight, ArrowLeft } from "lucide-react";
 import { useAppStore } from "@/src/store/useAppStore";
-import { User, Hash, CalendarDays, ArrowRight, Sparkles } from "lucide-react";
+import { useToastStore } from "@/src/store/useToastStore";
+import {
+  checkDuplicateIdentity,
+  isIdentityFormValid,
+  validateIdentity,
+} from "@/src/lib/validators";
 
-export default function IdentityForm() {
+export default function IdentityForm({ onBack }: { onBack?: () => void } = {}) {
   const identity = useAppStore((s) => s.identity);
   const setIdentity = useAppStore((s) => s.setIdentity);
+  const addToast = useToastStore((s) => s.addToast);
 
   const [nama, setNama] = useState("");
   const [nim, setNim] = useState("");
@@ -14,27 +21,58 @@ export default function IdentityForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function validate(): boolean {
-    const errs: Record<string, string> = {};
-    if (!nama.trim()) errs.nama = "Nama tidak boleh kosong";
-    if (!nim.trim()) {
-      errs.nim = "NPM / NIM tidak boleh kosong";
-    } else if (!/^\d+$/.test(nim.trim())) {
-      errs.nim = "NPM / NIM harus berupa angka";
-    }
-    if (!angkatan.trim()) errs.angkatan = "Angkatan harus dipilih";
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  }
+  const angkatanOptions = ["2022", "2023", "2024", "2025"];
+
+  const validate = (): boolean => {
+    const validationErrors = validateIdentity(nama, nim, angkatan);
+    const nextErrors = Object.fromEntries(
+      validationErrors.map((error) => [error.field, error.message]),
+    );
+    setErrors(nextErrors);
+    return validationErrors.length === 0;
+  };
+
+  const handleFieldBlur = (field: "nama" | "nim" | "angkatan", value: string) => {
+    const validationErrors = validateIdentity(
+      field === "nama" ? value : nama,
+      field === "nim" ? value : nim,
+      field === "angkatan" ? value : angkatan,
+    );
+
+    const fieldError = validationErrors.find((error) => error.field === field);
+    setErrors((previous) => {
+      if (!fieldError) {
+        const next = { ...previous };
+        delete next[field];
+        return next;
+      }
+      return { ...previous, [field]: fieldError.message };
+    });
+  };
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) {
+      addToast("Mohon periksa kembali data identitas Anda.", "warning");
+      return;
+    }
+
+    try {
+      const duplicateMessage = await checkDuplicateIdentity(nama, nim, angkatan);
+      if (duplicateMessage) {
+        setErrors((previous) => ({ ...previous, nim: duplicateMessage }));
+        addToast(duplicateMessage, "warning");
+        return;
+      }
+    } catch (error) {
+      console.error("Duplicate identity check failed:", error);
+      addToast("Tidak dapat memvalidasi data identitas saat ini. Coba beberapa saat lagi.", "error");
+      return;
+    }
 
     setIsSubmitting(true);
 
-    // Small delay for animation
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     setIdentity({
       nama: nama.trim(),
@@ -42,9 +80,6 @@ export default function IdentityForm() {
       angkatan: angkatan.trim(),
     });
   }
-
-  // Opsi angkatan manual (2022 - 2025)
-  const angkatanOptions = ["2022", "2023", "2024", "2025"];
 
   if (identity) {
     return (
@@ -88,6 +123,12 @@ export default function IdentityForm() {
 
   return (
     <div className="identity-panel">
+      {onBack && (
+        <button type="button" className="login-back-button" onClick={onBack}>
+          <ArrowLeft size={16} />
+          Kembali ke Login
+        </button>
+      )}
       {/* Form card containing both hero and fields */}
       <form
         onSubmit={handleSubmit}
@@ -97,9 +138,9 @@ export default function IdentityForm() {
       >
         {/* Hero section */}
         <div className="identity-hero">
-          <h2 className="identity-hero-title">Selamat Datang di Ujian Biostatistik</h2>
+          <h2 className="identity-hero-title">Data Diri</h2>
           <p className="identity-hero-subtitle">
-            Silakan isi data diri Anda untuk memulai ujian.
+            Lengkapi data diri Anda untuk membuat sesi mahasiswa.
           </p>
         </div>
 
@@ -117,8 +158,13 @@ export default function IdentityForm() {
             value={nama}
             onChange={(e) => {
               setNama(e.target.value);
-              if (errors.nama) setErrors((prev) => ({ ...prev, nama: "" }));
+              if (errors.nama) {
+                const next = { ...errors };
+                delete next.nama;
+                setErrors(next);
+              }
             }}
+            onBlur={(e) => handleFieldBlur("nama", e.target.value)}
           />
           {errors.nama && (
             <span className="form-error">{errors.nama}</span>
@@ -142,8 +188,13 @@ export default function IdentityForm() {
             onChange={(e) => {
               const onlyNums = e.target.value.replace(/\D/g, "");
               setNim(onlyNums);
-              if (errors.nim) setErrors((prev) => ({ ...prev, nim: "" }));
+              if (errors.nim) {
+                const next = { ...errors };
+                delete next.nim;
+                setErrors(next);
+              }
             }}
+            onBlur={(e) => handleFieldBlur("nim", e.target.value)}
           />
           {errors.nim && (
             <span className="form-error">{errors.nim}</span>
@@ -163,9 +214,13 @@ export default function IdentityForm() {
             value={angkatan}
             onChange={(e) => {
               setAngkatan(e.target.value);
-              if (errors.angkatan)
-                setErrors((prev) => ({ ...prev, angkatan: "" }));
+              if (errors.angkatan) {
+                const next = { ...errors };
+                delete next.angkatan;
+                setErrors(next);
+              }
             }}
+            onBlur={(e) => handleFieldBlur("angkatan", e.target.value)}
           >
             <option value="" disabled>
               Pilih tahun angkatan
@@ -185,7 +240,7 @@ export default function IdentityForm() {
         <button
           type="submit"
           className="form-submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !isIdentityFormValid(nama, nim, angkatan)}
           style={{ marginTop: "6px" }}
         >
           {isSubmitting ? (
