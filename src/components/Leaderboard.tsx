@@ -381,9 +381,8 @@ export default function Leaderboard() {
         )}
 
         {/* Scoreboard Table */}
-        <div className="block w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
-          <div className="min-w-[900px] max-h-[calc(100vh-250px)] w-full overflow-y-auto">
-            <table className="w-full table-fixed border-collapse text-left text-xs">
+        <div className="w-full max-h-[calc(100vh-250px)] overflow-x-auto overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
+            <table className="min-w-max border-collapse text-left text-xs">
               <colgroup>
                 <col className="w-[5%]" />
                 <col className="w-[17%]" />
@@ -536,7 +535,6 @@ export default function Leaderboard() {
                 )}
               </tbody>
             </table>
-          </div>
         </div>
       </div>
 
