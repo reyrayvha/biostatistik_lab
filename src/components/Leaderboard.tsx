@@ -326,7 +326,7 @@ export default function Leaderboard() {
               disabled={loading}
             >
               <RefreshCw size={16} className={loading ? "animate-spin text-blue-600" : "text-slate-500"} />
-              <span className="hidden sm:inline">Refresh</span>
+              <span>Refresh</span>
             </button>
 
             {isAdminMode ? (
@@ -380,102 +380,7 @@ export default function Leaderboard() {
           </div>
         )}
 
-        {/* Mobile View (Cards) */}
-        <div className="hidden">
-          {loading ? (
-              <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col items-center justify-center gap-3 text-slate-500">
-              <Loader2 className="animate-spin text-blue-600" size={32} />
-              <p className="font-medium">Memuat data papan skor...</p>
-            </div>
-          ) : data.length === 0 ? (
-            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center text-slate-500 font-medium">
-              Belum ada data nilai kuis mahasiswa.
-            </div>
-          ) : (
-            data.map((student, idx) => (
-              <div key={student.id} className="bg-white dark:bg-slate-900 p-3 md:p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
-                
-                {/* Header Card */}
-                <div className="flex flex-col pr-16 border-b border-slate-100 pb-2 mb-2">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-200 font-bold px-2 py-0.5 rounded text-[10px] md:text-xs">Rank #{idx + 1}</span>
-                    <span className="hidden text-[10px] md:inline md:text-xs font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">{student.angkatan}</span>
-                  </div>
-                  <span className="font-bold text-slate-800 text-base md:text-lg leading-tight break-words">{student.name}</span>
-                  <span className="hidden text-xs md:inline md:text-sm text-slate-500">{student.nim}</span>
-                </div>
-
-                {/* Highlight Card */}
-                <div className="flex justify-between items-center bg-blue-50/40 dark:bg-blue-950/30 p-2 md:p-3 rounded-lg border border-blue-50/50 dark:border-blue-900/60">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] md:text-xs text-blue-600 font-semibold uppercase tracking-wider mb-0.5">Skor NUMi</span>
-                    <span className="text-xl md:text-2xl font-bold text-blue-600 leading-none">{student.numiScore}</span>
-                  </div>
-                  <div className="flex flex-col items-end text-xs text-slate-500 dark:text-slate-400">
-                    <span className="mt-1 hidden whitespace-nowrap md:inline">{formatCompactTimestamp(student.finishTimestamp)}</span>
-                  </div>
-                </div>
-
-                {/* Grid Nilai (Penting) */}
-                <div className="hidden grid-cols-2 gap-2 mt-3 md:grid md:grid-cols-3">
-                  {QUIZ_COLUMNS.map((col) => {
-                    const quiz = student.quizzes.find((q) =>
-                      q.title.toLowerCase().includes(col.keyword.toLowerCase())
-                    );
-                    return (
-                      <div key={col.id} className="bg-slate-50 p-2 rounded-lg text-center flex flex-col items-center justify-center border border-slate-100">
-                        <span className="text-[10px] md:text-[11px] text-slate-500 font-medium w-full truncate">{col.name}</span>
-                        <span className={`text-sm md:text-base font-bold mt-0.5 ${quiz ? "text-slate-800" : "text-slate-400"}`}>
-                          {quiz ? `${quiz.correct}/${quiz.total}` : `0/${col.total}`}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Footer Card: Action */}
-                {(isAdminMode || student.nim === identity?.nim) && (
-                  <div className="pt-3 mt-3 border-t border-slate-100">
-                    {isAdminMode ? (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleViewStudent(student)}
-                          className="flex-1 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/40 px-2 py-2 text-[12px] font-semibold text-blue-700 dark:text-blue-200 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/50"
-                        >
-                          Lihat
-                        </button>
-                        <button
-                          onClick={() => handleEditStudent(student)}
-                          className="flex-1 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 px-2 py-2 text-[12px] font-semibold text-amber-700 dark:text-amber-200 transition-colors hover:bg-amber-100 dark:hover:bg-amber-900/50"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => {
-                            setDeletingStudentId(student.id);
-                            setIsConfirmOpen(true);
-                          }}
-                          className="flex-1 rounded-lg border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 px-2 py-2 text-[12px] font-semibold text-rose-700 dark:text-rose-200 transition-colors hover:bg-rose-100 dark:hover:bg-rose-900/50"
-                        >
-                          Hapus
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => handleViewStudent(student)}
-                        className="w-full py-2 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-200 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-100 dark:border-blue-800 rounded-lg text-[13px] md:text-sm font-semibold transition-colors"
-                      >
-                        Lihat Detail Jawaban
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Desktop Table View (Hidden on Mobile) */}
+        {/* Scoreboard Table */}
         <div className="block w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
           <div className="min-w-[900px] max-h-[calc(100vh-250px)] w-full overflow-y-auto">
             <table className="w-full table-fixed border-collapse text-left text-xs">
