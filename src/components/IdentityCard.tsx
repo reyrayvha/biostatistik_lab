@@ -21,7 +21,7 @@ export function IdentityCard() {
           <UserCircle2 size={20} />
         </div>
 
-        <div className="identity-card-info min-w-0 flex-1">
+        <div className="identity-card-info hidden min-w-0 flex-1 md:block">
           <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
             <span className="truncate font-semibold text-[var(--text-primary)]">{identity.nama}</span>
             <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.15em] text-blue-700">
@@ -31,7 +31,7 @@ export function IdentityCard() {
           <p className="text-[11px] text-[var(--text-muted)]">NIM: {identity.nim}</p>
         </div>
 
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="hidden shrink-0 items-center gap-1 md:flex">
           <button
             type="button"
             onClick={() => setIsEditModalOpen(true)}

@@ -399,10 +399,10 @@ export default function Leaderboard() {
                 <div className="flex flex-col pr-16 border-b border-slate-100 pb-2 mb-2">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-200 font-bold px-2 py-0.5 rounded text-[10px] md:text-xs">Rank #{idx + 1}</span>
-                    <span className="text-[10px] md:text-xs font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">{student.angkatan}</span>
+                    <span className="hidden text-[10px] md:inline md:text-xs font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">{student.angkatan}</span>
                   </div>
                   <span className="font-bold text-slate-800 text-base md:text-lg leading-tight break-words">{student.name}</span>
-                  <span className="text-xs md:text-sm text-slate-500">{student.nim}</span>
+                  <span className="hidden text-xs md:inline md:text-sm text-slate-500">{student.nim}</span>
                 </div>
 
                 {/* Highlight Card */}
@@ -412,12 +412,12 @@ export default function Leaderboard() {
                     <span className="text-xl md:text-2xl font-bold text-blue-600 leading-none">{student.numiScore}</span>
                   </div>
                   <div className="flex flex-col items-end text-xs text-slate-500 dark:text-slate-400">
-                    <span className="mt-1 whitespace-nowrap">{formatCompactTimestamp(student.finishTimestamp)}</span>
+                    <span className="mt-1 hidden whitespace-nowrap md:inline">{formatCompactTimestamp(student.finishTimestamp)}</span>
                   </div>
                 </div>
 
                 {/* Grid Nilai (Penting) */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
+                <div className="hidden grid-cols-2 gap-2 mt-3 md:grid md:grid-cols-3">
                   {QUIZ_COLUMNS.map((col) => {
                     const quiz = student.quizzes.find((q) =>
                       q.title.toLowerCase().includes(col.keyword.toLowerCase())
