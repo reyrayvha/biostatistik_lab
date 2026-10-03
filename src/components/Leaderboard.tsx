@@ -393,23 +393,23 @@ export default function Leaderboard() {
               </colgroup>
               <thead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-800 shadow-xs">
                 <tr className="border-b border-slate-200/50 text-slate-600 text-[10px] uppercase tracking-wide dark:border-white/10 sm:text-xs">
-                  <th className="break-words px-1 py-2 text-center font-semibold">Rank</th>
-                  <th className="break-words border-r border-slate-200 px-2 py-2 font-semibold dark:border-slate-700">Mahasiswa</th>
-                  <th className="break-words px-1 py-2 text-center font-semibold">Skor NUMi</th>
-                  <th className="break-words px-1 py-2 text-center font-semibold">Statistik</th>
-                  <th className="break-words px-1 py-2 text-center font-semibold">Distribusi</th>
-                  <th className="break-words px-1 py-2 text-center font-semibold">Probabilitas</th>
-                  <th className="break-words px-1 py-2 text-center font-semibold">Uji Hipotesis</th>
-                  <th className="break-words px-1 py-2 text-center font-semibold">Diagnostik</th>
-                  <th className="break-words px-1 py-2 text-center font-semibold">Desain Studi</th>
-                  <th className="break-words px-1 py-2 text-center font-semibold">Ujian Akhir</th>
-                  <th className="break-words border-l border-slate-200 px-1 py-2 text-center font-semibold dark:border-slate-700">Aksi</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Rank</th>
+                  <th className="whitespace-nowrap border-r border-slate-200 px-2 py-2 font-semibold dark:border-slate-700">Mahasiswa</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Skor NUMi</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Statistik</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Distribusi</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Probabilitas</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Uji Hipotesis</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Diagnostik</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Desain Studi</th>
+                  <th className="whitespace-nowrap px-1 py-2 text-center font-semibold">Ujian Akhir</th>
+                  <th className="whitespace-nowrap border-l border-slate-200 px-1 py-2 text-center font-semibold dark:border-slate-700">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200/50 dark:divide-white/10">
                 {loading ? (
                   <tr>
-                    <td colSpan={11} className="px-6 py-12 text-center">
+                    <td colSpan={11} className="whitespace-nowrap px-6 py-12 text-center">
                       <div className="flex flex-col items-center justify-center gap-3 text-slate-500">
                         <Loader2 className="animate-spin text-blue-600" size={32} />
                         <p className="font-medium">Memuat data papan skor...</p>
@@ -418,7 +418,7 @@ export default function Leaderboard() {
                   </tr>
                 ) : data.length === 0 ? (
                   <tr>
-                    <td colSpan={11} className="px-6 py-12 text-center text-slate-500 font-medium">
+                    <td colSpan={11} className="whitespace-nowrap px-6 py-12 text-center text-slate-500 font-medium">
                       Belum ada data nilai kuis mahasiswa.
                     </td>
                   </tr>
@@ -426,16 +426,16 @@ export default function Leaderboard() {
                   data.map((student, idx) => (
                     <tr key={student.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors group">
                       {/* Rank */}
-                      <td className="px-1 py-2 text-center">
+                      <td className="whitespace-nowrap px-1 py-2 text-center">
                         <div className="flex justify-center items-center">
                           {renderRankIcon(idx + 1)}
                         </div>
                       </td>
 
                       {/* Mahasiswa */}
-                      <td className="break-words border-r border-slate-200 px-2 py-2 dark:border-slate-700">
+                      <td className="whitespace-nowrap border-r border-slate-200 px-2 py-2 dark:border-slate-700">
                         <div className="flex min-w-0 flex-col">
-                          <span className="mb-1 break-words text-sm font-bold leading-tight text-slate-800">{student.name}</span>
+                          <span className="mb-1 whitespace-normal break-words text-sm font-bold leading-tight text-slate-800">{student.name}</span>
                           <div className="flex items-center gap-1.5 mt-0.5">
                             <span className="text-sm text-slate-500">{student.nim}</span>
                             <span className="px-1.5 py-0.2 rounded text-xs font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-200 border border-blue-200 dark:border-blue-800">
@@ -446,7 +446,7 @@ export default function Leaderboard() {
                       </td>
 
                       {/* Skor NUMi */}
-                      <td className="px-1 py-2 text-center">
+                      <td className="whitespace-nowrap px-1 py-2 text-center">
                         <div className="flex flex-col items-center">
                           <span className="text-lg font-black text-blue-600">{student.numiScore}</span>
                           <span className="mt-1 whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">{formatCompactTimestamp(student.finishTimestamp)}</span>
@@ -460,7 +460,7 @@ export default function Leaderboard() {
                         );
 
                         return (
-                          <td key={col.id} className="px-1 py-2 text-center">
+                          <td key={col.id} className="whitespace-nowrap px-1 py-2 text-center">
                             <div className="flex flex-col items-center">
                               {quiz ? (
                                 <>
@@ -487,7 +487,7 @@ export default function Leaderboard() {
                       })}
 
                       {/* Aksi */}
-                      <td className="border-l border-slate-200 px-1 py-2 text-center dark:border-slate-700">
+                      <td className="whitespace-nowrap border-l border-slate-200 px-1 py-2 text-center dark:border-slate-700">
                         {isAdminMode ? (
                           <div className="flex flex-wrap items-center justify-center gap-1">
                             <button
