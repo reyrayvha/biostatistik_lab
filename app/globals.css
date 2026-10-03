@@ -427,6 +427,20 @@ html.dark .app-nav-wrapper {
   max-width: 0;
 }
 
+.app-nav-wrapper > .tab-navigation {
+  width: 16rem;
+  min-width: 16rem;
+}
+
+.tab-labels {
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.app-nav-wrapper.closed .tab-labels {
+  opacity: 0;
+}
+
 /* --- Main --- */
 
 .app-main {
@@ -1895,7 +1909,7 @@ html.dark .form-select {
     padding: 4px;
   }
 
-  .identity-card button {
+  .identity-card > button {
     width: 30px;
     height: 30px;
     justify-content: center;

@@ -312,7 +312,7 @@ export default function Leaderboard() {
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative">
+        <div className="flex flex-row justify-between items-center gap-2 relative">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-3">
             <Trophy className="text-blue-600 dark:text-blue-400" size={32} />
             Papan Skor
@@ -381,7 +381,7 @@ export default function Leaderboard() {
         )}
 
         {/* Mobile View (Cards) */}
-        <div className="block md:hidden flex flex-col gap-4 w-full">
+        <div className="hidden">
           {loading ? (
               <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col items-center justify-center gap-3 text-slate-500">
               <Loader2 className="animate-spin text-blue-600" size={32} />
@@ -476,8 +476,8 @@ export default function Leaderboard() {
         </div>
 
         {/* Desktop Table View (Hidden on Mobile) */}
-        <div className="hidden md:block w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
-          <div className="max-h-[calc(100vh-250px)] w-full overflow-x-hidden overflow-y-auto">
+        <div className="block w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
+          <div className="min-w-[900px] max-h-[calc(100vh-250px)] w-full overflow-y-auto">
             <table className="w-full table-fixed border-collapse text-left text-xs">
               <colgroup>
                 <col className="w-[5%]" />
