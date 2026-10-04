@@ -29,6 +29,7 @@ type QuizResult = {
 
 type StudentRecord = {
   id: string;
+  studentId: string;
   name: string;
   nim: string;
   angkatan: string;
@@ -83,6 +84,9 @@ export default function Leaderboard() {
   const handleDeleteStudent = async () => {
     if (!deletingStudentId) return;
 
+    const studentRecord = data.find((s) => s.id === deletingStudentId);
+    if (!studentRecord) return;
+
     const client = supabase;
     if (!client) {
       addToast("Konfigurasi Supabase belum tersedia.", "error");
@@ -91,15 +95,19 @@ export default function Leaderboard() {
 
     try {
       setLoading(true);
-      const { error } = await client.from("students").delete().eq("id", deletingStudentId);
-      if (error) throw error;
+      // Delete the quiz attempt first to avoid foreign key constraints
+      const { error: attemptError } = await client.from("quiz_attempts").delete().eq("id", studentRecord.id);
+      if (attemptError) throw attemptError;
+
+      // Try to delete the student (this will fail silently if they have other attempts, which is fine)
+      await client.from("students").delete().eq("id", studentRecord.studentId);
 
       addToast("Data mahasiswa berhasil dihapus.", "success");
       setDeletingStudentId(null);
       setIsConfirmOpen(false);
       await fetchLeaderboard();
-    } catch (error) {
-      console.error("Error deleting student:", error);
+    } catch (error: any) {
+      console.error("Error deleting student:", error.message || error);
       addToast("Gagal menghapus data mahasiswa.", "error");
     } finally {
       setLoading(false);
@@ -182,6 +190,7 @@ export default function Leaderboard() {
       if (attempts) {
         const formattedData: StudentRecord[] = attempts.map((attempt: any) => ({
           id: attempt.id,
+          studentId: attempt.students.id,
           name: attempt.students.name,
           nim: attempt.students.nim,
           angkatan: attempt.students.cohort,
@@ -238,6 +247,10 @@ export default function Leaderboard() {
 
     try {
       setLoading(true);
+      // Hapus quiz_attempts terlebih dahulu
+      await client.from('quiz_attempts').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      
+      // Kemudian hapus mahasiswa
       const { error } = await client
         .from('students')
         .delete()
@@ -246,8 +259,8 @@ export default function Leaderboard() {
       if (error) throw error;
       addToast("Semua data berhasil dihapus.", "success");
       fetchLeaderboard();
-    } catch (error) {
-      console.error("Error deleting data:", error);
+    } catch (error: any) {
+      console.error("Error deleting data:", error.message || error);
       addToast("Gagal menghapus data.", "error");
     } finally {
       setLoading(false);
@@ -308,11 +321,11 @@ export default function Leaderboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-700 p-4 pb-32 md:p-8 md:pb-8 font-sans">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="flex w-full flex-col bg-slate-50 p-2 md:p-4 font-sans text-slate-700 h-[calc(100vh-140px)] md:h-[calc(100vh-130px)]">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col min-h-0 gap-4 md:gap-6">
 
         {/* Header */}
-        <div className="flex flex-row justify-between items-center gap-2 relative">
+        <div className="relative flex flex-none flex-row items-center justify-between gap-2">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-3">
             <Trophy className="text-blue-600 dark:text-blue-400" size={32} />
             Papan Skor
@@ -360,7 +373,7 @@ export default function Leaderboard() {
 
         {/* Admin Card */}
         {isAdminMode && (
-          <div className="bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 shadow-sm bg-gradient-to-r from-indigo-50/80 via-white to-blue-50/60 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900">
+          <div className="flex flex-none items-center justify-between gap-4 rounded-2xl border border-indigo-100 bg-white bg-gradient-to-r from-indigo-50/80 via-white to-blue-50/60 p-4 shadow-sm dark:border-indigo-900/60 dark:bg-slate-900 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 sm:p-5">
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200 dark:shadow-none shrink-0">
                 <ShieldCheck size={24} />
@@ -381,19 +394,19 @@ export default function Leaderboard() {
         )}
 
         {/* Scoreboard Table */}
-        <div className="block w-full overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
-            <table className="w-full md:w-full table-auto border-collapse text-left text-[10px] md:text-xs">
+        <div className="block min-h-0 w-full flex-1 overflow-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
+            <table className="w-full min-w-[1000px] table-fixed border-collapse text-left text-[10px] md:text-xs">
               <colgroup>
                 <col className="w-[5%]" />
-                <col className="w-[17%]" />
+                <col className="w-[23%]" />
                 <col className="w-[8%]" />
                 {QUIZ_COLUMNS.map((col) => <col key={col.id} className="w-[8%]" />)}
-                <col className="w-[14%]" />
+                <col className="w-[8%]" />
               </colgroup>
               <thead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-800 shadow-xs">
                 <tr className="border-b border-slate-200/50 text-slate-600 text-[10px] uppercase tracking-wide dark:border-white/10 sm:text-xs">
                   <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Rank</th>
-                  <th className="border-r border-slate-200 px-1 py-2 font-semibold dark:border-slate-700 md:whitespace-nowrap md:px-4">Mahasiswa</th>
+                  <th className="border-r border-slate-200 px-1 py-2 font-semibold dark:border-slate-700 md:px-4">Mahasiswa</th>
                   <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Skor NUMi</th>
                   <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Statistik</th>
                   <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Distribusi</th>
@@ -432,9 +445,9 @@ export default function Leaderboard() {
                       </td>
 
                       {/* Mahasiswa */}
-                      <td className="border-r border-slate-200 px-1 py-2 dark:border-slate-700 md:whitespace-nowrap md:px-4">
+                      <td className="border-r border-slate-200 px-1 py-2 dark:border-slate-700 md:px-4">
                         <div className="flex min-w-0 flex-col">
-                          <span className="mb-1 break-words text-[10px] font-bold leading-tight text-slate-800 md:text-sm">{student.name}</span>
+                          <span className="mb-1 whitespace-normal break-words text-[10px] font-bold leading-tight text-slate-800 md:text-sm">{student.name}</span>
                           <div className="flex items-center gap-1.5 mt-0.5">
                             <span className="text-sm text-slate-500">{student.nim}</span>
                             <span className="px-1.5 py-0.2 rounded text-xs font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-200 border border-blue-200 dark:border-blue-800">
@@ -486,9 +499,9 @@ export default function Leaderboard() {
                       })}
 
                       {/* Aksi */}
-                      <td className="border-l border-slate-200 px-1 py-2 text-center dark:border-slate-700 md:whitespace-nowrap md:px-2">
+                      <td className="border-l border-slate-200 px-1 py-2 text-center dark:border-slate-700 md:px-2">
                         {isAdminMode ? (
-                          <div className="flex flex-wrap items-center justify-center gap-1">
+                          <div className="flex flex-col items-center justify-center gap-1.5">
                             <button
                               onClick={() => handleViewStudent(student)}
                               className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/40 p-2 text-blue-700 dark:text-blue-200 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/50"
@@ -520,14 +533,20 @@ export default function Leaderboard() {
                         ) : student.nim === identity?.nim ? (
                           <button
                             onClick={() => handleViewStudent(student)}
-                            className="px-3.5 py-1.5 bg-blue-600 border border-blue-600 rounded-lg text-xs font-medium text-white hover:bg-blue-700 transition-all shadow-xs"
+                            className="mx-auto flex w-full max-w-[60px] flex-col items-center justify-center rounded-lg border border-blue-600 bg-blue-600 p-1.5 text-white shadow-xs transition-all hover:bg-blue-700"
+                            title="Detail Jawaban"
                           >
-                            Detail Jawaban
+                            <Eye size={14} className="mb-0.5" />
+                            <span className="text-[9px] font-medium leading-tight">Detail</span>
                           </button>
                         ) : (
-                            <span className="text-xs text-slate-500 italic px-2 py-1 bg-slate-50 dark:bg-slate-800 shadow-xs rounded-md border border-slate-200 dark:border-slate-700">
-                            Privasi Terjaga
-                          </span>
+                          <div
+                            className="mx-auto flex w-full max-w-[60px] flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-1.5 shadow-xs dark:border-slate-700 dark:bg-slate-800"
+                            title="Privasi Terjaga"
+                          >
+                            <Lock size={14} className="mb-0.5 text-slate-400" />
+                            <span className="text-[9px] font-medium text-slate-500 leading-tight">Privasi</span>
+                          </div>
                         )}
                       </td>
                     </tr>
@@ -656,7 +675,7 @@ function EditStudentModal({
 
     setIsLoading(true);
     try {
-      await onSave(student.id, name, nim, angkatan);
+      await onSave(student.studentId, name, nim, angkatan);
     } finally {
       setIsLoading(false);
     }

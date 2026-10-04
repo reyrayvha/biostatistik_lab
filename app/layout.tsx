@@ -27,8 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             __html: `
               try {
                 const saved = localStorage.getItem('app_theme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const theme = saved === 'dark' || saved === 'light' ? saved : (prefersDark ? 'dark' : 'light');
+                const theme = saved === 'dark' || saved === 'light' ? saved : 'light';
                 document.documentElement.classList.toggle('dark', theme === 'dark');
                 document.documentElement.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
               } catch (error) {}

@@ -159,8 +159,7 @@ export const useAppStore = create<AppState>()(
     if (typeof window === "undefined") return;
 
     const savedTheme = window.localStorage.getItem("app_theme");
-    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const nextTheme = savedTheme === "dark" || savedTheme === "light" ? savedTheme : systemPrefersDark ? "dark" : "light";
+    const nextTheme = savedTheme === "dark" || savedTheme === "light" ? savedTheme : "light";
 
     set({ theme: nextTheme });
     document.documentElement.classList.toggle("dark", nextTheme === "dark");
