@@ -56,7 +56,7 @@ function QuizSummaryScreen({
   onAdvance?: () => void;
 }) {
   const hasAttemptsLeft = attemptsUsed < MAX_ATTEMPTS;
-  const [isSummaryOpen, setIsSummaryOpen] = useState(true);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
   return (
     <div className="quiz-summary-screen">

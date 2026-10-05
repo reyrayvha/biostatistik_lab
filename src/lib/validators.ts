@@ -14,7 +14,7 @@ export const validateNama = (nama: string): string | undefined => {
   if (trimmed.length < 3) return "Nama harus 3-100 karakter";
   if (trimmed.length > 100) return "Nama harus 3-100 karakter";
 
-  const namePattern = /^[\p{L}\p{M}]+(?:[ .'-][\p{L}\p{M}]+)*$/u;
+  const namePattern = /^[\p{L}\p{M}]+(?:[ .'-]+[\p{L}\p{M}]+)*$/u;
   if (!namePattern.test(trimmed)) {
     return "Nama mengandung karakter tidak valid";
   }

@@ -23,6 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `
               try {

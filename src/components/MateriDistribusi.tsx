@@ -1,7 +1,21 @@
 "use client";
 
 import React from 'react';
-import { Bookmark } from 'lucide-react';
+import { Bookmark, ChevronDown } from 'lucide-react';
+
+const AccordionSection = ({ title, children, defaultOpen = false }: { title: React.ReactNode, children: React.ReactNode, defaultOpen?: boolean }) => {
+  return (
+    <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden" open={defaultOpen}>
+      <summary className="flex cursor-pointer items-center justify-between gap-4 p-4 md:p-6 text-slate-900 font-bold text-lg md:text-xl leading-snug">
+        {title}
+        <ChevronDown className="size-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" />
+      </summary>
+      <div className="p-4 pt-0 md:p-6 md:pt-0">
+        {children}
+      </div>
+    </details>
+  );
+};
 import InteractiveDistribution from './InteractiveDistribution';
 
 export default function MateriDistribusi() {
@@ -9,10 +23,7 @@ export default function MateriDistribusi() {
     <div className="flex flex-col gap-6 md:gap-10 text-sm md:text-base text-slate-700 leading-relaxed font-sans">
 
       {/* 1. Skenario */}
-      <div>
-        <h3 className="text-xl md:text-2xl font-bold text-blue-600 mb-2 md:mb-4 leading-snug">
-          Hasil Lab yang Membuat Mahasiswa Kedokteran Panik
-        </h3>
+      <AccordionSection title={<span className="text-blue-600">Hasil Lab yang Membuat Mahasiswa Kedokteran Panik</span>}>
         <p className="mb-4">
           Bulan kedua rotasi. Kamu mendapat hasil lab pada pasien sehat berusia 22 tahun.
           Hemoglobinnya 17,8 g/dL — ditandai merah sebagai &quot;TINGGI.&quot; Detak jantungmu
@@ -27,13 +38,10 @@ export default function MateriDistribusi() {
           Momen itu mengkristalkan kebenaran penting: untuk praktik kedokteran, kamu harus
           memahami bagaimana &quot;normal&quot; didefinisikan.
         </p>
-      </div>
+      </AccordionSection>
 
       {/* 2. Kurva Lonceng */}
-      <div>
-        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
-          Kurva Lonceng — Tempat Sebagian Besar Kedokteran Berada
-        </h4>
+      <AccordionSection title="Kurva Lonceng — Tempat Sebagian Besar Kedokteran Berada">
         <p className="mb-4">
           Tekanan darah, berat lahir, kolesterol, skor tes kognitif — semuanya membentuk kurva
           berbentuk lonceng jika kamu mengukur cukup banyak orang. Ini bukan kebetulan. Ketika
@@ -56,13 +64,10 @@ export default function MateriDistribusi() {
             </div>
           ))}
         </div>
-      </div>
+      </AccordionSection>
 
       {/* 3. Aturan 68-95-99.7 */}
-      <div>
-        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
-          Aturan yang Akan Kamu Gunakan Setiap Hari: 68-95-99,7
-        </h4>
+      <AccordionSection title="Aturan yang Akan Kamu Gunakan Setiap Hari: 68-95-99,7">
         <p className="mb-5">Ini aturan paling berguna dalam biostatistik:</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           {[
@@ -85,11 +90,10 @@ export default function MateriDistribusi() {
           Tapi jika nilai pasien <strong className="text-slate-900">3σ</strong> jauhnya? Itu di luar
           99,7% populasi. Sekarang perhatikan.
         </p>
-      </div>
+      </AccordionSection>
 
       {/* 4. Z-Score */}
-      <div>
-        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">Z-Score: Penerjemah Universal</h4>
+      <AccordionSection title="Z-Score: Penerjemah Universal">
         <p className="mb-4">
           Lab berbeda punya satuan berbeda — hemoglobin dalam g/dL, trombosit dalam ribu/μL,
           kreatinin dalam mg/dL. Bagaimana membandingkan seberapa &quot;abnormal&quot; masing-masing?
@@ -108,13 +112,10 @@ export default function MateriDistribusi() {
           kreatininnya mengkhawatirkan (z = +3,8).&quot; Kamu akan melihat z-score di ujian,
           grafik pertumbuhan pediatri, dan di jurnal manapun yang melakukan standarisasi data.
         </p>
-      </div>
+      </AccordionSection>
 
       {/* 5. TLP */}
-      <div>
-        <h4 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 md:mb-4 leading-snug">
-          Mengapa Statistik Benar-Benar Bekerja: Teorema Limit Pusat
-        </h4>
+      <AccordionSection title="Mengapa Statistik Benar-Benar Bekerja: Teorema Limit Pusat">
         <p className="mb-4">
           Eksperimen pikiran: ukur rata-rata tinggi badan 30 mahasiswa kedokteran acak. Lakukan
           lagi dengan kelompok berbeda. Dan lagi, ribuan kali. Plot semua rata-rata itu.{" "}
@@ -133,14 +134,10 @@ export default function MateriDistribusi() {
             Studi lebih besar → SE lebih kecil → estimasi lebih tepat.
           </p>
         </div>
-      </div>
+      </AccordionSection>
 
       {/* 6. Rangkuman */}
-      <div className="bg-slate-50/80 border border-slate-200 p-6 rounded-xl">
-        <div className="flex items-center gap-2 mb-4">
-          <Bookmark size={20} className="text-blue-600" />
-          <h4 className="text-lg font-semibold text-slate-900">Rangkuman untuk Ujian</h4>
-        </div>
+      <AccordionSection title={<div className="flex items-center gap-2"><Bookmark size={20} className="text-blue-600" /><span>Rangkuman untuk Ujian</span></div>}>
         <ul className="space-y-2.5 text-slate-700">
           {[
             <><strong className="text-slate-900">Aturan 68-95-99,7</strong> adalah dasar rentang referensi lab. Hafalkan.</>,
@@ -155,7 +152,7 @@ export default function MateriDistribusi() {
             </li>
           ))}
         </ul>
-      </div>
+      </AccordionSection>
 
       {/* 7. Interaktif */}
       <InteractiveDistribution />
