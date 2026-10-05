@@ -391,6 +391,18 @@ export const useAppStore = create<AppState>()(
 
   advanceToNextQuiz: () => {
     const { activeTab, unlockedIndex, quizStates } = get();
+    
+    // Mencegah bug double-click yang bisa membuat user skip materi/kuis selanjutnya
+    // dengan memastikan bahwa kuis saat ini benar-benar sudah dikerjakan (punya bestResult)
+    const quizMatch = activeTab.match(/^quiz-(\d+)$/);
+    if (quizMatch) {
+      const currentQuizId = parseInt(quizMatch[1], 10);
+      const currentState = quizStates[currentQuizId];
+      if (!currentState || !currentState.bestResult) {
+        return; // Jangan lanjut jika kuis ini belum pernah diselesaikan
+      }
+    }
+
     const currentIndex = TAB_ORDER.indexOf(activeTab);
     const nextIndex = currentIndex + 1;
     

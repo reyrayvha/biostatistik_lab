@@ -624,6 +624,8 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
 
   // Handle "Next" button
   const handleNext = useCallback(async () => {
+    if (isSubmitting) return;
+
     if (isLastQuestion) {
       setIsSubmitting(true);
 
