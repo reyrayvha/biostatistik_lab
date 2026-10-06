@@ -250,7 +250,7 @@ export default function IdentityForm({ onBack }: { onBack?: () => void } = {}) {
             </>
           ) : (
             <>
-              Mulai Kuis
+              Mulai Quiz
               <ArrowRight size={18} />
             </>
           )}
