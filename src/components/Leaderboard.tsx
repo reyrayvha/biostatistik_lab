@@ -347,7 +347,7 @@ export default function Leaderboard() {
   };
 
   return (
-    <div className="flex w-full flex-col bg-slate-50 p-2 md:p-4 font-sans text-slate-700 h-[calc(100vh-140px)] md:h-[calc(100vh-130px)]">
+    <div className="flex w-full max-w-[100vw] overflow-hidden flex-col bg-slate-50 p-2 md:p-4 font-sans text-slate-700 h-[calc(100vh-140px)] md:h-[calc(100vh-130px)]">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col min-h-0 gap-4 md:gap-6">
 
         {/* Header */}
@@ -421,26 +421,26 @@ export default function Leaderboard() {
 
         {/* Scoreboard Table */}
         <div className="block min-h-0 w-full flex-1 overflow-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
-            <table className="w-full min-w-[1000px] table-fixed border-collapse text-left text-[10px] md:text-xs">
+            <table className="w-full min-w-full md:min-w-[1000px] table-fixed border-collapse text-left text-[10px] md:text-xs">
               <colgroup>
-                <col className="w-[5%]" />
-                <col className="w-[23%]" />
-                <col className="w-[8%]" />
-                {QUIZ_COLUMNS.map((col) => <col key={col.id} className="w-[8%]" />)}
-                <col className="w-[8%]" />
+                <col className="w-[12%] md:w-[5%]" />
+                <col className="w-[48%] md:w-[23%]" />
+                <col className="w-[20%] md:w-[8%]" />
+                {QUIZ_COLUMNS.map((col) => <col key={col.id} className="hidden md:table-column md:w-[8%]" />)}
+                <col className="w-[20%] md:w-[8%]" />
               </colgroup>
               <thead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-800 shadow-xs">
                 <tr className="border-b border-slate-200/50 text-slate-600 text-[10px] uppercase tracking-wide dark:border-white/10 sm:text-xs">
                   <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Rank</th>
                   <th className="border-r border-slate-200 px-1 py-2 font-semibold dark:border-slate-700 md:px-4">Mahasiswa</th>
                   <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Skor NUMi</th>
-                  <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Statistik</th>
-                  <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Distribusi</th>
-                  <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Probabilitas</th>
-                  <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Uji Hipotesis</th>
-                  <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Diagnostik</th>
-                  <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Desain Studi</th>
-                  <th className="px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Ujian Akhir</th>
+                  <th className="hidden md:table-cell px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Statistik</th>
+                  <th className="hidden md:table-cell px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Distribusi</th>
+                  <th className="hidden md:table-cell px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Probabilitas</th>
+                  <th className="hidden md:table-cell px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Uji Hipotesis</th>
+                  <th className="hidden md:table-cell px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Diagnostik</th>
+                  <th className="hidden md:table-cell px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Desain Studi</th>
+                  <th className="hidden md:table-cell px-1 py-2 text-center font-semibold md:whitespace-nowrap md:px-2">Ujian Akhir</th>
                   <th className="border-l border-slate-200 px-1 py-2 text-center font-semibold dark:border-slate-700 md:whitespace-nowrap md:px-2">Aksi</th>
                 </tr>
               </thead>
@@ -498,7 +498,7 @@ export default function Leaderboard() {
                         );
 
                         return (
-                          <td key={col.id} className="px-1 py-2 text-center md:whitespace-nowrap md:px-2">
+                          <td key={col.id} className="hidden md:table-cell px-1 py-2 text-center md:whitespace-nowrap md:px-2">
                             <div className="flex flex-col items-center">
                               {quiz ? (
                                 <>
