@@ -432,91 +432,81 @@ export default function Leaderboard() {
             </div>
           ) : (
             data.map((student, idx) => (
-              <div key={student.id} className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-3 relative overflow-hidden">
-                {/* Rank Accent */}
-                {idx < 3 && (
-                  <div className={`absolute top-0 left-0 w-1 h-full ${idx === 0 ? 'bg-amber-400' : idx === 1 ? 'bg-slate-300' : 'bg-amber-600'}`} />
-                )}
-                
-                <div className="flex justify-between items-start">
-                   <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm shadow-sm border
-                        ${idx === 0 ? 'bg-amber-50 text-amber-600 border-amber-200' : 
-                          idx === 1 ? 'bg-slate-50 text-slate-600 border-slate-200' : 
-                          idx === 2 ? 'bg-orange-50 text-orange-600 border-orange-200' : 
-                          'bg-slate-100 text-slate-500 border-slate-200'}
-                      `}>
-                        {idx + 1}
-                      </div>
-                      <div>
-                         <div className="font-bold text-slate-800 text-sm leading-tight mb-0.5 dark:text-slate-100">{student.name}</div>
-                         <div className="text-[11px] text-slate-500">{student.nim} • {student.angkatan}</div>
-                      </div>
-                   </div>
-                   <div className="flex flex-col items-end">
-                      <div className="text-[10px] font-bold text-slate-400 tracking-wider">SKOR NUMi</div>
-                      <div className="text-lg font-black text-blue-600 leading-tight">{student.numiScore}</div>
-                   </div>
+              <div key={student.id} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col gap-5 relative overflow-hidden">
+                {/* Header (Rank, Name, NIM, Angkatan) */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-start gap-3">
+                    <div className="text-slate-400 dark:text-slate-500 font-bold text-base mt-0.5">#{idx + 1}</div>
+                    <div className="flex flex-col">
+                      <div className="font-bold text-slate-800 dark:text-slate-100 text-base leading-tight">{student.name}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">{student.nim} • {student.angkatan}</div>
+                    </div>
+                  </div>
                 </div>
-                
+
+                {/* Skor NUMi */}
+                <div className="flex flex-col">
+                  <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-1">SCORE NUMI</div>
+                  <div className="text-3xl font-black text-slate-800 dark:text-slate-100 leading-none">{student.numiScore}</div>
+                </div>
+
                 {/* Detailed Quiz Scores (Grid) */}
-                <div className="grid grid-cols-2 gap-2 mt-1">
+                <div className="grid grid-cols-2 gap-y-5 gap-x-4 mt-1">
                   {QUIZ_COLUMNS.map((col) => {
                      const q = student.quizzes.find((q) => q.title.toLowerCase().includes(col.keyword.toLowerCase()));
+                     const isLast = col.name === "Ujian Akhir";
                      return (
-                        <div key={col.id} className={`flex justify-between items-center p-2 rounded-lg border ${
-                          col.name === "Ujian Akhir" 
-                            ? 'col-span-2 bg-blue-50 border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50' 
-                            : 'bg-slate-50 border-slate-100 dark:bg-slate-800/50 dark:border-slate-800'
-                        }`}>
-                           <span className={`text-[10px] font-medium ${col.name === "Ujian Akhir" ? 'text-blue-700 dark:text-blue-300' : 'text-slate-600 dark:text-slate-400'}`}>{col.name}</span>
-                           <span className={`text-[11px] font-bold ${col.name === "Ujian Akhir" ? 'text-blue-800 dark:text-blue-200' : 'text-slate-800 dark:text-slate-200'}`}>{q ? `${q.correct}/${q.total}` : `0/${col.total}`}</span>
+                        <div key={col.id} className={`flex flex-col gap-1.5 ${isLast ? 'col-span-2' : ''}`}>
+                           <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{col.name}</span>
+                           <span className={`text-sm font-bold ${isLast ? 'text-blue-600 dark:text-blue-400' : 'text-slate-800 dark:text-slate-200'}`}>
+                             {q ? `${q.correct}/${q.total}` : `0/${col.total}`}
+                           </span>
                         </div>
                      )
                   })}
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-end gap-2 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex justify-center mt-2">
                    {isAdminMode ? (
-                     <>
+                     <div className="flex gap-2 w-full">
                         <button
                           onClick={() => handleViewStudent(student)}
-                          className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-blue-700 transition-colors hover:bg-blue-100"
+                          className="flex-1 flex justify-center items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 font-semibold text-sm transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                         >
-                          <Eye size={14} />
-                          <span className="text-xs font-semibold">Detail</span>
+                          <Eye size={16} />
+                          Detail
                         </button>
                         <button
                           onClick={() => handleEditStudent(student)}
-                          className="rounded-lg border border-amber-200 bg-amber-50 p-1.5 text-amber-700 transition-colors hover:bg-amber-100"
+                          className="flex justify-center items-center rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-700 transition-colors hover:bg-amber-100"
                           aria-label="Edit"
                         >
-                          <PencilLine size={14} />
+                          <PencilLine size={16} />
                         </button>
                         <button
                           onClick={() => {
                             setDeletingStudentId(student.id);
                             setIsConfirmOpen(true);
                           }}
-                          className="rounded-lg border border-rose-200 bg-rose-50 p-1.5 text-rose-700 transition-colors hover:bg-rose-100"
+                          className="flex justify-center items-center rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 transition-colors hover:bg-rose-100"
                           aria-label="Hapus"
                         >
-                          <Trash2 size={14} />
+                          <Trash2 size={16} />
                         </button>
-                     </>
+                     </div>
                    ) : student.nim === identity?.nim ? (
                      <button
                        onClick={() => handleViewStudent(student)}
-                       className="flex items-center gap-1.5 rounded-lg border border-blue-600 bg-blue-600 px-4 py-1.5 text-white shadow-sm transition-all hover:bg-blue-700"
+                       className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 font-semibold text-sm transition-all hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                      >
-                       <Eye size={14} />
-                       <span className="text-xs font-semibold">Lihat Detail</span>
+                       <Eye size={16} />
+                       <span>Lihat Detail</span>
                      </button>
                    ) : (
-                     <div className="flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-slate-500">
-                       <Lock size={12} />
-                       <span className="text-xs font-medium">Privasi</span>
+                     <div className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-3 text-slate-400 dark:bg-slate-800/50 border border-transparent dark:border-slate-800">
+                       <Lock size={14} />
+                       <span className="text-sm font-medium">Privasi</span>
                      </div>
                    )}
                 </div>
