@@ -347,17 +347,17 @@ export default function Leaderboard() {
   };
 
   return (
-    <div className="flex w-full max-w-[100vw] overflow-hidden flex-col bg-slate-50 p-2 md:p-4 font-sans text-slate-700 h-[calc(100vh-140px)] md:h-[calc(100vh-130px)]">
+    <div className="flex w-full flex-col bg-slate-50 p-3 md:p-4 font-sans text-slate-700 h-[calc(100vh-140px)] md:h-[calc(100vh-130px)]">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col min-h-0 gap-4 md:gap-6">
 
         {/* Header */}
-        <div className="relative flex flex-none flex-row items-center justify-between gap-2">
+        <div className="relative flex flex-none flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-2">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-3">
-            <Trophy className="text-blue-600 dark:text-blue-400" size={32} />
+            <Trophy className="text-blue-600 dark:text-blue-400" size={28} />
             Papan Skor
           </h1>
 
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
             <button
               onClick={fetchLeaderboard}
               className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-medium text-sm shadow-sm"
@@ -419,8 +419,114 @@ export default function Leaderboard() {
           </div>
         )}
 
-        {/* Scoreboard Table */}
-        <div className="block min-h-0 w-full flex-1 overflow-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
+        {/* Mobile View (Cards) */}
+        <div className="flex md:hidden flex-col gap-3 overflow-y-auto w-full pb-4 pr-1">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center gap-3 text-slate-500 py-10">
+              <Loader2 className="animate-spin text-blue-600" size={32} />
+              <p className="font-medium">Memuat data papan skor...</p>
+            </div>
+          ) : data.length === 0 ? (
+            <div className="text-center font-medium text-slate-500 py-10 bg-white rounded-2xl border border-slate-200">
+              Belum ada data nilai kuis mahasiswa.
+            </div>
+          ) : (
+            data.map((student, idx) => (
+              <div key={student.id} className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-3 relative overflow-hidden">
+                {/* Rank Accent */}
+                {idx < 3 && (
+                  <div className={`absolute top-0 left-0 w-1 h-full ${idx === 0 ? 'bg-amber-400' : idx === 1 ? 'bg-slate-300' : 'bg-amber-600'}`} />
+                )}
+                
+                <div className="flex justify-between items-start">
+                   <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm shadow-sm border
+                        ${idx === 0 ? 'bg-amber-50 text-amber-600 border-amber-200' : 
+                          idx === 1 ? 'bg-slate-50 text-slate-600 border-slate-200' : 
+                          idx === 2 ? 'bg-orange-50 text-orange-600 border-orange-200' : 
+                          'bg-slate-100 text-slate-500 border-slate-200'}
+                      `}>
+                        {idx + 1}
+                      </div>
+                      <div>
+                         <div className="font-bold text-slate-800 text-sm leading-tight mb-0.5 dark:text-slate-100">{student.name}</div>
+                         <div className="text-[11px] text-slate-500">{student.nim} • {student.angkatan}</div>
+                      </div>
+                   </div>
+                   <div className="flex flex-col items-end">
+                      <div className="text-[10px] font-bold text-slate-400 tracking-wider">SKOR NUMi</div>
+                      <div className="text-lg font-black text-blue-600 leading-tight">{student.numiScore}</div>
+                   </div>
+                </div>
+                
+                {/* Detailed Quiz Scores (Grid) */}
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  {QUIZ_COLUMNS.map((col) => {
+                     const q = student.quizzes.find((q) => q.title.toLowerCase().includes(col.keyword.toLowerCase()));
+                     return (
+                        <div key={col.id} className={`flex justify-between items-center p-2 rounded-lg border ${
+                          col.name === "Ujian Akhir" 
+                            ? 'col-span-2 bg-blue-50 border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50' 
+                            : 'bg-slate-50 border-slate-100 dark:bg-slate-800/50 dark:border-slate-800'
+                        }`}>
+                           <span className={`text-[10px] font-medium ${col.name === "Ujian Akhir" ? 'text-blue-700 dark:text-blue-300' : 'text-slate-600 dark:text-slate-400'}`}>{col.name}</span>
+                           <span className={`text-[11px] font-bold ${col.name === "Ujian Akhir" ? 'text-blue-800 dark:text-blue-200' : 'text-slate-800 dark:text-slate-200'}`}>{q ? `${q.correct}/${q.total}` : `0/${col.total}`}</span>
+                        </div>
+                     )
+                  })}
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-end gap-2 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800">
+                   {isAdminMode ? (
+                     <>
+                        <button
+                          onClick={() => handleViewStudent(student)}
+                          className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-blue-700 transition-colors hover:bg-blue-100"
+                        >
+                          <Eye size={14} />
+                          <span className="text-xs font-semibold">Detail</span>
+                        </button>
+                        <button
+                          onClick={() => handleEditStudent(student)}
+                          className="rounded-lg border border-amber-200 bg-amber-50 p-1.5 text-amber-700 transition-colors hover:bg-amber-100"
+                          aria-label="Edit"
+                        >
+                          <PencilLine size={14} />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setDeletingStudentId(student.id);
+                            setIsConfirmOpen(true);
+                          }}
+                          className="rounded-lg border border-rose-200 bg-rose-50 p-1.5 text-rose-700 transition-colors hover:bg-rose-100"
+                          aria-label="Hapus"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                     </>
+                   ) : student.nim === identity?.nim ? (
+                     <button
+                       onClick={() => handleViewStudent(student)}
+                       className="flex items-center gap-1.5 rounded-lg border border-blue-600 bg-blue-600 px-4 py-1.5 text-white shadow-sm transition-all hover:bg-blue-700"
+                     >
+                       <Eye size={14} />
+                       <span className="text-xs font-semibold">Lihat Detail</span>
+                     </button>
+                   ) : (
+                     <div className="flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-slate-500">
+                       <Lock size={12} />
+                       <span className="text-xs font-medium">Privasi</span>
+                     </div>
+                   )}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop View (Table) */}
+        <div className="hidden md:block min-h-0 w-full flex-1 overflow-auto rounded-2xl border border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
             <table className="w-full min-w-full md:min-w-[1000px] table-fixed border-collapse text-left text-[10px] md:text-xs">
               <colgroup>
                 <col className="w-[12%] md:w-[5%]" />
