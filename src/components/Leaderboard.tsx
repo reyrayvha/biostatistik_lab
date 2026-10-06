@@ -204,6 +204,32 @@ export default function Leaderboard() {
           quizzes: attempt.details || [],
         }));
 
+        formattedData.sort((a, b) => {
+          if (b.numiScore !== a.numiScore) {
+            return b.numiScore - a.numiScore;
+          }
+
+          const aTotalCorrect = a.quizzes.reduce((acc, q) => {
+            if (q && !q.title.includes("Ujian Akhir") && !q.title.includes("NUMi")) {
+              return acc + (q.correct || 0);
+            }
+            return acc;
+          }, 0);
+
+          const bTotalCorrect = b.quizzes.reduce((acc, q) => {
+            if (q && !q.title.includes("Ujian Akhir") && !q.title.includes("NUMi")) {
+              return acc + (q.correct || 0);
+            }
+            return acc;
+          }, 0);
+
+          if (bTotalCorrect !== aTotalCorrect) {
+            return bTotalCorrect - aTotalCorrect;
+          }
+
+          return a.finishTimestamp - b.finishTimestamp;
+        });
+
         setData(formattedData);
       }
     } catch (error: any) {
@@ -281,7 +307,7 @@ export default function Leaderboard() {
 
       // Helper to dynamically map summary and detailed answers
       const addQuizData = (columnPrefix: string, titleKeyword: string, defaultIndex: number) => {
-        const q = student.quizzes.find((q) => q.title.toLowerCase().includes(titleKeyword.toLowerCase())) || student.quizzes[defaultIndex];
+        const q = student.quizzes.find((q) => q.title.toLowerCase().includes(titleKeyword.toLowerCase()));
 
         // Add Summary Score
         rowData[`Nilai ${columnPrefix}`] = q ? `${q.correct}/${q.total}` : "-";

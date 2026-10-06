@@ -688,7 +688,7 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
           };
         }).filter(Boolean);
 
-        // Compute numiScore safely from details to avoid 0 score if lastResult was null
+        // Compute numiScore safely from details based ONLY on Ujian Akhir (Quiz 7)
         const quiz7Detail = details.find((d) => d && (d.title.includes("Ujian Akhir") || d.title.includes("NUMi")));
         let numiScore = 0;
         if (quiz7Detail) {
