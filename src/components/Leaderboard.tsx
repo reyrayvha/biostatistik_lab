@@ -347,7 +347,7 @@ export default function Leaderboard() {
   };
 
   return (
-    <div className="flex w-full flex-col bg-slate-50 p-3 md:p-4 font-sans text-slate-700 h-[calc(100vh-140px)] md:h-[calc(100vh-130px)]">
+    <div className="flex w-full flex-col bg-slate-50 p-3 md:p-4 font-sans text-slate-700 min-h-0 md:h-[calc(100vh-130px)]">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col min-h-0 gap-4 md:gap-6">
 
         {/* Header */}
@@ -420,7 +420,7 @@ export default function Leaderboard() {
         )}
 
         {/* Mobile View (Cards) */}
-        <div className="flex md:hidden flex-col gap-3 overflow-y-auto w-full pb-4 pr-1">
+        <div className="flex md:hidden flex-col gap-3 w-full pb-4">
           {loading ? (
             <div className="flex flex-col items-center justify-center gap-3 text-slate-500 py-10">
               <Loader2 className="animate-spin text-blue-600" size={32} />
@@ -432,81 +432,97 @@ export default function Leaderboard() {
             </div>
           ) : (
             data.map((student, idx) => (
-              <div key={student.id} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col gap-5 relative overflow-hidden">
-                {/* Header (Rank, Name, NIM, Angkatan) */}
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-start gap-3">
-                    <div className="text-slate-400 dark:text-slate-500 font-bold text-base mt-0.5">#{idx + 1}</div>
-                    <div className="flex flex-col">
-                      <div className="font-bold text-slate-800 dark:text-slate-100 text-base leading-tight">{student.name}</div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">{student.nim} • {student.angkatan}</div>
+              <div key={student.id} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-3 relative overflow-hidden">
+                {/* Header: Rank + Name + Score */}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                    <div className="text-slate-400 dark:text-slate-500 font-bold text-sm mt-0.5 shrink-0">#{idx + 1}</div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="font-bold text-slate-800 dark:text-slate-100 text-[15px] leading-tight truncate">{student.name}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">{student.nim} • {student.angkatan}</div>
                     </div>
+                  </div>
+                  <div className="flex flex-col items-end shrink-0">
+                    <div className="text-2xl font-black text-blue-600 dark:text-blue-400 leading-none">{student.numiScore}</div>
+                    <div className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 tracking-wider uppercase mt-1">NUMi</div>
                   </div>
                 </div>
 
-                {/* Skor NUMi */}
-                <div className="flex flex-col">
-                  <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-1">SCORE NUMI</div>
-                  <div className="text-3xl font-black text-slate-800 dark:text-slate-100 leading-none">{student.numiScore}</div>
-                </div>
-
-                {/* Detailed Quiz Scores (Grid) */}
-                <div className="grid grid-cols-2 gap-y-5 gap-x-4 mt-1">
-                  {QUIZ_COLUMNS.map((col) => {
+                {/* Quiz Scores Grid */}
+                <div className="grid grid-cols-4 gap-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3">
+                  {QUIZ_COLUMNS.filter(col => col.name !== "Ujian Akhir").map((col) => {
                      const q = student.quizzes.find((q) => q.title.toLowerCase().includes(col.keyword.toLowerCase()));
-                     const isLast = col.name === "Ujian Akhir";
                      return (
-                        <div key={col.id} className={`flex flex-col gap-1.5 ${isLast ? 'col-span-2' : ''}`}>
-                           <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{col.name}</span>
-                           <span className={`text-sm font-bold ${isLast ? 'text-blue-600 dark:text-blue-400' : 'text-slate-800 dark:text-slate-200'}`}>
+                        <div key={col.id} className="flex flex-col items-center gap-0.5">
+                           <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 text-center leading-tight">{col.name.length > 8 ? col.name.substring(0, 7) + '.' : col.name}</span>
+                           <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
                              {q ? `${q.correct}/${q.total}` : `0/${col.total}`}
                            </span>
                         </div>
                      )
                   })}
+                  {/* Ujian Akhir - takes 2 columns */}
+                  {(() => {
+                    const uaCol = QUIZ_COLUMNS.find(c => c.name === "Ujian Akhir");
+                    if (!uaCol) return null;
+                    const q = student.quizzes.find((q) => q.title.toLowerCase().includes(uaCol.keyword.toLowerCase()));
+                    return (
+                      <div className="col-span-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-700 pt-2 mt-1 px-1">
+                        <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Ujian Akhir</span>
+                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400">
+                          {q ? `${q.correct}/${q.total}` : `0/${uaCol.total}`}
+                        </span>
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Timestamp */}
+                <div className="text-[10px] text-slate-400 dark:text-slate-500 text-center">
+                  {formatCompactTimestamp(student.finishTimestamp)}
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-center mt-2">
+                <div className="flex justify-center">
                    {isAdminMode ? (
                      <div className="flex gap-2 w-full">
                         <button
                           onClick={() => handleViewStudent(student)}
-                          className="flex-1 flex justify-center items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 font-semibold text-sm transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                          className="flex-1 flex justify-center items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-slate-700 font-semibold text-sm transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                         >
-                          <Eye size={16} />
+                          <Eye size={15} />
                           Detail
                         </button>
                         <button
                           onClick={() => handleEditStudent(student)}
-                          className="flex justify-center items-center rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-700 transition-colors hover:bg-amber-100"
+                          className="flex justify-center items-center rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-amber-700 transition-colors hover:bg-amber-100"
                           aria-label="Edit"
                         >
-                          <PencilLine size={16} />
+                          <PencilLine size={15} />
                         </button>
                         <button
                           onClick={() => {
                             setDeletingStudentId(student.id);
                             setIsConfirmOpen(true);
                           }}
-                          className="flex justify-center items-center rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 transition-colors hover:bg-rose-100"
+                          className="flex justify-center items-center rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-rose-700 transition-colors hover:bg-rose-100"
                           aria-label="Hapus"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={15} />
                         </button>
                      </div>
                    ) : student.nim === identity?.nim ? (
                      <button
                        onClick={() => handleViewStudent(student)}
-                       className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 font-semibold text-sm transition-all hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                       className="w-full flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-blue-700 font-semibold text-sm transition-all hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-200 dark:hover:bg-blue-900/50"
                      >
-                       <Eye size={16} />
-                       <span>Lihat Detail</span>
+                       <Eye size={15} />
+                       <span>Lihat Detail Jawaban</span>
                      </button>
                    ) : (
-                     <div className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-3 text-slate-400 dark:bg-slate-800/50 border border-transparent dark:border-slate-800">
-                       <Lock size={14} />
-                       <span className="text-sm font-medium">Privasi</span>
+                     <div className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-2.5 text-slate-400 dark:bg-slate-800/50 border border-transparent dark:border-slate-800">
+                       <Lock size={13} />
+                       <span className="text-xs font-medium">Privasi</span>
                      </div>
                    )}
                 </div>
@@ -681,33 +697,40 @@ export default function Leaderboard() {
 
       {/* Modal Detail Jawaban */}
       {selectedStudent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center md:p-4">
           {/* Layer Overlay */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setSelectedStudent(null)}
           ></div>
 
-          {/* Layer Kotak Putih */}
-          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-md flex flex-col max-h-[85vh] overflow-hidden">
+          {/* Layer Kotak Putih - full screen on mobile, modal on desktop */}
+          <div className="relative w-full md:max-w-md bg-white dark:bg-slate-900 border-t md:border border-slate-200 dark:border-slate-700 rounded-t-2xl md:rounded-2xl shadow-md flex flex-col h-[92vh] md:h-auto md:max-h-[85vh] overflow-hidden">
             
             {/* Layer Header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-100 shrink-0">
-              <div>
-                <h3 className="text-xl font-bold text-slate-800">Detail Jawaban</h3>
-                <p className="text-sm text-slate-500 mt-1">{selectedStudent.name} • {selectedStudent.nim}</p>
+            <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700 shrink-0">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100">Detail Jawaban</h3>
+                <p className="text-sm text-slate-500 mt-0.5 truncate">{selectedStudent.name} • {selectedStudent.nim}</p>
               </div>
+              <button
+                onClick={() => setSelectedStudent(null)}
+                className="ml-3 shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                aria-label="Tutup"
+              >
+                <span className="text-lg leading-none">✕</span>
+              </button>
             </div>
 
             {/* Layer Body */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3">
               {selectedStudent.quizzes.map((quiz, qIdx) => (
                 <DetailAccordion key={qIdx} quiz={quiz} />
               ))}
             </div>
 
             {/* Layer Footer */}
-            <div className="flex justify-end p-4 border-t border-slate-100 dark:border-slate-700 shrink-0 bg-white dark:bg-slate-900">
+            <div className="flex justify-end p-3 md:p-4 border-t border-slate-100 dark:border-slate-700 shrink-0 bg-white dark:bg-slate-900">
               <button
                 onClick={() => setSelectedStudent(null)}
                 className="w-full md:w-auto px-6 py-2.5 rounded-lg border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors font-medium dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
@@ -990,32 +1013,32 @@ function DetailAccordion({ quiz }: { quiz: QuizResult }) {
         <div className="p-3 md:p-4 border-t border-slate-200 dark:border-slate-700 bg-white/30 dark:bg-slate-900/30">
           <div className="flex flex-col gap-2 mt-1">
             {quiz.answers.map((ans, idx) => (
-              <div key={idx} className="bg-slate-50/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg p-3 md:p-4">
+              <div key={idx} className="bg-slate-50/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 md:p-4">
                 {/* Header Soal */}
                 <div className="flex items-start gap-2 md:gap-3">
-                  <span className="shrink-0 px-2 md:px-2.5 py-0.5 md:py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] md:text-xs font-bold text-slate-500 border border-slate-200 dark:border-slate-700">
+                  <span className="shrink-0 px-1.5 md:px-2.5 py-0.5 md:py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] md:text-xs font-bold text-slate-500 border border-slate-200 dark:border-slate-700">
                     {ans.id}
                   </span>
-                  <p className="text-slate-800 text-[13px] md:text-sm leading-relaxed mt-0.5">
+                  <p className="text-slate-800 dark:text-slate-200 text-[12px] md:text-sm leading-relaxed mt-0.5">
                     {ans.question}
                   </p>
                 </div>
 
                 {/* Jawaban Mahasiswa */}
-                <div className="mt-4 pl-12 flex flex-col items-start gap-2">
-                  <div className={`inline-flex items-start gap-2.5 px-3 py-2 text-sm font-medium border rounded-md ${ans.isCorrect
+                <div className="mt-3 md:mt-4 ml-0 md:pl-12 flex flex-col items-start gap-1.5 md:gap-2">
+                  <div className={`inline-flex items-start gap-2 px-2.5 py-1.5 md:px-3 md:py-2 text-xs md:text-sm font-medium border rounded-md w-full md:w-auto ${ans.isCorrect
                     ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-200'
                     : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-200'
                     }`}>
                     <div className="shrink-0 mt-0.5">
-                      {ans.isCorrect ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                      {ans.isCorrect ? <CheckCircle2 size={14} className="md:w-4 md:h-4" /> : <XCircle size={14} className="md:w-4 md:h-4" />}
                     </div>
-                    <span>Jawaban: {ans.selectedOption}. {ans.selectedText}</span>
+                    <span className="break-words min-w-0">Jawaban: {ans.selectedOption}. {ans.selectedText}</span>
                   </div>
 
                   {/* Kunci Jawaban */}
                   {!ans.isCorrect && (
-                    <div className="text-slate-500 text-xs italic ml-1">
+                    <div className="text-slate-500 dark:text-slate-400 text-[11px] md:text-xs italic break-words">
                       Kunci Benar: {ans.correctOption}. {ans.correctText}
                     </div>
                   )}
