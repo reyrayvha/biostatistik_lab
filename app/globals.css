@@ -1070,15 +1070,18 @@ html.dark .form-select {
   padding: 12px 20px;
   background: var(--bg-card-elevated);
   border: 1px solid var(--border-light);
-  border-left: 3px solid var(--color-success);
+  border-left: 3px solid var(--brand-600);
   border-radius: var(--radius-md);
   color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
-.quiz-best-score-banner svg,
+.quiz-best-score-banner svg {
+  color: var(--brand-600);
+}
+
 .quiz-best-score-banner strong {
-  color: var(--color-success);
+  color: var(--text-primary);
 }
 
 .quiz-summary-content {

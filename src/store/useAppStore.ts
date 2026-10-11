@@ -346,10 +346,8 @@ export const useAppStore = create<AppState>()(
       answers: { ...prev.currentAnswers },
     };
 
-    const bestResult =
-      prev.bestResult && prev.bestResult.score >= score
-        ? prev.bestResult
-        : newResult;
+    // Kebijakan penilaian: skor yang diambil adalah hasil percobaan terakhir (terbaru)
+    const latestResult = newResult;
 
     set({
       quizStates: {
@@ -359,7 +357,7 @@ export const useAppStore = create<AppState>()(
           attemptsUsed: prev.attemptsUsed + 1,
           started: false,
           lastResult: newResult,
-          bestResult,
+          bestResult: latestResult,
         },
       },
     });

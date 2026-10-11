@@ -42,7 +42,8 @@ Aplikasi ini memiliki 7 tahapan pembelajaran yang harus diselesaikan secara beru
 2. Pilih salah satu jawaban yang Anda anggap paling tepat untuk setiap soal.
 3. Setelah selesai, klik tombol **"Selesai & Lihat Nilai"**.
 4. Hasil kuis (Skor, Jumlah Benar/Salah, dan Jawaban yang benar) akan langsung ditampilkan.
-5. Anda dapat mengulang kuis dengan mengklik **"Ulangi Kuis"** jika ingin memperbaiki nilai, atau klik **"Lanjut ke Materi Selanjutnya"** untuk membuka modul berikutnya.
+5. Anda dapat mengulang kuis dengan mengklik **"Ulangi Kuis"** jika masih memiliki sisa kesempatan percobaan, atau klik **"Lanjut ke Materi Selanjutnya"** untuk membuka modul berikutnya.
+   - *Penting: Nilai yang akan diambil dan dicatat dalam rekapitulasi nilai akhir adalah hasil dari **percobaan terakhir (terbaru)**.* Sebelum mengulang, sistem akan menampilkan dialog konfirmasi peringatan.
 *Catatan: Jika Anda tidak menyelesaikan kuis dan mencoba berpindah tab/menutup halaman, sistem akan memberikan peringatan bahwa jawaban belum tersimpan.*
 
 ### 4. Melihat Papan Skor dan Detail Jawaban

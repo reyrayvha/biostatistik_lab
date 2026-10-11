@@ -25,9 +25,12 @@ import {
   ChevronDown,
   ChevronUp,
   Loader2,
+  Info,
+  AlertCircle,
 } from "lucide-react";
 import { useToastStore } from "@/src/store/useToastStore";
 import { FlashcardButton } from "@/src/components/Flashcard";
+import QuizRetakeModal from "@/src/components/QuizRetakeModal";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -57,6 +60,15 @@ function QuizSummaryScreen({
 }) {
   const hasAttemptsLeft = attemptsUsed < MAX_ATTEMPTS;
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isRetakeModalOpen, setIsRetakeModalOpen] = useState(false);
+
+  const handleStart = () => {
+    if (attemptsUsed > 0) {
+      setIsRetakeModalOpen(true);
+    } else {
+      onStart();
+    }
+  };
 
   return (
     <div className="quiz-summary-screen">
@@ -67,7 +79,7 @@ function QuizSummaryScreen({
         <h2 className="text-lg md:text-2xl font-bold text-center text-slate-800">{title}</h2>
         {attemptsUsed > 0 && (
           <div className="quiz-attempt-badge">
-            <Zap size={14} />
+            <RotateCcw size={14} />
             Percobaan: {attemptsUsed}/{MAX_ATTEMPTS}
           </div>
         )}
@@ -75,13 +87,29 @@ function QuizSummaryScreen({
 
       {bestResult && (
         <div className="quiz-best-score-banner">
-          <Trophy size={18} />
+          <CheckCircle2 size={18} />
           <span>
-            Skor terbaik Anda:{" "}
+            Skor tersimpan saat ini:{" "}
             <strong>
               {bestResult.score}/{bestResult.total}
             </strong>
           </span>
+        </div>
+      )}
+
+      {/* Keterangan ketentuan pengulangan kuis */}
+      {attemptsUsed > 0 && hasAttemptsLeft && (
+        <div className="flex items-start gap-3 rounded-xl border border-slate-200/90 bg-slate-50/80 p-4 text-xs md:text-sm text-slate-600 dark:border-slate-700/80 dark:bg-slate-800/50 dark:text-slate-300">
+          <Info size={18} className="mt-0.5 shrink-0 text-slate-500 dark:text-slate-400" />
+          <div className="space-y-1">
+            <p className="font-semibold text-slate-800 dark:text-slate-100">
+              Ketentuan Pengulangan {quizId === 7 ? "Ujian Akhir" : "Kuis"}
+            </p>
+            <p className="leading-relaxed">
+              Skor yang akan dicatat dan dihitung dalam evaluasi akhir adalah hasil dari{" "}
+              <strong className="text-slate-800 dark:text-slate-100">percobaan terakhir (terbaru)</strong>. Nilai dari percobaan sebelumnya akan diperbarui dengan hasil percobaan terbaru.
+            </p>
+          </div>
         </div>
       )}
 
@@ -126,7 +154,7 @@ function QuizSummaryScreen({
                 ? "bg-[#2563eb] text-[#f8fafc] hover:bg-[#79c0ff] font-semibold"
                 : "border border-slate-300 bg-slate-50 text-slate-700 hover:bg-[#e2e8f0]/50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                 }`}
-              onClick={onStart}
+              onClick={handleStart}
             >
               {attemptsUsed > 0
                 ? (quizId === 7 ? `Ulangi Ujian Akhir (${MAX_ATTEMPTS - attemptsUsed} sisa)` : `Ulangi Quiz (${MAX_ATTEMPTS - attemptsUsed} sisa)`)
@@ -150,6 +178,20 @@ function QuizSummaryScreen({
 
         <FlashcardButton quizId={`quiz_${quizId}`} quizTitle={title} />
       </div>
+
+      <QuizRetakeModal
+        isOpen={isRetakeModalOpen}
+        onClose={() => setIsRetakeModalOpen(false)}
+        onConfirm={() => {
+          setIsRetakeModalOpen(false);
+          onStart();
+        }}
+        quizTitle={quizId === 7 ? "Ujian Akhir" : title}
+        isFinalExam={quizId === 7}
+        attemptsUsed={attemptsUsed}
+        maxAttempts={MAX_ATTEMPTS}
+        currentScore={bestResult}
+      />
     </div>
   );
 }
@@ -389,6 +431,13 @@ function QuizScorePanel({
           Lanjut ke Quiz Selanjutnya
         </button>
       </div>
+
+      {hasAttemptsLeft && (
+        <p className="mt-2 text-center text-xs text-slate-500 flex items-center justify-center gap-1.5">
+          <Info size={14} className="shrink-0 text-slate-400" />
+          <span>Jika Anda mengulang kuis, skor yang dicatat adalah hasil percobaan terakhir (terbaru).</span>
+        </p>
+      )}
     </div>
   );
 }
@@ -517,6 +566,11 @@ function NUMiScorePanel({
           Papan Skor
         </button>
       </div>
+
+      <p className="mt-2 text-center text-xs text-slate-500 flex items-center justify-center gap-1.5">
+        <Info size={14} className="shrink-0 text-slate-400" />
+        <span>Jika Anda mengulang ujian akhir, nilai yang dicatat adalah hasil percobaan terakhir (terbaru).</span>
+      </p>
 
     </div>
   );
@@ -659,7 +713,11 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
           const state = states[quiz.quizId];
           if (!state || state.attemptsUsed === 0) return null;
 
-          const answersToUse = state.lastResult ? state.lastResult.answers : state.currentAnswers;
+          const answersToUse = (state.lastResult && Object.keys(state.lastResult.answers).length > 0)
+            ? state.lastResult.answers
+            : (state.bestResult && Object.keys(state.bestResult.answers).length > 0)
+              ? state.bestResult.answers
+              : state.currentAnswers;
 
           const answersDetail = quiz.questions.map((q) => {
             const selectedOpt = answersToUse[q.id];
