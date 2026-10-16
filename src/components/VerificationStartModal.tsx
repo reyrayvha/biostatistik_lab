@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, BookOpen, FileQuestion, AlertTriangle } from "lucide-react";
+import { Clock, BookOpen, FileQuestion, AlertTriangle, Eye } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // VerificationStartModal — shown once after login before quiz begins
@@ -22,8 +22,8 @@ export default function VerificationStartModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" />
+      {/* Backdrop — Focus on Screen with rich Blur */}
+      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md transition-opacity" />
 
       {/* Modal */}
       <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
@@ -36,7 +36,7 @@ export default function VerificationStartModal({
             Sebelum Memulai Quiz
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Pastikan Anda memahami ketentuan waktu berikut
+            Pastikan Anda memahami ketentuan waktu dan fokus berikut
           </p>
         </div>
 
@@ -92,6 +92,21 @@ export default function VerificationStartModal({
             </div>
           </div>
 
+          {/* Rule 4: Fokus Layar & No Multitasking */}
+          <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+              <Eye size={16} className="text-blue-600" />
+            </div>
+            <div>
+              <p className="font-semibold text-slate-800 text-sm">
+                Fokus Penuh pada Layar
+              </p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Peserta wajib fokus pada layar pengerjaan kuis. Dilarang berpindah tab, membuka jendela lain, atau melakukan multitasking.
+              </p>
+            </div>
+          </div>
+
           {/* Warning */}
           <div className="flex items-start gap-3 p-3 rounded-xl bg-amber-50 border border-amber-200">
             <AlertTriangle
@@ -116,7 +131,7 @@ export default function VerificationStartModal({
               className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
             />
             <span className="text-sm text-slate-700">
-              Saya memahami ketentuan waktu dan siap memulai quiz
+              Saya memahami ketentuan waktu, siap fokus pada layar, dan tidak multitasking
             </span>
           </label>
 
