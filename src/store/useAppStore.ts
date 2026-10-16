@@ -114,8 +114,11 @@ type AppState = {
   startQuiz: (quizId: number) => void;
   answerQuestion: (quizId: number, questionId: number, answer: string) => void;
   finishQuiz: (quizId: number, score: number, total: number) => void;
-  retryQuiz: (quizId: number) => void;
   hasUnsavedQuizAnswers: (quizId?: number) => boolean;
+
+  /** Whether the user has confirmed quiz start rules (verification modal) */
+  quizStartConfirmed: boolean;
+  setQuizStartConfirmed: (confirmed: boolean) => void;
 
   /** Advance to the next tab and navigate there */
   advanceToNextQuiz: () => void;
@@ -175,6 +178,7 @@ export const useAppStore = create<AppState>()(
         unlockedIndex: 0,
         activeTab: "identitas",
         quizStates: {},
+        quizStartConfirmed: false,
         isAdminMode: false,
         adminName: null,
         adminAuthTimestamp: null,
@@ -189,6 +193,7 @@ export const useAppStore = create<AppState>()(
       identity,
       unlockedIndex: Math.max(current, 1),
       activeTab: "quiz-1",
+      quizStartConfirmed: false,
     });
   },
   updateIdentity: (identity) => {
@@ -211,6 +216,7 @@ export const useAppStore = create<AppState>()(
       adminName: null,
       adminAuthTimestamp: null,
       quizStates: {},
+      quizStartConfirmed: false,
     });
 
     if (typeof window !== "undefined") {
@@ -363,20 +369,6 @@ export const useAppStore = create<AppState>()(
     });
   },
 
-  retryQuiz: (quizId) => {
-    const prev = get().quizStates[quizId] ?? { ...DEFAULT_QUIZ_STATE };
-    set({
-      quizStates: {
-        ...get().quizStates,
-        [quizId]: {
-          ...prev,
-          started: true,
-          currentAnswers: {},
-          lastResult: null,
-        },
-      },
-    });
-  },
   hasUnsavedQuizAnswers: (quizId) => {
     const states = get().quizStates;
     if (!quizId) {
@@ -386,6 +378,10 @@ export const useAppStore = create<AppState>()(
     const state = states[quizId];
     return Boolean(state && state.started && Object.keys(state.currentAnswers).length > 0);
   },
+
+  // === Quiz Start Confirmation ===
+  quizStartConfirmed: false,
+  setQuizStartConfirmed: (confirmed) => set({ quizStartConfirmed: confirmed }),
 
   advanceToNextQuiz: () => {
     const { activeTab, unlockedIndex, quizStates } = get();
@@ -446,6 +442,7 @@ export const useAppStore = create<AppState>()(
         activeTab: state.activeTab,
         unlockedIndex: state.unlockedIndex,
         quizStates: state.quizStates,
+        quizStartConfirmed: state.quizStartConfirmed,
         isSidebarOpen: state.isSidebarOpen,
         isAdminMode: state.isAdminMode,
         adminName: state.adminName,

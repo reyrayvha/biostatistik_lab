@@ -613,23 +613,13 @@ export default function Leaderboard() {
                           <td key={col.id} className="hidden md:table-cell px-1 py-2 text-center md:whitespace-nowrap md:px-2">
                             <div className="flex flex-col items-center">
                               {quiz ? (
-                                <>
-                                  <span className="text-sm font-bold text-slate-800">
-                                    {quiz.correct}/{quiz.total}
-                                  </span>
-                                  <span className="mt-0.5 text-[10px] leading-tight text-slate-500">
-                                    Percobaan: {quiz.attempts}x
-                                  </span>
-                                </>
+                                <span className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                                  {quiz.correct}/{quiz.total}
+                                </span>
                               ) : (
-                                <>
-                                  <span className="text-sm font-semibold text-slate-400">
-                                    0/{col.total}
-                                  </span>
-                                  <span className="mt-0.5 text-[10px] leading-tight text-slate-400">
-                                    Percobaan: 0x
-                                  </span>
-                                </>
+                                <span className="text-sm font-semibold text-slate-400 dark:text-slate-500">
+                                  0/{col.total}
+                                </span>
                               )}
                             </div>
                           </td>

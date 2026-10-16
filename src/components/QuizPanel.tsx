@@ -27,16 +27,18 @@ import {
   Loader2,
   Info,
   AlertCircle,
+  Clock,
 } from "lucide-react";
 import { useToastStore } from "@/src/store/useToastStore";
 import { FlashcardButton } from "@/src/components/Flashcard";
-import QuizRetakeModal from "@/src/components/QuizRetakeModal";
+import FloatingTimer from "@/src/components/FloatingTimer";
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const MAX_ATTEMPTS = 2;
+const SUMMARY_DURATION = 240; // 4 menit membaca & eksplorasi materi
+const QUESTION_DURATION = 60; // 1 menit per soal
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -46,29 +48,19 @@ const MAX_ATTEMPTS = 2;
 function QuizSummaryScreen({
   quizId,
   title,
-  attemptsUsed,
   bestResult,
   onStart,
   onAdvance,
+  summarySecondsLeft,
 }: {
   quizId: number;
   title: string;
-  attemptsUsed: number;
   bestResult: { score: number; total: number } | null;
   onStart: () => void;
   onAdvance?: () => void;
+  summarySecondsLeft?: number;
 }) {
-  const hasAttemptsLeft = attemptsUsed < MAX_ATTEMPTS;
-  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
-  const [isRetakeModalOpen, setIsRetakeModalOpen] = useState(false);
-
-  const handleStart = () => {
-    if (attemptsUsed > 0) {
-      setIsRetakeModalOpen(true);
-    } else {
-      onStart();
-    }
-  };
+  const [isSummaryOpen, setIsSummaryOpen] = useState(true);
 
   return (
     <div className="quiz-summary-screen">
@@ -76,11 +68,15 @@ function QuizSummaryScreen({
         <div className="quiz-summary-icon">
           <BookOpen size={32} strokeWidth={1.5} />
         </div>
-        <h2 className="text-lg md:text-2xl font-bold text-center text-slate-800">{title}</h2>
-        {attemptsUsed > 0 && (
-          <div className="quiz-attempt-badge">
-            <RotateCcw size={14} />
-            Percobaan: {attemptsUsed}/{MAX_ATTEMPTS}
+        <h2 className="text-lg md:text-2xl font-bold text-center text-slate-800 dark:text-slate-100">{title}</h2>
+
+        {/* Time indicator for reading material when not yet finished */}
+        {quizId !== 7 && !bestResult && summarySecondsLeft !== undefined && (
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-950/60 dark:border-blue-800 dark:text-blue-300 text-xs font-semibold mt-1">
+            <Clock size={14} className="text-blue-600 dark:text-blue-400" />
+            <span>
+              Waktu Eksplorasi Materi: {Math.floor(summarySecondsLeft / 60)}:{(summarySecondsLeft % 60).toString().padStart(2, "0")}
+            </span>
           </div>
         )}
       </div>
@@ -89,27 +85,11 @@ function QuizSummaryScreen({
         <div className="quiz-best-score-banner">
           <CheckCircle2 size={18} />
           <span>
-            Skor tersimpan saat ini:{" "}
+            Kuis telah diselesaikan. Skor tersimpan:{" "}
             <strong>
               {bestResult.score}/{bestResult.total}
             </strong>
           </span>
-        </div>
-      )}
-
-      {/* Keterangan ketentuan pengulangan kuis */}
-      {attemptsUsed > 0 && hasAttemptsLeft && (
-        <div className="flex items-start gap-3 rounded-xl border border-slate-200/90 bg-slate-50/80 p-4 text-xs md:text-sm text-slate-600 dark:border-slate-700/80 dark:bg-slate-800/50 dark:text-slate-300">
-          <Info size={18} className="mt-0.5 shrink-0 text-slate-500 dark:text-slate-400" />
-          <div className="space-y-1">
-            <p className="font-semibold text-slate-800 dark:text-slate-100">
-              Ketentuan Pengulangan {quizId === 7 ? "Ujian Akhir" : "Kuis"}
-            </p>
-            <p className="leading-relaxed">
-              Skor yang akan dicatat dan dihitung dalam evaluasi akhir adalah hasil dari{" "}
-              <strong className="text-slate-800 dark:text-slate-100">percobaan terakhir (terbaru)</strong>. Nilai dari percobaan sebelumnya akan diperbarui dengan hasil percobaan terbaru.
-            </p>
-          </div>
         </div>
       )}
 
@@ -148,50 +128,25 @@ function QuizSummaryScreen({
 
       <div className="mt-6 flex w-full flex-col gap-3">
         <div className="flex flex-col gap-3 sm:flex-row">
-          {hasAttemptsLeft ? (
+          {!bestResult ? (
             <button
-              className={`flex-1 py-3.5 rounded-xl font-medium text-base transition-colors tracking-wide ${attemptsUsed === 0
-                ? "bg-[#2563eb] text-[#f8fafc] hover:bg-[#79c0ff] font-semibold"
-                : "border border-slate-300 bg-slate-50 text-slate-700 hover:bg-[#e2e8f0]/50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
-                }`}
-              onClick={handleStart}
+              className="flex-1 py-3.5 rounded-xl font-semibold text-base transition-colors tracking-wide bg-[#2563eb] text-[#f8fafc] hover:bg-blue-700 shadow-md shadow-blue-200 dark:shadow-none"
+              onClick={onStart}
             >
-              {attemptsUsed > 0
-                ? (quizId === 7 ? `Ulangi Ujian Akhir (${MAX_ATTEMPTS - attemptsUsed} sisa)` : `Ulangi Quiz (${MAX_ATTEMPTS - attemptsUsed} sisa)`)
-                : (quizId === 7 ? "Mulai Ujian Akhir" : "Mulai Quiz")}
+              {quizId === 7 ? "Mulai Ujian Akhir" : "Mulai Quiz"}
             </button>
-          ) : (
-            <div className="flex-1 flex items-center justify-center py-3.5 rounded-xl border border-slate-300 bg-slate-50 text-slate-500 font-medium text-sm tracking-wide dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-              Sisa percobaan quiz ini telah habis.
-            </div>
-          )}
-
-          {bestResult && onAdvance && (
+          ) : onAdvance ? (
             <button
-              className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+              className="flex-1 py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-base hover:bg-blue-700 transition-colors tracking-wide shadow-md shadow-blue-200 dark:shadow-none"
               onClick={onAdvance}
             >
               {quizId === 7 ? "Lihat Papan Skor" : "Lanjut Quiz Berikutnya"}
             </button>
-          )}
+          ) : null}
         </div>
 
         <FlashcardButton quizId={`quiz_${quizId}`} quizTitle={title} />
       </div>
-
-      <QuizRetakeModal
-        isOpen={isRetakeModalOpen}
-        onClose={() => setIsRetakeModalOpen(false)}
-        onConfirm={() => {
-          setIsRetakeModalOpen(false);
-          onStart();
-        }}
-        quizTitle={quizId === 7 ? "Ujian Akhir" : title}
-        isFinalExam={quizId === 7}
-        attemptsUsed={attemptsUsed}
-        maxAttempts={MAX_ATTEMPTS}
-        currentScore={bestResult}
-      />
     </div>
   );
 }
@@ -201,12 +156,10 @@ function SegmentedProgressBar({
   questions,
   currentAnswers,
   currentIndex,
-  onSegmentClick,
 }: {
   questions: Question[];
   currentAnswers: Record<number, string>;
   currentIndex: number;
-  onSegmentClick: (index: number) => void;
 }) {
   return (
     <div className="segmented-progress">
@@ -224,10 +177,9 @@ function SegmentedProgressBar({
         }
 
         return (
-          <button
+          <div
             key={q.id}
             className={segClass}
-            onClick={() => onSegmentClick(idx)}
             aria-label={`Soal ${idx + 1}`}
             title={`Soal ${idx + 1}`}
           />
@@ -244,12 +196,14 @@ function QuestionView({
   total,
   selectedAnswer,
   onAnswer,
+  remainingSeconds,
 }: {
   question: Question;
   index: number;
   total: number;
   selectedAnswer: string | undefined;
   onAnswer: (answer: string) => void;
+  remainingSeconds?: number;
 }) {
   const isAnswered = selectedAnswer !== undefined;
 
@@ -257,10 +211,24 @@ function QuestionView({
     <div className="question-card" key={`q-${question.id}-${index}`} style={{ animation: "slideLeft 0.3s ease" }}>
       {/* Question header */}
       <div className="question-header">
-        <span className="question-number">
-          <Hash size={14} />
-          Soal {index + 1} dari {total}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="question-number">
+            <Hash size={14} />
+            Soal {index + 1} dari {total}
+          </span>
+          {remainingSeconds !== undefined && (
+            <span
+              className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold border transition-colors ${
+                remainingSeconds <= 10
+                  ? "bg-red-50 text-red-600 border-red-200 dark:bg-red-950/60 dark:text-red-400 dark:border-red-800 animate-pulse"
+                  : "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+              }`}
+            >
+              <Clock size={12} />
+              {Math.floor(remainingSeconds / 60)}:{(remainingSeconds % 60).toString().padStart(2, "0")}
+            </span>
+          )}
+        </div>
         {isAnswered && (
           <span
             className={`question-status ${selectedAnswer === question.correctAnswer
@@ -330,20 +298,15 @@ function QuestionView({
 function QuizScorePanel({
   score,
   total,
-  attemptsUsed,
   quote,
-  onRetry,
   onAdvance,
 }: {
   score: number;
   total: number;
-  attemptsUsed: number;
   quote?: string;
-  onRetry: () => void;
   onAdvance: () => void;
 }) {
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
-  const hasAttemptsLeft = attemptsUsed < MAX_ATTEMPTS;
   const panelRef = useRef<HTMLDivElement>(null);
 
   const displayQuote =
@@ -364,7 +327,7 @@ function QuizScorePanel({
   }
 
   return (
-    <div ref={panelRef} className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-8 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
+    <div ref={panelRef} className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-8 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl dark:bg-slate-900 dark:border-slate-800">
 
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
@@ -372,72 +335,53 @@ function QuizScorePanel({
           <Target size={18} /> Hasil Quiz
         </h3>
 
-        <div className="text-5xl md:text-7xl font-bold tracking-tight leading-none text-slate-900 mt-2 md:mt-0">
+        <div className="text-5xl md:text-7xl font-bold tracking-tight leading-none text-slate-900 dark:text-slate-100 mt-2 md:mt-0">
           {percentage}
           <span className="text-3xl md:text-5xl font-normal text-slate-500 ml-1 md:ml-2">%</span>
         </div>
 
         <div className="mt-4 md:mt-5 flex flex-col items-center justify-center gap-2 md:gap-3">
-          <span className="px-4 md:px-5 py-1 md:py-1.5 rounded-full border border-slate-300 bg-[#f8fafc] text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-700">
+          <span className="px-4 md:px-5 py-1 md:py-1.5 rounded-full border border-slate-300 bg-[#f8fafc] text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
             {levelText}
           </span>
-          <p className="text-sm md:text-base text-slate-500">Anda menjawab <strong className="text-slate-700">{score} dari {total}</strong> soal dengan benar</p>
+          <p className="text-sm md:text-base text-slate-500">Anda menjawab <strong className="text-slate-700 dark:text-slate-200">{score} dari {total}</strong> soal dengan benar</p>
         </div>
       </div>
 
-      <hr className="border-slate-300 my-1 md:my-2" />
+      <hr className="border-slate-300 dark:border-slate-800 my-1 md:my-2" />
 
-      {/* Stats Row */}
-      <div className="flex gap-2 md:gap-4 mt-1 md:mt-2">
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+      {/* Stats Row - 2 columns */}
+      <div className="grid grid-cols-2 gap-3 md:gap-4 mt-1 md:mt-2">
+        <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-4 md:p-6 text-center flex flex-col justify-center items-center dark:bg-slate-800/60 dark:border-slate-700">
           <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
             <Target size={14} className="hidden md:block" /> Benar
           </div>
-          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{score}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">/{total}</span></div>
+          <div className="text-2xl md:text-4xl text-slate-700 dark:text-slate-200 font-semibold">{score}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">/{total}</span></div>
         </div>
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+        <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-4 md:p-6 text-center flex flex-col justify-center items-center dark:bg-slate-800/60 dark:border-slate-700">
           <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
             <Zap size={14} className="hidden md:block" /> Akurasi
           </div>
-          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{percentage}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">%</span></div>
-        </div>
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
-          <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
-            <RotateCcw size={14} className="hidden md:block" /> Percobaan
-          </div>
-          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{attemptsUsed}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">/{MAX_ATTEMPTS}</span></div>
+          <div className="text-2xl md:text-4xl text-slate-700 dark:text-slate-200 font-semibold">{percentage}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">%</span></div>
         </div>
       </div>
 
       {/* Quote */}
       <div className="mt-3 md:mt-6 mb-1 md:mb-2 flex items-center justify-center px-2 md:px-4">
-        <p className="text-sm md:text-lg text-slate-700 font-medium italic text-center leading-relaxed max-w-2xl mx-auto">
+        <p className="text-sm md:text-lg text-slate-700 dark:text-slate-300 font-medium italic text-center leading-relaxed max-w-2xl mx-auto">
           &ldquo;{displayQuote}&rdquo;
         </p>
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-3 md:gap-5 mt-2 md:mt-4">
-        <button
-          onClick={onRetry}
-          className="flex-1 py-3 md:py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-sm md:text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
-        >
-          Buka Kembali Materi {hasAttemptsLeft ? `(${MAX_ATTEMPTS - attemptsUsed} sisa)` : ""}
-        </button>
+      <div className="mt-2 md:mt-4">
         <button
           onClick={onAdvance}
-          className="flex-1 py-3 md:py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-sm md:text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+          className="w-full py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-sm md:text-base hover:bg-blue-700 transition-colors tracking-wide shadow-md shadow-blue-200 dark:shadow-none"
         >
           Lanjut ke Quiz Selanjutnya
         </button>
       </div>
-
-      {hasAttemptsLeft && (
-        <p className="mt-2 text-center text-xs text-slate-500 flex items-center justify-center gap-1.5">
-          <Info size={14} className="shrink-0 text-slate-400" />
-          <span>Jika Anda mengulang kuis, skor yang dicatat adalah hasil percobaan terakhir (terbaru).</span>
-        </p>
-      )}
     </div>
   );
 }
@@ -448,14 +392,12 @@ function NUMiScorePanel({
   total,
   questions,
   currentAnswers,
-  onRetry,
   onAdvance,
 }: {
   score: number;
   total: number;
   questions: Question[];
   currentAnswers: Record<number, string>;
-  onRetry: () => void;
   onAdvance?: () => void;
 }) {
   const numiScore = total > 0 ? Math.round((score / total) * 1000) : 0;
@@ -481,7 +423,7 @@ function NUMiScorePanel({
   ];
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-8 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl">
+    <div className="flex flex-col gap-4 md:gap-6 w-full max-w-4xl mx-auto p-4 pb-8 md:p-8 md:pb-8 font-sans mt-4 bg-slate-50 border border-slate-300 rounded-2xl dark:bg-slate-900 dark:border-slate-800">
 
       {/* Header Section */}
       <div className="text-center flex flex-col items-center">
@@ -489,46 +431,45 @@ function NUMiScorePanel({
           <BookOpen size={18} /> Indeks Pemahaman Numerik
         </h3>
 
-        <div className="text-5xl md:text-7xl font-bold tracking-tight leading-none text-slate-900 mt-2 md:mt-0">
+        <div className="text-5xl md:text-7xl font-bold tracking-tight leading-none text-slate-900 dark:text-slate-100 mt-2 md:mt-0">
           {numiScore}
           <span className="text-3xl md:text-5xl font-normal text-slate-500 ml-1 md:ml-2">/ 1000</span>
         </div>
       </div>
 
-      {/* Stats Row */}
-      <div className="flex gap-2 md:gap-4 mt-1 md:mt-2">
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+      {/* Stats Row - 2 columns */}
+      <div className="grid grid-cols-2 gap-3 md:gap-4 mt-1 md:mt-2">
+        <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-4 md:p-6 text-center flex flex-col justify-center items-center dark:bg-slate-800/60 dark:border-slate-700">
           <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
             <Target size={14} className="hidden md:block" /> Benar
           </div>
-          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{score}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">/{total}</span></div>
+          <div className="text-2xl md:text-4xl text-slate-700 dark:text-slate-200 font-semibold">{score}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">/{total}</span></div>
         </div>
-        <div className="flex-1 bg-[#f8fafc] border border-slate-300 rounded-xl p-3 md:p-6 text-center flex flex-col justify-center items-center">
+        <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-4 md:p-6 text-center flex flex-col justify-center items-center dark:bg-slate-800/60 dark:border-slate-700">
           <div className="text-xs md:text-sm text-slate-500 uppercase font-bold tracking-widest mb-1 md:mb-2 flex items-center justify-center gap-1.5">
             <Zap size={14} className="hidden md:block" /> Akurasi
           </div>
-          <div className="text-2xl md:text-4xl text-slate-700 font-semibold">{accuracy}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">%</span></div>
+          <div className="text-2xl md:text-4xl text-slate-700 dark:text-slate-200 font-semibold">{accuracy}<span className="text-sm md:text-lg text-slate-500 font-normal ml-1">%</span></div>
         </div>
       </div>
 
-      <hr className="border-slate-300 my-1 md:my-2" />
+      <hr className="border-slate-300 dark:border-slate-800 my-1 md:my-2" />
 
       {/* Domain Breakdown */}
       <div>
-        <h4 className="text-sm md:text-base text-slate-900 font-semibold mb-3 md:mb-4">Rincian per Domain</h4>
+        <h4 className="text-sm md:text-base text-slate-900 dark:text-slate-100 font-semibold mb-3 md:mb-4">Rincian per Domain</h4>
         <div className="space-y-3 md:space-y-4">
           {domains.map(d => {
-            // Neutral colors: Green for very good, Yellow for okay, Blue for low (avoids aggressive red)
             const barColor = d.pct >= 80 ? '#3fb950' : d.pct >= 60 ? '#d29922' : '#2563eb';
             return (
               <div key={d.name} className="flex flex-col gap-1 md:gap-2">
                 <div className="flex justify-between items-center text-xs md:text-[15px]">
-                  <span className="text-slate-600 truncate mr-2">{d.name}</span>
+                  <span className="text-slate-600 dark:text-slate-300 truncate mr-2">{d.name}</span>
                   <span className="font-mono text-slate-500 font-medium shrink-0">
-                    {d.correct}/{d.total} <span className="ml-1 md:ml-1.5 text-slate-700">({d.pct}%)</span>
+                    {d.correct}/{d.total} <span className="ml-1 md:ml-1.5 text-slate-700 dark:text-slate-200">({d.pct}%)</span>
                   </span>
                 </div>
-                <div className="h-1.5 md:h-2 w-full bg-[#f8fafc] rounded-full overflow-hidden">
+                <div className="h-1.5 md:h-2 w-full bg-[#f8fafc] dark:bg-slate-800 rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-700 ease-out"
                     style={{ width: `${d.pct}%`, backgroundColor: barColor }}
@@ -541,36 +482,25 @@ function NUMiScorePanel({
       </div>
 
       {/* Interpretasi (Padat) */}
-      <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-4 md:p-5 mt-2">
-        <h4 className="text-sm md:text-base text-slate-900 font-semibold mb-3 md:mb-4">Interpretasi NUMi</h4>
+      <div className="bg-[#f8fafc] border border-slate-300 rounded-xl p-4 md:p-5 mt-2 dark:bg-slate-800/60 dark:border-slate-700">
+        <h4 className="text-sm md:text-base text-slate-900 dark:text-slate-100 font-semibold mb-3 md:mb-4">Interpretasi NUMi</h4>
         <div className="flex flex-col md:flex-row md:flex-wrap gap-x-12 gap-y-2 md:gap-y-3 text-xs md:text-sm font-mono text-slate-500">
-          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 font-medium">900-1000:</span> Ahli</div>
-          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 font-medium">750-899:</span> Mahir</div>
-          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 font-medium">600-749:</span> Berkembang</div>
-          <div className="flex items-center justify-between md:justify-start gap-2.5"><span className="text-slate-700 font-medium">&lt; 600:</span> Dasar</div>
+          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 dark:border-slate-700 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 dark:text-slate-200 font-medium">900-1000:</span> Ahli</div>
+          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 dark:border-slate-700 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 dark:text-slate-200 font-medium">750-899:</span> Mahir</div>
+          <div className="flex items-center justify-between md:justify-start gap-2.5 border-b border-slate-200 dark:border-slate-700 pb-2 md:pb-0 md:border-0"><span className="text-slate-700 dark:text-slate-200 font-medium">600-749:</span> Berkembang</div>
+          <div className="flex items-center justify-between md:justify-start gap-2.5"><span className="text-slate-700 dark:text-slate-200 font-medium">&lt; 600:</span> Dasar</div>
         </div>
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-3 md:gap-5 mt-4 md:mt-6">
-        <button
-          onClick={onRetry}
-          className="flex-1 py-3 md:py-3.5 rounded-xl border border-slate-300 text-slate-700 font-medium text-sm md:text-base hover:bg-[#e2e8f0]/50 transition-colors tracking-wide"
-        >
-          Ulangi Ujian Akhir
-        </button>
+      <div className="mt-4 md:mt-6">
         <button
           onClick={onAdvance}
-          className="flex-1 py-3 md:py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-sm md:text-base hover:bg-[#79c0ff] transition-colors tracking-wide"
+          className="w-full py-3.5 rounded-xl bg-[#2563eb] text-[#f8fafc] font-semibold text-sm md:text-base hover:bg-blue-700 transition-colors tracking-wide shadow-md shadow-blue-200 dark:shadow-none"
         >
-          Papan Skor
+          Lihat Papan Skor
         </button>
       </div>
-
-      <p className="mt-2 text-center text-xs text-slate-500 flex items-center justify-center gap-1.5">
-        <Info size={14} className="shrink-0 text-slate-400" />
-        <span>Jika Anda mengulang ujian akhir, nilai yang dicatat adalah hasil percobaan terakhir (terbaru).</span>
-      </p>
 
     </div>
   );
@@ -589,8 +519,8 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
   const startQuiz = useAppStore((s) => s.startQuiz);
   const answerQuestion = useAppStore((s) => s.answerQuestion);
   const finishQuiz = useAppStore((s) => s.finishQuiz);
-  const retryQuiz = useAppStore((s) => s.retryQuiz);
   const advanceToNextQuiz = useAppStore((s) => s.advanceToNextQuiz);
+  const quizStartConfirmed = useAppStore((s) => s.quizStartConfirmed);
   const addToast = useToastStore((s) => s.addToast);
 
   // Local pagination state
@@ -599,26 +529,39 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
   const [forceSummary, setForceSummary] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Timer states: 4 minutes for summary (Quiz 1-6), 1 minute per question
+  const [summarySecondsLeft, setSummarySecondsLeft] = useState(SUMMARY_DURATION);
+  const [questionSecondsLeft, setQuestionSecondsLeft] = useState(QUESTION_DURATION);
+
   // Reset local state when navigating to a different quiz
   useEffect(() => {
     setCurrentIndex(0);
     setShowResults(false);
     setForceSummary(false);
+    setSummarySecondsLeft(SUMMARY_DURATION);
+    setQuestionSecondsLeft(QUESTION_DURATION);
   }, [quizId]);
 
-  // Reset pagination when quiz restarts
+  // Reset pagination and question timer when quiz restarts or starts
   const { started } = quizState;
   useEffect(() => {
     if (started) {
       setCurrentIndex(0);
       setShowResults(false);
+      setQuestionSecondsLeft(QUESTION_DURATION);
     }
   }, [started]);
+
+  // Reset question timer whenever currentIndex changes during an active quiz
+  useEffect(() => {
+    if (started) {
+      setQuestionSecondsLeft(QUESTION_DURATION);
+    }
+  }, [currentIndex, started]);
 
   if (!quiz) return null;
 
   const {
-    attemptsUsed,
     currentAnswers,
     lastResult,
     bestResult,
@@ -672,12 +615,72 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
   }, 0);
 
   const answeredCount = Object.keys(currentAnswers).length;
-  const allAnswered = answeredCount === totalQuestions && totalQuestions > 0;
-
   const hasFinished = lastResult !== null && !started;
 
-  // Handle "Next" button
-  const handleNext = useCallback(async () => {
+  // 1. Summary Countdown Timer Effect (4 minutes for Quiz 1-6)
+  // ONLY runs once user has confirmed starting the quiz in VerificationStartModal
+  useEffect(() => {
+    if (
+      !quizStartConfirmed ||
+      quizId === 7 ||
+      bestResult ||
+      started ||
+      hasFinished ||
+      showResults ||
+      forceSummary
+    ) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setSummarySecondsLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [quizStartConfirmed, quizId, bestResult, started, hasFinished, showResults, forceSummary]);
+
+  // Auto-start quiz when 4-minute summary timer runs out
+  useEffect(() => {
+    if (
+      quizStartConfirmed &&
+      summarySecondsLeft === 0 &&
+      !started &&
+      !bestResult &&
+      !hasFinished &&
+      !showResults &&
+      quizId !== 7
+    ) {
+      addToast("Waktu membaca materi (4 menit) telah habis. Kuis dimulai!", "info");
+      startQuiz(quizId);
+    }
+  }, [quizStartConfirmed, summarySecondsLeft, started, bestResult, hasFinished, showResults, quizId, startQuiz, addToast]);
+
+  // 2. Question Countdown Timer Effect (1 minute per question for Quiz 1-7)
+  // ONLY runs when user has confirmed and quiz is started
+  useEffect(() => {
+    if (!quizStartConfirmed || !started || showResults || hasFinished) return;
+
+    const interval = setInterval(() => {
+      setQuestionSecondsLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [quizStartConfirmed, started, showResults, hasFinished, currentIndex]);
+
+  // Handle "Next" button & Auto-advance on time up
+  const handleNext = useCallback(async (isTimeUp = false) => {
     if (isSubmitting) return;
 
     if (isLastQuestion) {
@@ -688,8 +691,8 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
 
       // 2. Sync to Supabase in the background
       try {
-        const identity = useAppStore.getState().identity;
-        if (!identity) throw new Error("Identity not found");
+        const currentIdentity = useAppStore.getState().identity;
+        if (!currentIdentity) throw new Error("Identity not found");
 
         const { supabase: supabaseClient } = await import("@/src/lib/supabaseClient");
         if (!supabaseClient) {
@@ -699,7 +702,7 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
         const { data: student, error: studentError } = await supabaseClient
           .from("students")
           .upsert(
-            { nim: identity.nim, name: identity.nama, cohort: identity.angkatan },
+            { nim: currentIdentity.nim, name: currentIdentity.nama, cohort: currentIdentity.angkatan },
             { onConflict: "nim" }
           )
           .select("id")
@@ -709,8 +712,8 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
 
         const states = useAppStore.getState().quizStates;
 
-        const details = quizData.map((quiz) => {
-          const state = states[quiz.quizId];
+        const details = quizData.map((quizItem) => {
+          const state = states[quizItem.quizId];
           if (!state || state.attemptsUsed === 0) return null;
 
           const answersToUse = (state.lastResult && Object.keys(state.lastResult.answers).length > 0)
@@ -719,7 +722,7 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
               ? state.bestResult.answers
               : state.currentAnswers;
 
-          const answersDetail = quiz.questions.map((q) => {
+          const answersDetail = quizItem.questions.map((q) => {
             const selectedOpt = answersToUse[q.id];
             const selectedIdx = q.options.indexOf(selectedOpt || "");
             const correctIdx = q.options.indexOf(q.correctAnswer);
@@ -738,9 +741,9 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
           const correctCount = answersDetail.filter((a) => a.isCorrect).length;
 
           return {
-            title: quiz.title,
+            title: quizItem.title,
             correct: correctCount,
-            total: quiz.questions.length,
+            total: quizItem.questions.length,
             attempts: state.attemptsUsed,
             answers: answersDetail,
           };
@@ -787,42 +790,58 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
         setShowResults(true);
       }
     } else {
-      setCurrentIndex((prev) => {
-        // Mencegah bug double-click (fast click) yang melewati soal
-        const freshAnswers = useAppStore.getState().quizStates[quizId]?.currentAnswers || {};
-        const q = questions[prev];
-        if (q && freshAnswers[q.id] !== undefined) {
-          return prev + 1;
-        }
-        return prev;
-      });
+      if (isTimeUp) {
+        setCurrentIndex((prev) => prev + 1);
+        setQuestionSecondsLeft(QUESTION_DURATION);
+      } else {
+        setCurrentIndex((prev) => {
+          const freshAnswers = useAppStore.getState().quizStates[quizId]?.currentAnswers || {};
+          const q = questions[prev];
+          if (q && freshAnswers[q.id] !== undefined) {
+            return prev + 1;
+          }
+          return prev;
+        });
+        setQuestionSecondsLeft(QUESTION_DURATION);
+      }
     }
-  }, [isLastQuestion, quizId, currentScore, totalQuestions, finishQuiz, questions]);
+  }, [isSubmitting, isLastQuestion, quizId, currentScore, totalQuestions, finishQuiz, questions, addToast]);
 
-  // Handle retry from score panel (go back to summary first)
-  const handleRetryFromScore = useCallback(() => {
-    setForceSummary(true);
-    setShowResults(false);
-  }, []);
+  // Auto-advance when question time runs out (1 minute per question)
+  useEffect(() => {
+    if (quizStartConfirmed && questionSecondsLeft === 0 && started && !showResults && !hasFinished && !isSubmitting) {
+      if (!isLastQuestion) {
+        addToast(`Waktu untuk Soal ${currentIndex + 1} habis! Beralih ke soal berikutnya.`, "warning");
+      } else {
+        addToast("Waktu pengerjaan soal habis! Kuis selesai.", "info");
+      }
+      handleNext(true);
+    }
+  }, [quizStartConfirmed, questionSecondsLeft, started, showResults, hasFinished, isSubmitting, isLastQuestion, currentIndex, handleNext, addToast]);
 
   // ----- Render: Summary screen -----
   if ((!started && !hasFinished && !showResults) || forceSummary) {
     return (
-      <QuizSummaryScreen
-        quizId={quizId}
-        title={quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
-        attemptsUsed={attemptsUsed}
-        bestResult={bestResult}
-        onStart={() => {
-          setForceSummary(false);
-          if (attemptsUsed > 0) {
-            retryQuiz(quizId);
-          } else {
+      <>
+        <QuizSummaryScreen
+          quizId={quizId}
+          title={quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
+          bestResult={bestResult}
+          onStart={() => {
+            setForceSummary(false);
             startQuiz(quizId);
-          }
-        }}
-        onAdvance={advanceToNextQuiz}
-      />
+          }}
+          onAdvance={advanceToNextQuiz}
+          summarySecondsLeft={quizStartConfirmed ? summarySecondsLeft : undefined}
+        />
+        {quizStartConfirmed && quizId !== 7 && !bestResult && (
+          <FloatingTimer
+            totalSeconds={SUMMARY_DURATION}
+            remainingSeconds={summarySecondsLeft}
+            label="Waktu Materi"
+          />
+        )}
+      </>
     );
   }
 
@@ -835,21 +854,16 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
           total={totalQuestions}
           questions={questions}
           currentAnswers={currentAnswers}
-          onRetry={handleRetryFromScore}
           onAdvance={advanceToNextQuiz}
         />
       );
     }
 
-    const displayAttemptsUsed = lastResult ? attemptsUsed : attemptsUsed + 1;
-
     return (
       <QuizScorePanel
         score={lastResult ? lastResult.score : currentScore}
         total={totalQuestions}
-        attemptsUsed={displayAttemptsUsed}
         quote={quiz.quote}
-        onRetry={handleRetryFromScore}
         onAdvance={advanceToNextQuiz}
       />
     );
@@ -857,65 +871,71 @@ export default function QuizPanel({ quizId }: { quizId: number }) {
 
   // ----- Render: Paginated question view -----
   return (
-    <div className="quiz-panel">
-      {/* Header bar */}
-      <div className="quiz-header-bar">
-        <h2 className="text-lg md:text-2xl font-bold text-center text-slate-800">
-          {quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
-        </h2>
-        <span className="quiz-header-meta">
-          {currentIndex + 1} / {totalQuestions}
-        </span>
+    <>
+      <div className="quiz-panel">
+        {/* Header bar */}
+        <div className="quiz-header-bar">
+          <h2 className="text-lg md:text-2xl font-bold text-center text-slate-800 dark:text-slate-100">
+            {quizId === 7 ? "Ujian Akhir" : `Quiz ${quizId} – ${quiz.title}`}
+          </h2>
+          <span className="quiz-header-meta">
+            {currentIndex + 1} / {totalQuestions}
+          </span>
+        </div>
+
+        {/* Segmented progress bar */}
+        <SegmentedProgressBar
+          questions={questions}
+          currentAnswers={currentAnswers}
+          currentIndex={currentIndex}
+        />
+
+        {/* Single question */}
+        {currentQuestion && (
+          <QuestionView
+            question={currentQuestion}
+            index={currentIndex}
+            total={totalQuestions}
+            selectedAnswer={currentAnswer}
+            onAnswer={(answer) =>
+              answerQuestion(quizId, currentQuestion.id, answer)
+            }
+            remainingSeconds={quizStartConfirmed ? questionSecondsLeft : undefined}
+          />
+        )}
+
+        {/* Next / See Results button */}
+        {isCurrentAnswered && (
+          <button className="quiz-next-btn" onClick={() => handleNext(false)} disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                Menyimpan Hasil...
+              </>
+            ) : isLastQuestion ? (
+              <>
+                <Eye size={16} />
+                Lihat Hasil
+              </>
+            ) : (
+              <>
+                Selanjutnya
+                <ArrowRight size={16} />
+              </>
+            )}
+          </button>
+        )}
       </div>
 
-      {/* Segmented progress bar */}
-      <SegmentedProgressBar
-        questions={questions}
-        currentAnswers={currentAnswers}
-        currentIndex={currentIndex}
-        onSegmentClick={(idx) => {
-          // Allow navigating to answered questions or current
-          if (idx <= answeredCount) {
-            setCurrentIndex(idx);
-          }
-        }}
-      />
-
-      {/* Single question */}
-      {currentQuestion && (
-        <QuestionView
-          question={currentQuestion}
-          index={currentIndex}
-          total={totalQuestions}
-          selectedAnswer={currentAnswer}
-          onAnswer={(answer) =>
-            answerQuestion(quizId, currentQuestion.id, answer)
-          }
+      {/* Floating circular countdown timer - outside quiz-panel */}
+      {quizStartConfirmed && (
+        <FloatingTimer
+          totalSeconds={QUESTION_DURATION}
+          remainingSeconds={questionSecondsLeft}
+          label={`Soal ${currentIndex + 1}/${totalQuestions}`}
         />
       )}
-
-      {/* Next / See Results button */}
-      {isCurrentAnswered && (
-        <button className="quiz-next-btn" onClick={handleNext} disabled={isSubmitting}>
-          {isSubmitting ? (
-            <>
-              <Loader2 size={16} className="animate-spin" />
-              Menyimpan Hasil...
-            </>
-          ) : isLastQuestion ? (
-            <>
-              <Eye size={16} />
-              Lihat Hasil
-            </>
-          ) : (
-            <>
-              Selanjutnya
-              <ArrowRight size={16} />
-            </>
-          )}
-        </button>
-      )}
-    </div>
+    </>
   );
 }
 

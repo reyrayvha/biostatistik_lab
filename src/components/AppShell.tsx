@@ -10,6 +10,7 @@ import Leaderboard from "@/src/components/Leaderboard";
 import { AdminPinModal } from "@/src/components/AdminPinModal";
 import { Toast } from "@/src/components/Toast";
 import { IdentityCard } from "@/src/components/IdentityCard";
+import VerificationStartModal from "@/src/components/VerificationStartModal";
 import { useToastStore } from "@/src/store/useToastStore";
 
 export default function AppShell() {
@@ -27,6 +28,8 @@ export default function AppShell() {
   const setTheme = useAppStore((s) => s.setTheme);
   const setAdminMode = useAppStore((s) => s.setAdminMode);
   const hasUnsavedQuizAnswers = useAppStore((s) => s.hasUnsavedQuizAnswers);
+  const quizStartConfirmed = useAppStore((s) => s.quizStartConfirmed);
+  const setQuizStartConfirmed = useAppStore((s) => s.setQuizStartConfirmed);
   const addToast = useToastStore((s) => s.addToast);
 
   useEffect(() => setMounted(true), []);
@@ -201,6 +204,13 @@ export default function AppShell() {
         onClose={() => setIsAdminModalOpen(false)}
         onSuccess={handleAdminSuccess}
       />
+
+      {identity && !isAdminMode && (
+        <VerificationStartModal
+          isOpen={!quizStartConfirmed}
+          onConfirm={() => setQuizStartConfirmed(true)}
+        />
+      )}
 
       <Toast />
     </div>
