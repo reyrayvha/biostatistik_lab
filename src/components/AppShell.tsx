@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, Lock, X, Moon, Sun, GraduationCap, ArrowRight, AlertTriangle } from "lucide-react";
+import { Menu, Lock, X, Moon, Sun, GraduationCap, ArrowRight } from "lucide-react";
 import { useAppStore } from "@/src/store/useAppStore";
 import TabNavigation from "@/src/components/TabNavigation";
 import IdentityForm from "@/src/components/IdentityForm";
@@ -11,6 +11,7 @@ import { AdminPinModal } from "@/src/components/AdminPinModal";
 import { Toast } from "@/src/components/Toast";
 import { IdentityCard } from "@/src/components/IdentityCard";
 import VerificationStartModal from "@/src/components/VerificationStartModal";
+import FocusWarningModal from "@/src/components/FocusWarningModal";
 import { useToastStore } from "@/src/store/useToastStore";
 
 export default function AppShell() {
@@ -244,32 +245,11 @@ export default function AppShell() {
         />
       )}
 
-      {/* Focus Reminder Modal on Multitasking / Screen Switching */}
-      {showFocusWarning && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 select-none">
-          {/* Blurred Backdrop */}
-          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md transition-opacity" />
-
-          {/* Modal Card */}
-          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 text-center">
-            <div className="mx-auto w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mb-4">
-              <AlertTriangle size={28} className="text-amber-600" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              Peringatan: Tetap Fokus pada Layar
-            </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
-              Terdeteksi perpindahan tab atau aplikasi lain. Harap tetap fokus pada layar pengerjaan kuis dan tidak melakukan multitasking agar hasil pengerjaan kuis tetap optimal.
-            </p>
-            <button
-              onClick={() => setShowFocusWarning(false)}
-              className="mt-6 w-full py-3 rounded-xl font-semibold text-sm md:text-base bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-200 transition-all cursor-pointer"
-            >
-              Saya Mengerti, Kembali Fokus ke Kuis
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Professional Focus Warning Modal */}
+      <FocusWarningModal
+        isOpen={showFocusWarning}
+        onDismiss={() => setShowFocusWarning(false)}
+      />
 
       <Toast />
     </div>
