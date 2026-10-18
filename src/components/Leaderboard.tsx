@@ -8,7 +8,6 @@ import { useAppStore } from "@/src/store/useAppStore";
 import { useToastStore } from "@/src/store/useToastStore";
 import { isIdentityFormValid, validateIdentity } from "@/src/lib/validators";
 
-// --- Types ---
 type AnswerDetail = {
   id: string;
   question: string;
