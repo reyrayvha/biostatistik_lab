@@ -25,8 +25,8 @@ export const validateNama = (nama: string): string | undefined => {
 export const validateNim = (nim: string): string | undefined => {
   const trimmed = nim?.trim() ?? "";
 
-  if (!trimmed) return "NIM tidak boleh kosong";
-  if (!/^\d{10}$/.test(trimmed)) return "NIM harus 10 digit angka";
+  if (!trimmed) return "NPM / NIM tidak boleh kosong";
+  if (trimmed.length > 50) return "NPM / NIM maksimal 50 karakter";
 
   return undefined;
 };
@@ -37,10 +37,10 @@ export const validateAngkatan = (angkatan: string): string | undefined => {
   if (!trimmed) return "Angkatan tidak boleh kosong";
 
   const parsed = Number.parseInt(trimmed, 10);
-  if (Number.isNaN(parsed)) return "Format angkatan harus YYYY";
+  if (Number.isNaN(parsed) || !/^\d{4}$/.test(trimmed)) return "Format angkatan harus 4 digit tahun (contoh: 2021)";
 
   const currentYear = new Date().getFullYear();
-  if (parsed < 2000 || parsed > currentYear + 4) {
+  if (parsed < 1970 || parsed > currentYear + 5) {
     return "Angkatan tidak valid";
   }
 

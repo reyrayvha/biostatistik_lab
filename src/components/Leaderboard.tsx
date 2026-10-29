@@ -774,6 +774,10 @@ function EditStudentModal({
   const [name, setName] = useState(student.name);
   const [nim, setNim] = useState(student.nim);
   const [angkatan, setAngkatan] = useState(student.angkatan);
+  const angkatanOptions = ["2022", "2023", "2024", "2025"];
+  const isPresetAngkatan = angkatanOptions.includes(student.angkatan);
+  const [isCustomAngkatan, setIsCustomAngkatan] = useState(!isPresetAngkatan && Boolean(student.angkatan));
+  const [customAngkatan, setCustomAngkatan] = useState(!isPresetAngkatan ? student.angkatan : "");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -853,10 +857,10 @@ function EditStudentModal({
             <input
               id="student-edit-nim"
               value={nim}
-              maxLength={10}
-              inputMode="numeric"
+
+
               onChange={(event) => {
-                const nextValue = event.target.value.replace(/\D/g, "");
+                const nextValue = event.target.value;
                 setNim(nextValue);
                 if (errors.nim) {
                   const next = { ...errors };
@@ -875,16 +879,27 @@ function EditStudentModal({
             <label htmlFor="student-edit-angkatan" className="mb-1.5 block text-sm font-medium text-slate-700">Angkatan</label>
             <select
               id="student-edit-angkatan"
-              value={angkatan}
+              value={isCustomAngkatan ? "lainnya" : angkatan}
               onChange={(event) => {
-                setAngkatan(event.target.value);
+                const val = event.target.value;
+                if (val === "lainnya") {
+                  setIsCustomAngkatan(true);
+                  setAngkatan(customAngkatan.trim());
+                } else {
+                  setIsCustomAngkatan(false);
+                  setAngkatan(val);
+                }
                 if (errors.angkatan) {
                   const next = { ...errors };
                   delete next.angkatan;
                   setErrors(next);
                 }
               }}
-              onBlur={(event) => applyFieldError("angkatan", event.target.value)}
+              onBlur={(event) => {
+                if (event.target.value !== "lainnya") {
+                  applyFieldError("angkatan", event.target.value);
+                }
+              }}
               className={`w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-700 dark:text-slate-100 outline-none transition focus:ring-2 ${errors.angkatan ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30 focus:ring-red-200" : "border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-100"}`}
               disabled={isLoading}
             >
@@ -896,7 +911,32 @@ function EditStudentModal({
               ].map((year) => (
                 <option key={year} value={year}>{year}</option>
               ))}
+                <option value="lainnya">Lainnya</option>
             </select>
+
+            {isCustomAngkatan && (
+              <input
+                id="student-edit-angkatan-manual"
+                type="text"
+                inputMode="numeric"
+                value={customAngkatan}
+                placeholder="Masukkan tahun angkatan (contoh: 2021)"
+                onChange={(event) => {
+                  const val = event.target.value;
+                  setCustomAngkatan(val);
+                  setAngkatan(val);
+                  if (errors.angkatan) {
+                    const next = { ...errors };
+                    delete next.angkatan;
+                    setErrors(next);
+                  }
+                }}
+                onBlur={(event) => applyFieldError("angkatan", event.target.value)}
+                className={`mt-2 w-full rounded-xl border bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-700 dark:text-slate-100 outline-none transition focus:ring-2 ${errors.angkatan ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/30 focus:ring-red-200" : "border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-100"}`}
+                disabled={isLoading}
+                autoFocus
+              />
+            )}
             {errors.angkatan && <p className="mt-1 text-sm text-red-600 dark:text-red-400">⚠ {errors.angkatan}</p>}
           </div>
 

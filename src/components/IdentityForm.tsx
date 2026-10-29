@@ -18,6 +18,8 @@ export default function IdentityForm({ onBack }: { onBack?: () => void } = {}) {
   const [nama, setNama] = useState("");
   const [nim, setNim] = useState("");
   const [angkatan, setAngkatan] = useState("");
+  const [isCustomAngkatan, setIsCustomAngkatan] = useState(false);
+  const [customAngkatan, setCustomAngkatan] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -109,6 +111,8 @@ export default function IdentityForm({ onBack }: { onBack?: () => void } = {}) {
                 setNama("");
                 setNim("");
                 setAngkatan("");
+                setIsCustomAngkatan(false);
+                setCustomAngkatan("");
               }
             }}
             className="px-6 py-3 bg-white hover:bg-slate-100 text-slate-700 rounded-xl border border-slate-200 transition-colors mx-auto inline-flex items-center justify-center gap-2 font-medium"
@@ -180,14 +184,14 @@ export default function IdentityForm({ onBack }: { onBack?: () => void } = {}) {
           <input
             id="input-nim"
             type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
+
+
             className={`form-input ${errors.nim ? "form-input--error" : ""}`}
             placeholder="Contoh: 2023110001"
             value={nim}
             onChange={(e) => {
-              const onlyNums = e.target.value.replace(/\D/g, "");
-              setNim(onlyNums);
+
+              setNim(e.target.value);
               if (errors.nim) {
                 const next = { ...errors };
                 delete next.nim;
@@ -211,16 +215,27 @@ export default function IdentityForm({ onBack }: { onBack?: () => void } = {}) {
             id="input-angkatan"
             className={`form-input form-select ${errors.angkatan ? "form-input--error" : ""
               }`}
-            value={angkatan}
+            value={isCustomAngkatan ? "lainnya" : angkatan}
             onChange={(e) => {
-              setAngkatan(e.target.value);
+              const val = e.target.value;
+              if (val === "lainnya") {
+                setIsCustomAngkatan(true);
+                setAngkatan(customAngkatan.trim());
+              } else {
+                setIsCustomAngkatan(false);
+                setAngkatan(val);
+              }
               if (errors.angkatan) {
                 const next = { ...errors };
                 delete next.angkatan;
                 setErrors(next);
               }
             }}
-            onBlur={(e) => handleFieldBlur("angkatan", e.target.value)}
+            onBlur={(e) => {
+              if (e.target.value !== "lainnya") {
+                handleFieldBlur("angkatan", e.target.value);
+              }
+            }}
           >
             <option value="" disabled>
               Pilih tahun angkatan
@@ -230,7 +245,30 @@ export default function IdentityForm({ onBack }: { onBack?: () => void } = {}) {
                 {year}
               </option>
             ))}
+            <option value="lainnya">Lainnya</option>
           </select>
+          {isCustomAngkatan && (
+            <input
+              id="input-angkatan-manual"
+              type="text"
+              inputMode="numeric"
+              className={`form-input ${errors.angkatan ? "form-input--error" : ""}`}
+              placeholder="Masukkan tahun angkatan (contoh: 2021)"
+              value={customAngkatan}
+              onChange={(e) => {
+                const val = e.target.value;
+                setCustomAngkatan(val);
+                setAngkatan(val);
+                if (errors.angkatan) {
+                  const next = { ...errors };
+                  delete next.angkatan;
+                  setErrors(next);
+                }
+              }}
+              onBlur={(e) => handleFieldBlur("angkatan", e.target.value)}
+              autoFocus
+            />
+          )}
           {errors.angkatan && (
             <span className="form-error">{errors.angkatan}</span>
           )}

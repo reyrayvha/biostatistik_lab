@@ -27,13 +27,18 @@ export function EditIdentityModal({
   const [nama, setNama] = useState(currentIdentity.nama);
   const [nim, setNim] = useState(currentIdentity.nim);
   const [angkatan, setAngkatan] = useState(currentIdentity.angkatan);
+
+  const angkatanOptions = ["2022", "2023", "2024", "2025"];
+  const isPresetAngkatan = angkatanOptions.includes(currentIdentity.angkatan);
+  const [isCustomAngkatan, setIsCustomAngkatan] = useState(!isPresetAngkatan && Boolean(currentIdentity.angkatan));
+  const [customAngkatan, setCustomAngkatan] = useState(!isPresetAngkatan ? currentIdentity.angkatan : "");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const updateIdentity = useAppStore((state) => state.updateIdentity);
   const addToast = useToastStore((state) => state.addToast);
 
-  const angkatanOptions = useMemo(() => ["2022", "2023", "2024", "2025"], []);
+
 
   const handleFieldBlur = (field: "nama" | "nim" | "angkatan", value: string) => {
     const validationErrors = validateIdentity(
@@ -140,11 +145,11 @@ export function EditIdentityModal({
             <input
               id="edit-nim"
               type="text"
-              inputMode="numeric"
-              maxLength={10}
+
+
               value={nim}
               onChange={(event) => {
-                const nextValue = event.target.value.replace(/\D/g, "");
+                const nextValue = event.target.value;
                 setNim(nextValue);
                 if (errors.nim) {
                   const next = { ...errors };
@@ -167,16 +172,27 @@ export function EditIdentityModal({
             </label>
             <select
               id="edit-angkatan"
-              value={angkatan}
+              value={isCustomAngkatan ? "lainnya" : angkatan}
               onChange={(event) => {
-                setAngkatan(event.target.value);
+                const val = event.target.value;
+                if (val === "lainnya") {
+                  setIsCustomAngkatan(true);
+                  setAngkatan(customAngkatan.trim());
+                } else {
+                  setIsCustomAngkatan(false);
+                  setAngkatan(val);
+                }
                 if (errors.angkatan) {
                   const next = { ...errors };
                   delete next.angkatan;
                   setErrors(next);
                 }
               }}
-              onBlur={(event) => handleFieldBlur("angkatan", event.target.value)}
+              onBlur={(event) => {
+                if (event.target.value !== "lainnya") {
+                  handleFieldBlur("angkatan", event.target.value);
+                }
+              }}
               className={`w-full rounded-xl border bg-white px-3 py-2.5 text-slate-700 outline-none transition focus:ring-2 ${
                 errors.angkatan ? "border-red-300 bg-red-50 focus:ring-red-200" : "border-slate-200 focus:border-blue-500 focus:ring-blue-100"
               }`}
@@ -188,7 +204,34 @@ export function EditIdentityModal({
                   {year}
                 </option>
               ))}
+              <option value="lainnya">Lainnya</option>
             </select>
+
+            {isCustomAngkatan && (
+              <input
+                id="edit-angkatan-manual"
+                type="text"
+                inputMode="numeric"
+                value={customAngkatan}
+                placeholder="Masukkan tahun angkatan (contoh: 2021)"
+                onChange={(event) => {
+                  const val = event.target.value;
+                  setCustomAngkatan(val);
+                  setAngkatan(val);
+                  if (errors.angkatan) {
+                    const next = { ...errors };
+                    delete next.angkatan;
+                    setErrors(next);
+                  }
+                }}
+                onBlur={(event) => handleFieldBlur("angkatan", event.target.value)}
+                className={`mt-2 w-full rounded-xl border bg-white px-3 py-2.5 text-slate-700 outline-none transition focus:ring-2 ${
+                  errors.angkatan ? "border-red-300 bg-red-50 focus:ring-red-200" : "border-slate-200 focus:border-blue-500 focus:ring-blue-100"
+                }`}
+                disabled={isLoading}
+                autoFocus
+              />
+            )}
             {errors.angkatan && <p className="mt-1 text-sm text-red-600">⚠ {errors.angkatan}</p>}
           </div>
 
